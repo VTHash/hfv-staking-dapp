@@ -1,0 +1,17 @@
+hfv-staking-dapp/
+├── public/
+│   └── index.html                 ← basic HTML (or use create-react-app default)
+├── src/
+│   ├── App.jsx                    ← already provided
+│   ├── components/
+│   │   ├── StakeForm.jsx
+│   │   ├── RewardCalculator.jsx
+│   │   ├── ClaimButton.jsx
+│   │   ├── AnalyticsDashboard.jsx (coming next)
+│   ├── contracts/
+│   │   ├── HFVToken.json          ← ABI (get from Remix deployment)
+│   │   ├── HFVStaking.json        ← ABI (get from Remix deployment)
+│   ├── index.js                   ← standard React entry
+├── .env                           ← use contract addresses here
+├── package.json                   ← already provided above
+├── README.md
