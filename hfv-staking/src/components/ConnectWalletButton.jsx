@@ -1,54 +1,59 @@
 import React from "react";
-import { configureChains, createConfig, WagmiConfig, useAccount, useConnect, useDisconnect } from "wagmi";
-import { polygon } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
-import { Web3Modal } from "@web3modal/react";
 import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/react";
+import {
+  configureChains,
+  createConfig,
+  WagmiConfig,
+  useAccount,
+  useConnect,
+  useDisconnect
+} from "wagmi";
+import { mainnet, polygon } from "wagmi/chains";
 
-const projectId = "YOUR_PROJECT_ID"; // Replace this with your actual WalletConnect Project ID
+const projectId = "93fec723c6a3e456a04e6e949b271056"; // Your WalletConnect Project ID
 
-const chains = [polygon];
-
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId }), publicProvider()]);
+const chains = [polygon, mainnet];
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors: w3mConnectors({ projectId, version: "1", chains }),
-  publicClient,
+  publicClient
 });
 
 const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
-function WalletUI() {
+export default function ConnectWalletButton() {
   const { address, isConnected } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
 
-  if (isConnected) {
-    return (
-      <div className="text-green-300 font-semibold space-y-2">
-        <p>Connected: {address.slice(0, 6)}...{address.slice(-4)}</p>
-        <button onClick={() => disconnect()} className="bg-red-500 px-4 py-2 rounded">Disconnect</button>
-      </div>
-    );
-  }
-
-  return (
-    <button
-      onClick={() => connect({ connector: connectors[0] })}
-      className="bg-green-400 text-black px-6 py-2 rounded hover:bg-green-300 transition"
-    >
-      Connect Wallet
-    </button>
-  );
-}
-
-export default function ConnectWalletButton() {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <WalletUI />
+      <div className="flex items-center justify-center flex-col mt-4">
+        {isConnected ? (
+          <>
+            <div className="mb-2 text-sm">Connected: {address.slice(0, 6)}...{address.slice(-4)}</div>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded"
+              onClick={() => disconnect()}
+            >
+              Disconnect Wallet
+            </button>
+          </>
+        ) : (
+          <button
+            className="bg-green-500 text-black px-4 py-2 rounded"
+            onClick={() => connect({ connector: connectors[0] })}
+          >
+            Connect Wallet
+          </button>
+        )}
+      </div>
+
+      {/* Wallet Modal */}
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </WagmiConfig>
   );
 }
-
