@@ -2,11 +2,57 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/src/assets/hfv-logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#00ff88" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>HFV Staking DApp</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom, #000000, #011f0d);
+        color: limegreen;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      .logo {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 20px;
+        border-radius: 9999px;
+        box-shadow: 0 0 30px limegreen;
+      }
+
+      .launch-btn {
+        background-color: limegreen;
+        color: black;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 15px limegreen;
+        text-decoration: none;
+      }
+
+      .launch-btn:hover {
+        box-shadow: 0 0 30px limegreen;
+        transform: scale(1.05);
+      }
+    </style>
   </head>
   <body>
+    <img src="/src/assets/hfv-logo.png" alt="HFV Logo" class="logo" />
+    <a href="/src/main.jsx" class="launch-btn">Launch DApp</a>
+
+    <!-- React app root -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

@@ -53,20 +53,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "MIN_LOCK_DAYS",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "MULTIPLIER",
+		"name": "BASE_REWARD",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -93,9 +80,14 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum HFVStaking.Duration",
+				"name": "d",
+				"type": "uint8"
 			}
 		],
 		"name": "calculateReward",
@@ -106,14 +98,80 @@
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
 		"name": "claim",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "enum HFVStaking.Duration",
+				"name": "d",
+				"type": "uint8"
+			}
+		],
+		"name": "getLockTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getUserStakes",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum HFVStaking.Duration",
+						"name": "lockPeriod",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct HFVStaking.Stake[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -181,6 +239,11 @@
 				"internalType": "uint256",
 				"name": "amount",
 				"type": "uint256"
+			},
+			{
+				"internalType": "enum HFVStaking.Duration",
+				"name": "lockPeriod",
+				"type": "uint8"
 			}
 		],
 		"name": "stake",
@@ -194,6 +257,11 @@
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"name": "stakes",
@@ -207,6 +275,11 @@
 				"internalType": "uint256",
 				"name": "startTime",
 				"type": "uint256"
+			},
+			{
+				"internalType": "enum HFVStaking.Duration",
+				"name": "lockPeriod",
+				"type": "uint8"
 			},
 			{
 				"internalType": "bool",
