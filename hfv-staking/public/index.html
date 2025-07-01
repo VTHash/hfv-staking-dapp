@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HFV Staking</title>
+    <style>
+      body {
+        background: radial-gradient(#1a1a1a, #000);
+        font-family: sans-serif;
+        color: limegreen;
+        text-align: center;
+        padding-top: 50px;
+      }
+      .logo {
+        width: 150px;
+        border-radius: 50%;
+        box-shadow: 0 0 30px limegreen;
+        margin-bottom: 20px;
+      }
+      .launch-btn {
+        background-color: limegreen;
+        color: black;
+        font-weight: bold;
+        padding: 15px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 0 30px limegreen;
+        transition: all 0.3s ease;
+      }
+      .launch-btn:hover {
+        box-shadow: 0 0 40px limegreen;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <img src="/hfv-logo.png" alt="HFV Logo" class="logo" />
+    <h1>Welcome to HFV Staking</h1>
+    <a href="/staking" class="launch-btn">Launch DApp</a>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
