@@ -15,8 +15,14 @@
     "wagmi": "^2.15.6"
   },
   "devDependencies": {
+    "@netlify/vite-plugin": "^2.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vite": "^7.0.0"
-  }
+  },
+  "description": "A decentralized staking platform for the **HFV Token**, built on Ethereum and Polygon. This DApp allows users to stake HFV tokens, calculate rewards, and claim earnings, while maintaining sustainability through PSF and MF smart contract logic.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
