@@ -1,6 +1,6 @@
 # 💚 HFV Staking DApp
 
-A decentralized staking platform for the **HFV Token**, built on Ethereum and Polygon. This DApp allows users to stake HFV tokens, calculate rewards, and claim earnings, while maintaining sustainability through PSF and MF smart contract logic.
+A decentralized staking platform for the **HFV Token**, built on Ethereum. This DApp allows users to stake HFV tokens, calculate rewards, and claim earnings, while maintaining sustainability through PSF and MF smart contract logic.
 
 ---
 
@@ -28,8 +28,4 @@ A decentralized staking platform for the **HFV Token**, built on Ethereum and Po
 
 ## 📦 Getting Started
 
-### 1. Clone the repo
 
-```bash
-git clone https://github.com/YOUR_USERNAME/hfv-staking-dapp.git
-cd hfv-staking-dapp/hfv-staking-dapp
