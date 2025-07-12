@@ -1,27 +1,33 @@
 // src/components/ConnectWalletButton.jsx
 import React from "react";
-import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
-import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, polygon } from "wagmi/chains";
-
-const projectId = "93fec723c6a3e456a04e6e949b271056"; // YOUR REAL PROJECT ID
-
-const chains = [mainnet, polygon];
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors: w3mConnectors({ projectId, version: "1", chains }),
-  publicClient,
-});
-
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
+import React from "react";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function ConnectWalletButton() {
+  const { address, isConnected } = useAccount();
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+  const { disconnect } = useDisconnect();
+
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-    </WagmiConfig>
+    <div className="mt-4">
+      {isConnected ? (
+        <button
+          onClick={() => disconnect()}
+          className="bg-red-600 text-white px-4 py-2 rounded"
+        >
+          Disconnect ({address.slice(0, 6)}...{address.slice(-4)})
+        </button>
+      ) : (
+        <button
+          onClick={() => connect()}
+          className="bg-green-600 text-white px-4 py-2 rounded"
+        >
+          Connect Wallet
+        </button>
+      )}
+    </div>
   );
 }
