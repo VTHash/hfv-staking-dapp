@@ -7,7 +7,7 @@ export const projectId = '93fec723c6a3e456a04e6e949b271056' // ✅ HFV WalletCon
 
 const chains = [mainnet]
 
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 
 export const wagmiConfig = createConfig({
   autoConnect: true,
