@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@wagmi/connectors": "^5.8.5",
-    "@wagmi/core": "^2.17.3",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/react": "^2.7.1",
     "ethers": "^6.15.0",
