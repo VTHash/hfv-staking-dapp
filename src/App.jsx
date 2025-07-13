@@ -7,7 +7,7 @@ import {
   wagmiConfig,
   ethereumClient,
   projectId,
-} from "./walletConnectConfig";
+} from "./walletConnectConfig.js";
 
 export default function App() {
   return (
