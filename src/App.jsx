@@ -1,12 +1,15 @@
 import React from "react";
 import { WagmiConfig } from 'wagmi'
 import { wagmiConfig } from './wagmiConfig'
-import ConnectWalletButton from './ConnectWalletButton'
+import ConnectWalletButton from './components/ConnectWalletButton'
 
 export default function App() {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <ConnectWalletButton />
+      <div className="mt-10">
+        <ConnectWalletButton />
+      </div>
+    </WagmiConfig>
   )
 }
     <div className="min-h-screen bg-black text-green-400">
@@ -17,7 +20,19 @@ export default function App() {
       />
       <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">
   Stake Your HFV Tokens ✅
-</h1>
+</h1>import { WagmiConfig } from 'wagmi'
+import { wagmiConfig } from './wagmiConfig'
+import ConnectWalletButton from './components/ConnectWalletButton'
+
+export default function App() {
+  return (
+    <WagmiConfig config={wagmiConfig}>
+      <div className="mt-10">
+        <ConnectWalletButton />
+      </div>
+    </WagmiConfig>
+  )
+}
       <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto text-center">
         Choose your lock duration and earn rewards
       </p>
