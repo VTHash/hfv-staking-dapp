@@ -1,10 +1,12 @@
-import ReactDOM from 'react-dom/client'
-import { WagmiProvider } from 'wagmi'
-import { Web3Modal } from '@web3modal/react' 
-import { wagmiConfig } from './wagmiConfig'
-import App from './App'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { WagmiProvider } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-const projectId = import.meta.env.VITE_PROJECT_ID
+import App from './App';
+import { wagmiConfig } from './wagmiConfig';
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

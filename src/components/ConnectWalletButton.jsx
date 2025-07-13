@@ -1,21 +1,23 @@
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import React from 'react';
+import { useAccount, useDisconnect } from 'wagmi';
+import { Web3Button } from '@web3modal/react';
 
-export default function ConnectWalletButton() {
+function ConnectWalletButton() {
   const { address, isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
 
-  if (isConnected)
-    return (
-      <div>
-        Connected to {address}
-        <button onClick={() => disconnect()}>Disconnect</button>
-      </div>
-    );
-
   return (
-    <button onClick={() => connect({ connector: connectors[0] })}>
-      Connect Wallet
-    </button>
+    <div>
+      {isConnected ? (
+        <div>
+          <p>Connected: {address.slice(0, 6)}...{address.slice(-4)}</p>
+          <button onClick={() => disconnect()}>Disconnect</button>
+        </div>
+      ) : (
+        <Web3Button />
+      )}
+    </div>
   );
 }
+
+export default ConnectWalletButton;

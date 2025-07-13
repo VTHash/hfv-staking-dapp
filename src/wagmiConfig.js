@@ -1,19 +1,23 @@
-import { WagmiProvider, configureChains, createConfig } from 'wagmi'
-import { mainnet } from 'wagmi/chains'
-import { publicProvider } from 'wagmi/providers/public'
-import { walletConnectProvider } from '@web3modal/wagmi'
+import { configureChains, createConfig, WagmiProvider } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
+import { http } from 'viem';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { EthereumClient } from '@web3modal/ethereum';
+import { Web3Modal } from '@web3modal/react';
 
-const projectId = import.meta.env.VITE_PROJECT_ID
+const projectId = import.meta.env.VITE_PROJECT_ID;
 
-const { publicClient } = configureChains(
+const { chains, publicClient } = configureChains(
   [mainnet],
-  [
-    walletConnectProvider({ projectId }),
-    publicProvider()
-  ]
-)
+  [http()]
+);
 
 export const wagmiConfig = createConfig({
   autoConnect: true,
-  publicClient
-})
+  publicClient,
+});
+
+export const ethereumClient = new EthereumClient(wagmiConfig, chains);
+export const queryClient = new QueryClient();
+
+export { projectId, WagmiProvider, QueryClientProvider, Web3Modal };
