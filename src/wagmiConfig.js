@@ -1,6 +1,5 @@
-import { configureChains, createConfig } from 'wagmi';
-import { mainnet } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
+import { configureChains, createConfig,mainnet } from 'wagmi';
+import { publicProvider } from '@wagmi/providers/public';
 import { injected, walletConnect } from 'wagmi/connectors';
 
 // Set up supported chains and providers
