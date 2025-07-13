@@ -1,20 +1,29 @@
-import { configureChains, createConfig,mainnet } from 'wagmi';
-import { publicProvider } from '@wagmi/providers/public';
-import { injected, walletConnect } from 'wagmi/connectors';
+import { configureChains, createConfig } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 
-// Set up supported chains and providers
-const { chains, publicClient, webSocketPublicClient } = configureChains(
+const { publicClient, webSocketPublicClient } = configureChains(
   [mainnet],
-  [publicProvider()]
+  [
+    jsonRpcProvider({
+      rpc: () => ({
+        http: 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID',
+      }),
+    }),
+  ]
 );
 
-// Create wagmi client configuration
 export const wagmiConfig = createConfig({
   autoConnect: true,
   connectors: [
-    injected(),
-    walletConnect({
-      projectId: import.meta.env.VITE_WC_PROJECT_ID ?? '',
+    new InjectedConnector(),
+    new WalletConnectConnector({
+      options: {
+        projectId: process.env.WC_PROJECT_ID ?? '',
+        showQrModal: true,
+      },
     }),
   ],
   publicClient,
