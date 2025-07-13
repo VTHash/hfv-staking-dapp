@@ -1,16 +1,14 @@
 import React from "react";
-import { WagmiConfig } from "wagmi";
-import { Web3Modal } from "@web3modal/react";
-import StakeForm from "./components/StakeForm";
-import ConnectWalletButton from "./components/ConnectWalletButton";
-import {
-  wagmiConfig,
-  ethereumClient,
-  projectId,
-} from "./walletConnectConfig";
+import { WagmiConfig } from 'wagmi'
+import { wagmiConfig } from './wagmiConfig'
+import ConnectWalletButton from './ConnectWalletButton'
 
 export default function App() {
   return (
+    <WagmiConfig config={wagmiConfig}>
+      <ConnectWalletButton />
+  )
+}
     <div className="min-h-screen bg-black text-green-400">
       <img
         src="/hfv-logo.png"

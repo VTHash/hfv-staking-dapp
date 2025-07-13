@@ -1,28 +1,26 @@
-import React from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useConnect, useAccount, useDisconnect } from 'wagmi'
 
 export default function ConnectWalletButton() {
-  const { address, isConnected } = useAccount();
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
+  const { connectors, connect, error } = useConnect()
+  const { address, isConnected } = useAccount()
+  const { disconnect } = useDisconnect()
+
+  if (isConnected) {
+    return (
+      <button onClick={() => disconnect()}>
+        Disconnect {address?.slice(0,6)}…{address?.slice(-4)}
+      </button>
+    )
+  }
 
   return (
-    <div className="mt-4">
-      {isConnected ? (
-        <button
-          onClick={() => disconnect()}
-          className="bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Disconnect ({address.slice(0, 6)}...{address.slice(-4)})
+    <div>
+      {connectors.map((c) => (
+        <button key={c.id} onClick={() => connect({ connector: c })}>
+          Connect with {c.name}
         </button>
-      ) : (
-        <button
-          onClick={() => connect()}
-          className="bg-green-600 text-white px-4 py-2 rounded"
-        >
-          Connect Wallet
-        </button>
-      )}
+      ))}
+      {error && <div style={{ color: 'red' }}>Error: {error.message}</div>}
     </div>
-  );
+  )
 }
