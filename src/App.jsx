@@ -1,47 +1,22 @@
 import React from "react";
-import { WagmiConfig } from 'wagmi'
-import { wagmiConfig } from './wagmiConfig'
-import ConnectWalletButton from './components/ConnectWalletButton'
+import { WagmiConfig } from "wagmi";
+import { Web3Modal } from "@web3modal/react";
+import wagmiConfig from "./wagmiConfig";
+import { projectId, ethereumClient } from "./web3modalConfig";
+import ConnectWalletButton from "./components/ConnectWalletButton";
+import StakeForm from "./components/StakeForm";
 
 export default function App() {
   return (
     <WagmiConfig config={wagmiConfig}>
+      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
       <div className="mt-10">
         <ConnectWalletButton />
-      </div>
-    </WagmiConfig>
-  )
-}
-    <div className="min-h-screen bg-black text-green-400">
-      <img
-        src="/hfv-logo.png"
-        alt="HFV Logo"
-        className="w-20 h-20 mx-auto mt-8 animate-pulse drop-shadow-md"
-      />
-      <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">
-  Stake Your HFV Tokens ✅
-</h1>import { WagmiConfig } from 'wagmi'
-import { wagmiConfig } from './wagmiConfig'
-import ConnectWalletButton from './components/ConnectWalletButton'
-
-export default function App() {
-  return (
-    <WagmiConfig config={wagmiConfig}>
-      <div className="mt-10">
-        <ConnectWalletButton />
-      </div>
-    </WagmiConfig>
-  )
-}
-      <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto text-center">
-        Choose your lock duration and earn rewards
-      </p>
-
-      <WagmiConfig config={wagmiConfig}>
-        <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-        <ConnectWalletButton />
+        <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto text-center">
+          Choose your lock duration and earn rewards
+        </p>
         <StakeForm />
-      </WagmiConfig>
-    </div>
+      </div>
+    </WagmiConfig>
   );
 }
