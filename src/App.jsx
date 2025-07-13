@@ -1,8 +1,8 @@
 import React from "react";
 import { WagmiConfig } from "wagmi";
 import { Web3Modal } from "@web3modal/react";
-import wagmiConfig from "./wagmiConfig";
-import { projectId, ethereumClient } from "./web3modalConfig";
+import { wagmiConfig } from "./components/wagmiConfig";
+import { projectId, ethereumClient } from "./components/web3modalConfig";
 import ConnectWalletButton from "./components/ConnectWalletButton";
 import StakeForm from "./components/StakeForm";
 
