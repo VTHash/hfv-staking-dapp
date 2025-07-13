@@ -1,13 +1,9 @@
-// src/components/ConnectWalletButton.jsx
 import React from "react";
-import { useAccount, useConnect, useDisconnect } from "@wagmi";
-import { InjectedConnector } from "@wagmi/connectors/injected";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export default function ConnectWalletButton() {
   const { address, isConnected } = useAccount();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+  const { connect } = useConnect();
   const { disconnect } = useDisconnect();
 
   return (
