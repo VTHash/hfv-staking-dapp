@@ -4,13 +4,6 @@ import { wagmiConfig } from './components/wagmiConfig';
 import { mainnet } from 'wagmi/chains';
 
 const chains = [mainnet];
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet],
-  [publicProvider()],
-)
 
-// Get WallettConnect Project ID from .env
-export const projectId = process.env.WC_PROJECT_ID;
-
-// Setup the Ethereum client for Web3Modal
+export const projectId = import.meta.env.VITE_WC_PROJECT_ID;
 export const ethereumClient = new EthereumClient(wagmiConfig, chains);

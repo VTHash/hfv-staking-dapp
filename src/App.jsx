@@ -1,22 +1,27 @@
-import React from "react";
-import { WagmiConfig } from "wagmi";
-import { Web3Modal } from "@web3modal/react";
-import { wagmiConfig } from "./components/wagmiConfig";
-import { projectId, ethereumClient } from "./components/web3modalConfig";
-import ConnectWalletButton from "./components/ConnectWalletButton";
-import StakeForm from "./components/StakeForm";
+import { WagmiConfig } from 'wagmi';
+import { Web3Modal } from '@web3modal/react';
+import { wagmiConfig } from './components/wagmiConfig';
+import { projectId, ethereumClient } from './web3modalConfig';
+import ConnectWalletButton from './components/ConnectWalletButton';
+import StakeForm from './components/StakeForm';
+import RewardCalculator from './components/RewardCalculator';
+import ClaimButton from './components/ClaimButton';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
 
-export default function App() {
+function App() {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-      <div className="mt-10">
+      <div className="App">
+        <h1>HFV Staking DApp</h1>
         <ConnectWalletButton />
-        <p className="text-lg md:text-xl mb-8 max-w-xl mx-auto text-center">
-          Choose your lock duration and earn rewards
-        </p>
         <StakeForm />
+        <RewardCalculator />
+        <ClaimButton />
+        <AnalyticsDashboard />
       </div>
+      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </WagmiConfig>
   );
 }
+
+export default App;
