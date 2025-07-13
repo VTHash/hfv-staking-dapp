@@ -8,12 +8,13 @@
   },
   "dependencies": {
     "@wagmi/connectors": "^5.8.5",
+    "@wagmi/core": "^2.17.3",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/react": "^2.7.1",
     "ethers": "^6.10.0",
     "lucide-react": "^0.270.0",
-    "viem": "^2.31.6",
-    "wagmi": "^2.15.6"
+    "viem": "^2.31.7",
+    "wagmi": "^1.4.13"
   },
   "devDependencies": {
     "@netlify/vite-plugin": "^2.3.4",
