@@ -10,7 +10,7 @@ const StakingDashboard = () => {
       {/* Header */}
       <header className="flex flex-col md:flex-row justify-between items-center mb-8">
         <div className="flex items-center space-x-4">
-          <img src="/logo.png" alt="HFV Logo" className="w-32 h-auto mb-4 drop-shadow-lg animate-pulse" />
+          <img src="/logo.png" alt="HFV Logo" className="w-14 h-14" />
           <h1 className="text-3xl md:text-4xl font-bold text-[#a3ff59] drop-shadow-lg">
             HFV Staking Dashboard
           </h1>
