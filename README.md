@@ -22,7 +22,7 @@ A decentralized staking platform for the **HFV Token**, built on Ethereum. This 
 - **Blockchain:** Solidity (ERC20 + Staking contracts)
 - **Web3:** ethers.js
 - **Deployment:** Netlify / GitHub Pages
-- **Network:** Ethereum Mainnet / Polygon
+- **Network:** Ethereum Mainnet 
 
 ---
 
