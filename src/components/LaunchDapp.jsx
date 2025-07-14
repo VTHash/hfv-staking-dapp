@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAppKit } from 'reown/appkit/react';
+import { useAppKit } from '@reown/appkit/react';
 import { useNavigate } from 'react-router-dom';
 
 const LaunchDapp = () => {
