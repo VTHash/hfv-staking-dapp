@@ -36,8 +36,8 @@
       }
 
       .launch-btn:hover {
-        transform: scale(1.05);
         box-shadow: 0 0 40px limegreen;
+        transform: scale(1.05);
       }
 
       h1 {
@@ -46,14 +46,11 @@
       }
     </style>
   </head>
+
   <body>
     <img src="/hfv-logo.png" alt="HFV Logo" class="logo" />
     <h1>Welcome to HFV Staking</h1>
     <a href="/staking" class="launch-btn">Launch DApp</a>
 
     <div id="root"></div>
-
-    <!-- ✅ THIS LINE MUST BE RELATIVE -->
-    <script type="module" src="./src/main.jsx"></script>
-  </body>
-</html>
+    <script type="module" src="/src/main.jsx"></script>
