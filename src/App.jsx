@@ -4,8 +4,8 @@ import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const metadata = {
-  name: 'Your DApp',
-  description: 'Describe your app',
+  name: 'HFV Protocol',
+  description: 'Staking Protocol',
   url: window.location.origin,
   icons: ['…/icon.png']
 }
@@ -23,7 +23,6 @@ function App() {
   return (
     <WagmiProvider config={wagmiAdapter.wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        {/* Your app */}
         <button onClick={() => appKitModal.open()}>Connect Wallet</button>
       </QueryClientProvider>
     </WagmiProvider>
