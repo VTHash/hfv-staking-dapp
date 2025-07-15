@@ -1,18 +1,21 @@
-import { http } from 'viem';
-import { createConfig } from '@wagmi/core';
-import { mainnet } from '@wagmi/chains';
-import { walletConnect, injected } from 'wagmi/connectors';
+import { cookieStorage, createStorage, http } from '@wagmi/core'
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
+import { mainnet, arbitrum } from '@reown/appkit/networks'
 
-export const wagmiConfig = createConfig({
-  chains: [mainnet],
+const projectId = import.meta.env.VITE_PROJECT_ID
+if (!projectId) throw new Error('VITE_PROJECT_ID is not defined')
+
+export const networks = [mainnet, arbitrum]
+
+export const wagmiAdapter = new WagmiAdapter({
+  projectId,
+  networks,
+  storage: createStorage({ storage: cookieStorage }),
   transports: {
+    // optional: customize RPC, e.g. for mainnet
     [mainnet.id]: http(),
-  },
-  connectors: [
-    injected({ shimDisconnect: true }),
-    walletConnect({
-      projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
-      showQrModal: true,
-    }),
-  ],
-});
+    [arbitrum.id]: http()
+  }
+})
+
+export const wagmiConfig = wagmiAdapter.wagmiConfig
