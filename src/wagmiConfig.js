@@ -2,7 +2,7 @@ import { http } from 'viem';
 import { createConfig } from '@wagmi/core';
 import { mainnet } from 'wagmi/chains';
 import { walletConnect, injected } from 'wagmi/connectors';
-
+import { config } from '../wagmiConfig';
 export const config = createConfig({
   chains: [mainnet],
     transports: {
@@ -16,4 +16,5 @@ export const config = createConfig({
                                     }),
                                       ],
                                       });
+
                                       
