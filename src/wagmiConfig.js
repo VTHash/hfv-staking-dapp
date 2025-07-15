@@ -1,7 +1,7 @@
 import { http } from 'viem';
 import { createConfig } from '@wagmi/core';
 import { mainnet } from '@wagmi/chains';
-import { walletConnect, injected } from '@wagmi/connectors';
+import { walletConnect, injected } from 'wagmi/connectors';
 
 export const wagmiConfig = createConfig({
   chains: [mainnet],
