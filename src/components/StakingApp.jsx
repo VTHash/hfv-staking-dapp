@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { mainnet } from '@reown/appkit/networks';
-import wagmiConfig from '../wagmiConfig';
+import { wagmiConfig } from '../wagmiConfig';
 
 import ConnectWalletButton from './LaunchDapp';
 import StakeForm from '../components/StakeForm';
