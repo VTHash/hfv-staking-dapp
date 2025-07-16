@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi/hooks';
 
 const NetworkBanner = () => {
   const { chain, isConnected } = useNetwork();
