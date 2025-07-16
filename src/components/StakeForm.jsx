@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
 import stakingAbi from "../contracts/HFVStaking.json";
+const stakingAbi = stakingAbiJson.abi;
 
 const stakingAddress = import.meta.env.VITE_HFV_STAKING;
 
