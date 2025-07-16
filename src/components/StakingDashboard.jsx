@@ -1,7 +1,7 @@
 import React from 'react';
+imort WalletStatus from './WalletStatus';
 import StakeForm from './StakeForm';
 import RewardCalculator from './RewardCalculator';
-import WalletStatus from './WalletStatus';
 import NetworkBanner from './NetworkBanner';
 
 const StakingDashboard = () => {
