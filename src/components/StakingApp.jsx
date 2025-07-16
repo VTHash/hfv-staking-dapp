@@ -25,7 +25,7 @@ export default function StakingApp() {
     <WagmiProvider config={wagmiAdapter.wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <div style={{ color: 'limegreen', textAlign: 'center', marginTop: '5rem' }}>
-          <h1>Staking Page Loaded ✅</h1>
+          <StakingDashboard />
         </div>
       </QueryClientProvider>
     </WagmiProvider>

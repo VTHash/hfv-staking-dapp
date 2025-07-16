@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import Home from './components/home.jsx';
 import StakingApp from './components/StakingApp.jsx';
 
