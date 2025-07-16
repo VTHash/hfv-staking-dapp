@@ -1,13 +1,13 @@
-import React from 'react';
-import { useNetwork } from 'wagmi';
+import React from "react";
+import { useChainId, useAccount } from "wagmi";
 
 const NetworkBanner = () => {
-  const { chain, isConnected } = useNetwork();
+  const chainId = useChainId();
+  const { isConnected } = useAccount();
 
   const supportedChainId = 1; // Ethereum Mainnet
-  const chainName = chain?.name || 'Unknown Network';
-
-  const isCorrectNetwork = isConnected && chain?.id === supportedChainId;
+  const chainName = chainId === 1 ? "Ethereum Mainnet" : `Chain ID ${chainId}`;
+  const isCorrectNetwork = isConnected && chainId === supportedChainId;
 
   return (
     <div className={`w-full text-center py-3 text-sm font-medium ${
@@ -17,10 +17,10 @@ const NetworkBanner = () => {
         isCorrectNetwork ? (
           <>✅ Connected to {chainName}</>
         ) : (
-          <>⚠️ Wrong Network: You’re on {chainName}, switch to Ethereum Mainnet</>
+          <>⚠️ Wrong Network: You're on {chainName}, switch to Ethereum Mainnet</>
         )
       ) : (
-        <>🛑 Wallet Not Connected</>
+        <>🔴 Wallet Not Connected</>
       )}
     </div>
   );
