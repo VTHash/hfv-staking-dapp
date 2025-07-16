@@ -21,13 +21,13 @@ const appKitModal = createAppKit({
 const queryClient = new QueryClient();
 
 export default function StakingApp() {
-  return (
-    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
-        <div style={{ color: 'limegreen', textAlign: 'center', marginTop: '5rem' }}>
-          <StakingDashboard />
-        </div>
-      </QueryClientProvider>
-    </WagmiProvider>
-  );
+ return (
+  <WagmiProvider config={wagmiAdapter.wagmiConfig}>
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen bg-black text-lime-400 px-4">
+        <StakingDashboard />
+      </div>
+    </QueryClientProvider>
+  </WagmiProvider>
+);
 }

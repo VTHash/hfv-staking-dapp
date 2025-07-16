@@ -23,11 +23,14 @@ a:hover {
 }
 
 body {
+  padding: 0;
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  background-color: #000; 
+  color: #fff;
 }
 
 h1 {
