@@ -3,9 +3,7 @@
   publish = "dist"
   node_version = "18"
 
-  [[headers]]
+[[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = 
-    "default-src 'self'; script-src 'self''unsafe-eval' 'unsafe-inline'; 
-     object-src 'none'; style-src 'self' 'unsafe-inline';"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline';"
