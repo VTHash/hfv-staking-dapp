@@ -1,3 +1,4 @@
+console.log("APP RENDERED");
 import { createAppKit } from '@reown/appkit/react'
 import { wagmiAdapter, networks } from './wagmiConfig'
 import { WagmiProvider } from 'wagmi'
