@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider }
 from '@tanstack/react-query'; 
 import StakingDashboard 
 from './components/StakingDashboard'; 
-import './App.css';
+import './index.css';
 
 const metadata = { name: 'HFV Protocol', description: 'Staking Protocol',
    url: window.location.origin, icons: ['/icon.png'] };
