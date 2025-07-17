@@ -1,16 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './components/home.jsx';
-import StakingApp from './components/StakingApp.jsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/staking" element={<StakingApp />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+const App = () => {
+  return (
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>🔥 HFV DApp UI Loaded</h1>
+      <p>No wallet connection. This confirms UI is rendering properly.</p>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
