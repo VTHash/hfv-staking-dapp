@@ -21,10 +21,9 @@ function App() {
   const queryClient = new QueryClient()
 
   return (
-  <div style={{ padding: '2rem', textAlign: 'center' }}>
+  <div style={{ padding: '2rem', textAlign: 'center', color: "lime" }}>
     <h1>HFV DApp Loaded Successfully ✅</h1>
       <p>If you are seeing this, the app is loading correctly!</p>
-      <p>We will re-enable wallet connect in the next step.</p>
-    </div>
+      </div>
   );
 }
