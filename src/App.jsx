@@ -22,9 +22,9 @@ function App() {
 
   return (
   <div style={{ padding: '2rem', textAlign: 'center' }}>
-    <h1>🔥 HFV DApp Loaded Successfully</h1>
-    <p>If you're seeing this, the app is loading correctly!</p>
-    <p>We will re-enable wallet connect in the next step.</p>
-  </div>
-);
+    <h1>HFV DApp Loaded Successfully ✅</h1>
+      <p>If you are seeing this, the app is loading correctly!</p>
+      <p>We will re-enable wallet connect in the next step.</p>
+    </div>
+  );
 }

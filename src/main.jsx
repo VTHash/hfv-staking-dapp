@@ -1,13 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
 
-const App = () => {
-  return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
-      <h1>🔥 HFV DApp UI Loaded</h1>
-      <p>No wallet connection. This confirms UI is rendering properly.</p>
-    </div>
-  );
-};
+import {
+  Web3Modal,
+  EthereumClient
+} from "@web3modal/ethereum";
+import { Web3Modal as Modal } from "@web3modal/react";
+import { wagmiConfig, ethereumClient, projectId } from "./walletConnectConfig";
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+import { WagmiConfig } from "wagmi";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <WagmiConfig config={wagmiConfig}>
+      <App />
+      <Modal projectId={projectId} ethereumClient={ethereumClient} />
+    </WagmiConfig>
+  </React.StrictMode>
+);
