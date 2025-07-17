@@ -1,32 +1,26 @@
 console.log("APP RENDERED");
-import { createAppKit } from '@reown/appkit/react'
-import { wagmiAdapter, networks } from './wagmiConfig'
-import { WagmiProvider } from 'wagmi'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const metadata = {
-  name: 'HFV Protocol',
-  description: 'Staking Protocol',
-  url: window.location.origin,
-  icons: ['…/icon.png']
-}
+import { createAppKit } from '@reown/appkit/react'; 
+import { wagmiAdapter, networks } from './wagmiConfig'; 
+import { WagmiProvider } from 'wagmi'; 
+import { QueryClient, QueryClientProvider } 
+from '@tanstack/react-query'; 
+import StakingDashboard 
+from './components/StakingDashboard'; 
+import './App.css';
 
-const appKitModal = createAppKit({
-  adapters: [wagmiAdapter],
-  networks,
-  projectId: import.meta.env.VITE_PROJECT_ID,
-  metadata
-})
+const metadata = { name: 'HFV Protocol', description: 'Staking Protocol',
+   url: window.location.origin, icons: ['/icon.png'] };
 
-function App() {
-  const queryClient = new QueryClient()
+const appKitModal = createAppKit({ adapters: [wagmiAdapter],
+   networks, projectId: import.meta.env.VITE_PROJECT_ID, metadata });
 
-  return (
-  <div style={{ padding: '2rem', textAlign: 'center', color: "lime" }}>
-    <h1>HFV DApp Loaded Successfully ✅</h1>
-      <p>If you are seeing this, the app is loading correctly!</p>
-      </div>
-  );
-}
+function App() { const queryClient = new QueryClient();
+
+return ( <WagmiProvider config={appKitModal.wagmiConfig}>
+   <QueryClientProvider client={queryClient}> <appKitModal.ConnectButton />
+    <div className="app-container"> <StakingDashboard />
+     </div>
+      </QueryClientProvider> </WagmiProvider> ); }
 
 export default App;
