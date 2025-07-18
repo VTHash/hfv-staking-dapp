@@ -1,21 +1,16 @@
-import { cookieStorage, createStorage, http } from '@wagmi/core'
-import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
-import { mainnet, arbitrum } from '@reown/appkit/networks'
+import { createConfig, http } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
+import { injected } from 'wagmi/connectors';
+import { createAppKitAdapter } from '@reown/appkit/wagmi';
 
-const projectId = import.meta.env.VITE_PROJECT_ID
-if (!projectId) throw new Error('VITE_PROJECT_ID is not defined')
-
-export const networks = [mainnet, arbitrum]
-
-export const wagmiAdapter = new WagmiAdapter({
-  projectId,
-  networks,
-  storage: createStorage({ storage: cookieStorage }),
+export const wagmiConfig = createConfig({
+  chains: [mainnet],
+  connectors: [injected()],
   transports: {
-    // optional: customize RPC, e.g. for mainnet
     [mainnet.id]: http(),
-    [arbitrum.id]: http()
-  }
-})
+  },
+  ssr: false, // Disable SSR for Vite compatibility
+});
 
-export const wagmiConfig = wagmiAdapter.wagmiConfig
+export const wagmiAdapter = createAppKitAdapter(wagmiConfig);
+export const networks = [mainnet];

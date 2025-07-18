@@ -1,4 +1,3 @@
-/* HFV DApp Global Styling */
 body {
   margin: 0;
   padding: 0;
@@ -11,13 +10,11 @@ body {
   align-items: center;
 }
 
-/* Container for Centered Content */
 .app-container {
-  text-align: center;
-  padding: 2rem;
+  border: 2px dashed red;
 }
 
-/* Titles and Text */
+
 h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
@@ -29,7 +26,6 @@ p {
   color: #d2ffd2;
 }
 
-/* Wallet Button or Action Buttons */
 button {
   background-color: #a6ff00;
   color: #0f0f0f;
