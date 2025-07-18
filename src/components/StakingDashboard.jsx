@@ -3,7 +3,7 @@ import WalletStatus from './WalletStatus';
 import StakeForm from './StakeForm';
 import RewardCalculator from './RewardCalculator';
 import NetworkBanner from './NetworkBanner';
-
+import './LogoStyles.css';
 const StakingDashboard = () => {
   return (
     <div className="min-h-screen bg-black text-white font-sans px-4 py-6">

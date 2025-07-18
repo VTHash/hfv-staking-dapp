@@ -1,6 +1,6 @@
 import React from "react";
 import { useChainId, useAccount } from "wagmi";
-
+import './LogoStyles.css';
 const NetworkBanner = () => {
   const chainId = useChainId();
   const { isConnected } = useAccount();

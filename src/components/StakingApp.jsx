@@ -4,7 +4,7 @@ import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit } from '@reown/appkit/react';
 import { wagmiAdapter, networks } from '../wagmiConfig';
-
+import './LogoStyles.css';
 const metadata = {
   name: 'HFV DApp',
   description: 'Staking interface for HFV',

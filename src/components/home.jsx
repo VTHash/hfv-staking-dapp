@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import './LogoStyles.css';
 export default function Home() {
   const navigate = useNavigate();
 
