@@ -1,16 +1,14 @@
-import { createConfig, http } from 'wagmi';
+import { configureChains, createConfig } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
-import { injected } from 'wagmi/connectors';
-import { createAppKitAdapter } from '@reown/appkit/wagmi';
+import { publicProvider } from 'wagmi/providers/public';
+import { walletConnectProvider } from '@web3modal/wagmi';
 
-export const wagmiConfig = createConfig({
-  chains: [mainnet],
-  connectors: [injected()],
-  transports: {
-    [mainnet.id]: http(),
-  },
-  ssr: false, // Disable SSR for Vite compatibility
-});
+const projectId = import.meta.env.VITE_PROJECT_ID;
 
-export const wagmiAdapter = createAppKitAdapter(wagmiConfig);
-export const networks = [mainnet];
+export const { chains, publicClient } = configureChains(
+  [mainnet],
+  [
+    walletConnectProvider({ projectId }),
+    publicProvider()
+  ]
+);
