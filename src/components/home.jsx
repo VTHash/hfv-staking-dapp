@@ -9,7 +9,7 @@ export default function Home() {
       <img
         src="/logo.png"
         alt="HFV Logo"
-        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mb-6 drop-shadow-lg"
+        className="logo"
       />
 
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-4 leading-tight">
