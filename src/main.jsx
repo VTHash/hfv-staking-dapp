@@ -1,15 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./index.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './components/home.jsx';
+import StakingApp from './components/StakingApp.jsx';
 
-import { WagmiProvider } from "wagmi";
-import { wagmiConfig } from "./walletConnectConfig";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <WagmiProvider config={wagmiConfig}>
-      <App />
-    </WagmiProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/staking" element={<StakingApp />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
