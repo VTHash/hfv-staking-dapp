@@ -1,21 +1,21 @@
-import './index.css';
-import { WagmiProvider } from 'wagmi';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { wagmiConfig } from './walletConnectConfig';
-import ConnectWalletButton from './components/ConnectWalletButton';
+import React from 'react'
+import ConnectWalletButton from './ConnectWalletButton'
+import WalletStatus from './WalletStatus'
+import NetworkBanner from './NetworkBanner'
+import RewardCalculator from './RewardCalculator'
+import StakeForm from './StakeForm'
+import StakingDashboard from './StakingDashboard'
 
-const queryClient = new QueryClient();
-
-function App() {
+export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <WagmiProvider config={wagmiConfig}>
-        <div className="min-h-screen flex items-center justify-center bg-black text-white">
-          <ConnectWalletButton />
-        </div>
-      </WagmiProvider>
-    </QueryClientProvider>
-  );
+    <div style={{ backgroundColor: '#000', minHeight: '100vh', padding: '2rem', color: '#fff' }}>
+      <NetworkBanner />
+      <h1 style={{ fontSize: '2rem' }}>🚀 HFV Staking DApp</h1>
+      <ConnectWalletButton />
+      <WalletStatus />
+      <RewardCalculator />
+      <StakeForm />
+      <StakingDashboard />
+    </div>
+  )
 }
-
-export default App;

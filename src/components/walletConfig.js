@@ -1,13 +1,16 @@
-import { createConfig, http } from 'wagmi';
-import { mainnet } from 'wagmi/chains';
-import { injected } from 'wagmi/connectors';
+import { getDefaultConfig } from '@rainbow-me/rainbowkit'
+import { mainnet } from 'wagmi/chains'
+import { http, createConfig } from 'wagmi'
 
-export const wagmiConfig = createConfig({
-  connectors: [
-    injected(), // Metamask
-  ],
-  chains: [mainnet],
-  transports: {
-    [mainnet.id]: http(),
-  },
-});
+export const walletConfig = () => {
+  return createConfig(
+    getDefaultConfig({
+      appName: 'HFV Staking DApp',
+      projectId: 'VITE_PROJECT_ID',
+      chains: [mainnet],
+      transports: {
+        [mainnet.id]: http()
+      }
+    })
+  )
+}
