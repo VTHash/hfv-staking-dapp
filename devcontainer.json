@@ -1,0 +1,3 @@
+"features": {
+    "ghcr.io/devcontainer/features/node:1 : { "version": "20" }
+}

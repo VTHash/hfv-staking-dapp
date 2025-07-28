@@ -1,21 +1,28 @@
-import React from 'react'
-import ConnectWalletButton from './ConnectWalletButton'
-import WalletStatus from './WalletStatus'
-import NetworkBanner from './NetworkBanner'
-import RewardCalculator from './RewardCalculator'
-import StakeForm from './StakeForm'
-import StakingDashboard from './StakingDashboard'
+ import React from 'react'; 
+ import ConnectWallet from './components/ConnectWallet'; 
+ import StakeForm from './components/StakeForm'; 
+ import StakingDashboard from './components/StakingDashboard'; 
+ import RewardCalculator from './components/RewardCalculator';
+ import NetworkBanner from './components/NetworkBanner';
+ import WalletStatus from  './components/WalletStatus';
+ import Claim from './components/Claim'; 
+ import './App.css';
+ import './index.css';
 
-export default function App() {
-  return (
-    <div style={{ backgroundColor: '#000', minHeight: '100vh', padding: '2rem', color: '#fff' }}>
-      <NetworkBanner />
-      <h1 style={{ fontSize: '2rem' }}>🚀 HFV Staking DApp</h1>
-      <ConnectWalletButton />
-      <WalletStatus />
-      <RewardCalculator />
-      <StakeForm />
-      <StakingDashboard />
-    </div>
-  )
-}
+const App = () => { 
+  return ( <div className="app-container"> 
+  <header className="header"> 
+    <h1>HFV Staking DApp</h1> 
+    <ConnectWallet />
+     </header>
+
+<main className="main-content">
+    <StakeForm />
+    <StakingDashboard />
+    <RewardCalculator />
+  </main>
+</div>
+
+); };
+
+export default App;
