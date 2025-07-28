@@ -1,30 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import { BrowserProvider } from 'ethers';
 
 export default function NetworkBanner() {
-  const [chainId, setChainId] = useState(null);
+  const [network, setNetwork] = useState(null);
+  const [wrongNetwork, setWrongNetwork] = useState(false);
 
   useEffect(() => {
-    async function getChainId() {
-      if (window.ethereum) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const checkNetwork = async () => {
+      if (!window.ethereum) return;
+
+      try {
+        const provider = new BrowserProvider(window.ethereum);
         const network = await provider.getNetwork();
-        setChainId(network.chainId);
+        setNetwork(network);
+        setWrongNetwork(network.chainId !== 1);
+      } catch (err) {
+        console.error('Error fetching network:', err);
       }
-    }
+    };
 
-    getChainId();
+    checkNetwork();
 
-    if (window.ethereum) {
-      window.ethereum.on('chainChanged', () => window.location.reload());
-    }
+    // Update on chain change
+    window.ethereum?.on('chainChanged', () => window.location.reload());
+
+    return () => {
+      window.ethereum?.removeListener('chainChanged', () => {});
+    };
   }, []);
 
-  if (chainId === 1) return null;
+  if (!network) return null;
 
   return (
-    <div style={{ backgroundColor: '#ff0055', color: '#fff', padding: '0.5rem', textAlign: 'center' }}>
-      ⚠ Please switch to Ethereum Mainnet to use HFV Staking DApp
+    <div className={`network-banner ${wrongNetwork ? 'wrong' : 'correct'}`}>
+      {wrongNetwork ? (
+        <p>
+          ⚠️ You are connected to <strong>{network.name}</strong> (chainId {network.chainId}). Please switch to Ethereum Mainnet.
+        </p>
+      ) : (
+        <p>
+          ✅ Connected to Ethereum Mainnet (chainId 1)
+        </p>
+      )}
     </div>
   );
 }

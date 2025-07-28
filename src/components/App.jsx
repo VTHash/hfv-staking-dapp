@@ -5,23 +5,22 @@
  import RewardCalculator from './RewardCalculator';
  import NetworkBanner from './NetworkBanner';
  import WalletStatus from  './WalletStatus';
- import Claim from './Claim'; 
+ import Claim from './ClaimHFV'; 
  import '../index.css';
 
 const App = () => { 
-  return ( <div className="app-container"> 
-  <header className="header"> 
-    <h1>HFV Staking DApp</h1> 
+  return (
+  <div className="app-container">
+    <h1>HFV Staking DApp</h1>
     <ConnectWallet />
-     </header>
-
-<main className="main-content">
+    <NetworkBanner />
     <StakeForm />
     <StakingDashboard />
+    <Claim />
     <RewardCalculator />
-  </main>
-</div>
-
-); };
+    <WalletStatus />
+  </div>
+  );
+};
 
 export default App;

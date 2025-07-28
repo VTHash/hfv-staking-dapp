@@ -1,37 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import { BrowserProvider } from 'ethers';
 
 export default function WalletStatus() {
   const [address, setAddress] = useState('');
-  const [balance, setBalance] = useState('');
+  const [networkName, setNetworkName] = useState('');
 
   useEffect(() => {
-    const fetchWalletInfo = async () => {
-      if (window.ethereum) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const userAddress = await signer.getAddress();
-        const userBalance = await provider.getBalance(userAddress);
+    const loadWalletStatus = async () => {
+      if (!window.ethereum) {
+        setAddress('MetaMask not installed');
+        return;
+      }
 
-        setAddress(userAddress);
-        setBalance(ethers.utils.formatEther(userBalance));
+      try {
+        const provider = new BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const addr = await signer.getAddress();
+        const network = await provider.getNetwork();
+
+        setAddress(addr);
+        setNetworkName(network.name);
+      } catch (err) {
+        console.error('Failed to load wallet status:', err);
       }
     };
 
-    fetchWalletInfo();
+    loadWalletStatus();
+
+    // Update on account or chain change
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', () => window.location.reload());
+      window.ethereum.on('chainChanged', () => window.location.reload());
+    }
+
+    return () => {
+      if (window.ethereum?.removeListener) {
+        window.ethereum.removeListener('accountsChanged', () => {});
+        window.ethereum.removeListener('chainChanged', () => {});
+      }
+    };
   }, []);
 
-  if (!address) return null;
-
   return (
-    <div className="glow-frame" style={{ marginTop: '2rem' }}>
-      <h2 style={{ color: '#0ff' }}>👛 Wallet Info</h2>
-      <p style={{ color: '#ccc' }}>
-        <strong>Address:</strong> {address.slice(0, 6)}...{address.slice(-4)}
-      </p>
-      <p style={{ color: '#ccc' }}>
-        <strong>Balance:</strong> {balance} ETH
-      </p>
+    <div className="wallet-status">
+      <p><strong>Wallet:</strong> {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Not connected'}</p>
+      <p><strong>Network:</strong> {networkName || 'Unknown'}</p>
     </div>
   );
 }

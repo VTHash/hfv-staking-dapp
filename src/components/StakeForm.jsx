@@ -1,97 +1,91 @@
-import { useState } from 'react';
-import { ethers } from 'ethers';
+import React, { useState, useEffect } from 'react';
+import { ethers, BrowserProvider } from 'ethers';
 import stakingAbi from '../abi/HFVStaking.json';
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
-const contract = new ethers.Contract(
-  import.meta.env.VITE_HFV_STAKING_ADDRESS,
-  stakingAbi,
-  signer
-);
+const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 
-const StakeForm = () => {
+const DURATION_OPTIONS = [
+  { label: '21 Days', value: 21 * 24 * 60 * 60, multiplier: 1 },
+  { label: '3 Months', value: 3 * 30 * 24 * 60 * 60, multiplier: 3 },
+  { label: '6 Months', value: 6 * 30 * 24 * 60 * 60, multiplier: 6 },
+  { label: '12 Months', value: 12 * 30 * 24 * 60 * 60, multiplier: 12 },
+];
+
+export default function StakeForm() {
   const [amount, setAmount] = useState('');
-  const [duration, setDuration] = useState('21');
+  const [duration, setDuration] = useState(DURATION_OPTIONS[0].value);
+  const [multiplier, setMultiplier] = useState(DURATION_OPTIONS[0].multiplier);
+  const [provider, setProvider] = useState(null);
+  const [signer, setSigner] = useState(null);
+  const [rewardPreview, setRewardPreview] = useState('');
+
+  useEffect(() => {
+    const init = async () => {
+      if (window.ethereum) {
+        const browserProvider = new BrowserProvider(window.ethereum);
+        const signer = await browserProvider.getSigner();
+        setProvider(browserProvider);
+        setSigner(signer);
+      }
+    };
+    init();
+  }, []);
+
+  useEffect(() => {
+    const amt = parseFloat(amount);
+    if (!amt || amt <= 0) return setRewardPreview('');
+    const reward = amt * 6.952 * multiplier;
+    setRewardPreview(reward.toFixed(2));
+  }, [amount, multiplier]);
 
   const handleStake = async () => {
-    try {
-      const parsedAmount = ethers.utils.parseUnits(amount, 18);
-      const durationInSeconds = parseInt(duration) * 24 * 60 * 60;
+    if (!provider || !signer || !stakingAddress) {
+      console.error('Provider or signer not available');
+      return;
+    }
 
-      const tx = await contract.stake(parsedAmount, durationInSeconds);
+    try {
+      const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+      const parsedAmount = ethers.parseUnits(amount, 18);
+      const tx = await contract.stake(parsedAmount, duration);
       await tx.wait();
-      alert('Staked successfully!');
+      alert('HFV successfully staked!');
+      setAmount('');
     } catch (err) {
-      console.error('Stake error:', err);
-      alert('Stake failed. Check console for details.');
+      console.error('Staking failed:', err);
+      alert('Error during staking. Check console.');
     }
   };
 
   return (
-    <div className="glow-frame" style={{ padding: '2rem', marginTop: '1rem' }}>
-      <h2>🚀 Stake HFV</h2>
-      <div style={{ marginBottom: '1rem' }}>
-        <label>Amount to stake (HFV): </label>
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="0.0"
-          style={{
-            padding: '0.5rem',
-            backgroundColor: '#111',
-            color: '#0f0',
-            border: '1px solid #0f0',
-            borderRadius: '0.25rem',
-            width: '100%',
-            marginTop: '0.5rem'
-          }}
-        />
-      </div>
-
-      <div style={{ marginBottom: '1rem' }}>
-        <label>Lock duration: </label>
-        <select
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            backgroundColor: '#111',
-            color: '#0ff',
-            border: '1px solid #0ff',
-            borderRadius: '0.25rem',
-            width: '100%',
-            marginTop: '0.5rem'
-          }}
-        >
-          <option value="21">21 Days</option>
-          <option value="90">3 Months</option>
-          <option value="180">6 Months</option>
-          <option value="365">12 Months</option>
-        </select>
-      </div>
-
-      <button
-        onClick={handleStake}
-        style={{
-          padding: '0.75rem 1.5rem',
-          background: '#0f0',
-          color: '#000',
-          border: 'none',
-          borderRadius: '0.5rem',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          boxShadow: '0 0 10px #0f0, 0 0 20px #0ff',
-          transition: 'transform 0.2s ease-in-out'
+    <div className="stake-form">
+      <h2>Stake HFV Tokens</h2>
+      <input
+        type="number"
+        placeholder="Amount"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+      />
+      <select
+        value={duration}
+        onChange={(e) => {
+          const selected = DURATION_OPTIONS.find(opt => opt.value === parseInt(e.target.value));
+          setDuration(selected.value);
+          setMultiplier(selected.multiplier);
         }}
-        onMouseOver={(e) => (e.target.style.transform = 'scale(1.05)')}
-        onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}
       >
-        Stake
-      </button>
+        {DURATION_OPTIONS.map((opt) => (
+          <option key={opt.label} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+      <button onClick={handleStake}>Stake</button>
+      {rewardPreview && (
+        <p className="reward-preview">
+          Estimated Reward: <strong>{rewardPreview} HFV</strong>
+        </p>
+      )}
     </div>
   );
-};
-
-export default StakeForm;
+}

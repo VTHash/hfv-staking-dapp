@@ -1,0 +1,3 @@
+} else {
+  console.error("MetaMask not detected or window.ethereum is unavailable");
+}
