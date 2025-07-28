@@ -1,11 +1,11 @@
  import React from 'react'; 
- import ConnectWallet from './components/ConnectWallet'; 
- import StakeForm from './components/StakeForm'; 
- import StakingDashboard from './components/StakingDashboard'; 
- import RewardCalculator from './components/RewardCalculator';
- import NetworkBanner from './components/NetworkBanner';
- import WalletStatus from  './components/WalletStatus';
- import Claim from './components/Claim'; 
+ import ConnectWallet from './ConnectWallet'; 
+ import StakeForm from './StakeForm'; 
+ import StakingDashboard from './StakingDashboard'; 
+ import RewardCalculator from './RewardCalculator';
+ import NetworkBanner from './NetworkBanner';
+ import WalletStatus from  './WalletStatus';
+ import Claim from './Claim'; 
  import './index.css';
 
 const App = () => { 
