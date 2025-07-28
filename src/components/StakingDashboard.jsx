@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
-import stakingAbi from './abi/Staking.json';
-
+import stakinAbi from '../abi/HFVStaking.json'
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const contract = new ethers.Contract(import.meta.env.VITE_HFV_STAKING_ADDRESS, stakingAbi, signer);
