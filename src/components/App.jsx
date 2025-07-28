@@ -6,7 +6,6 @@
  import NetworkBanner from './components/NetworkBanner';
  import WalletStatus from  './components/WalletStatus';
  import Claim from './components/Claim'; 
- import './App.css';
  import './index.css';
 
 const App = () => { 
