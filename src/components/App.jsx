@@ -6,7 +6,7 @@
  import NetworkBanner from './NetworkBanner';
  import WalletStatus from  './WalletStatus';
  import Claim from './Claim'; 
- import './index.css';
+ import '../index.css';
 
 const App = () => { 
   return ( <div className="app-container"> 
