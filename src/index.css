@@ -126,16 +126,19 @@ select {
   }
 }
 
-/* WalletConnect Modal (minor fix for z-index if needed) */
-.walletconnect-modal {
-  z-index: 9999 !important;
 }
 
-/* Soft separator */
-hr {
-  border: none;
-  height: 1px;
-  background-color: #00ff99;
-  opacity: 0.2;
-  margin: 2rem 0;
+/* Fix oversized WalletConnect logo on mobile */
+img[alt="walletconnect"] {
+  max-width: 160px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 600px) {
+  img[alt="walletconnect"] {
+    max-width: 100px;
+  }
 }
