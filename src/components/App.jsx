@@ -7,12 +7,11 @@ import NetworkBanner from './NetworkBanner';
 import WalletStatus from './WalletStatus'; 
 import Claim from './ClaimHFV'; 
 import '../index.css'; 
-import hfvLogo from '../hfv-logo.png';
 
 const App = () => { 
   return ( <div className="app-wrapper"> 
   <div className="app-header"> 
-    <img src={hfvLogo} alt="HFV Logo" className="logo" /> 
+    <img src={hfv-logo.png} alt="HFV Logo" className="logo" /> 
     <h1 className="app-title">HFV Staking DApp</h1> </div>
 
 <div className="main-content">
