@@ -1,67 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { ethers, BrowserProvider } from 'ethers';
+import { ethers } from 'ethers';
 import stakingAbi from '../abi/HFVStaking.json';
 
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 
 export default function StakingDashboard() {
   const [stakes, setStakes] = useState([]);
-  const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
-  const [userAddress, setUserAddress] = useState('');
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
-    const init = async () => {
-      if (!window.ethereum) return;
-      const browserProvider = new BrowserProvider(window.ethereum);
-      const signer = await browserProvider.getSigner();
-      const address = await signer.getAddress();
-      setProvider(browserProvider);
-      setSigner(signer);
-      setUserAddress(address);
-    };
-    init();
-  }, []);
+    const fetchStakes = async () => {
+      if (!window.ethereum || !stakingAddress) return;
 
-  useEffect(() => {
-    const loadStakes = async () => {
-      if (!provider || !signer || !stakingAddress || !userAddress) return;
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const userAddress = await signer.getAddress();
+      setAddress(userAddress);
 
-      try {
-        const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-        const count = await contract.getStakeCount(userAddress);
-        const results = [];
+      const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+      const stakeCount = await contract.getStakeCount(userAddress);
+      const result = [];
 
-        for (let i = 0; i < count; i++) {
-          const stake = await contract.stakes(userAddress, i);
-          results.push({
-            amount: ethers.formatUnits(stake.amount, 18),
-            duration: stake.duration,
-            start: stake.startTimestamp,
-            claimed: stake.claimed,
-          });
-        }
-
-        setStakes(results);
-      } catch (err) {
-        console.error('Error loading stakes:', err);
+      for (let i = 0; i < stakeCount; i++) {
+        const s = await contract.stakes(userAddress, i);
+        result.push({
+          amount: ethers.formatUnits(s.amount, 18),
+          start: new Date(Number(s.startTimestamp) * 1000).toLocaleDateString(),
+          duration: Number(s.duration),
+          claimed: s.claimed,
+        });
       }
+
+      setStakes(result);
     };
 
-    loadStakes();
-  }, [provider, signer, userAddress]);
+    fetchStakes();
+  }, []);
 
   return (
     <div className="staking-dashboard">
-      <h2>Your Active Stakes</h2>
+      <h3 className="section-title">Your Active Stakes</h3>
       {stakes.length === 0 ? (
-        <p>No active stakes.</p>
+        <p>No stakes found.</p>
       ) : (
         <ul>
-          {stakes.map((s, idx) => (
-            <li key={idx}>
-              <strong>Amount:</strong> {s.amount} HFV |{' '}
-              <strong>Duration:</strong> {s.duration / (24 * 60 * 60)} days |{' '}
+          {stakes.map((s, i) => (
+            <li key={i} className="glow-subframe">
+              <strong>Amount:</strong> {s.amount} HFV<br />
+              <strong>Start:</strong> {s.start}<br />
+              <strong>Duration:</strong> {(s.duration / 86400).toFixed(0)} days<br />
               <strong>Claimed:</strong> {s.claimed ? 'Yes' : 'No'}
             </li>
           ))}

@@ -1,46 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserProvider } from 'ethers';
 
 export default function NetworkBanner() {
-  const [network, setNetwork] = useState(null);
-  const [wrongNetwork, setWrongNetwork] = useState(false);
+  const [chainId, setChainId] = useState(null);
 
   useEffect(() => {
-    const checkNetwork = async () => {
-      if (!window.ethereum) return;
+    if (window.ethereum) {
+      window.ethereum.request({ method: 'eth_chainId' }).then((id) => {
+        setChainId(parseInt(id, 16));
+      });
 
-      try {
-        const provider = new BrowserProvider(window.ethereum);
-        const network = await provider.getNetwork();
-        setNetwork(network);
-        setWrongNetwork(network.chainId !== 1);
-      } catch (err) {
-        console.error('Error fetching network:', err);
-      }
-    };
-
-    checkNetwork();
-
-    // Update on chain change
-    window.ethereum?.on('chainChanged', () => window.location.reload());
-
-    return () => {
-      window.ethereum?.removeListener('chainChanged', () => {});
-    };
+      window.ethereum.on('chainChanged', (id) => {
+        setChainId(parseInt(id, 16));
+      });
+    }
   }, []);
 
-  if (!network) return null;
+  const isCorrectNetwork = chainId === 1;
 
   return (
-    <div className={`network-banner ${wrongNetwork ? 'wrong' : 'correct'}`}>
-      {wrongNetwork ? (
-        <p>
-          ⚠️ You are connected to <strong>{network.name}</strong> (chainId {network.chainId}). Please switch to Ethereum Mainnet.
-        </p>
+    <div className="status-text">
+      {chainId ? (
+        isCorrectNetwork ? (
+          <span>✅ Connected to Ethereum Mainnet</span>
+        ) : (
+          <span style={{ color: 'orange' }}>⚠️ Wrong network! Please switch to Ethereum Mainnet</span>
+        )
       ) : (
-        <p>
-          ✅ Connected to Ethereum Mainnet (chainId 1)
-        </p>
+        <span>🔌 Connecting to network...</span>
       )}
     </div>
   );
