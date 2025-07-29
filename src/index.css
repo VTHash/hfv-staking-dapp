@@ -196,3 +196,22 @@ img[alt="walletconnect"] {
   display: block !important;
   filter: drop-shadow(0 0 8px #00ff99);
 }
+
+/* Force scale down WalletConnect modal */
+body > div[id*="walletconnect"] {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  z-index: 99999 !important;
+}
+
+body > div[id*="walletconnect"] img {
+  max-width: 80px !important;
+  max-height: 80px !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block;
+  margin: 0 auto;
+}
