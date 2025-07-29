@@ -30,4 +30,4 @@ jest-test-results.json
 
 package-lock.json
 
-pnpm-lock.yaml
+pnpm-lock.yaml.env
