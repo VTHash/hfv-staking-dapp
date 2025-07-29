@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserProvider, Contract, formatUnits } from 'ethers';
 import stakingAbi from '../abi/HFVStaking.json';
-console.log("Staking address env:", import.meta.env.VITE_HFV_STAKING_ADDRESS);
-const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 
+const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
+console.log("All ENV:", import.meta.env)
 export default function ClaimHFV() {
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
