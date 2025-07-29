@@ -1,25 +1,51 @@
- import React from 'react'; 
- import ConnectWallet from './ConnectWallet'; 
- import StakeForm from './StakeForm'; 
- import StakingDashboard from './StakingDashboard'; 
- import RewardCalculator from './RewardCalculator';
- import NetworkBanner from './NetworkBanner';
- import WalletStatus from  './WalletStatus';
- import Claim from './ClaimHFV'; 
- import '../index.css';
+import React from 'react';
+import ConnectWallet from './ConnectWallet';
+import StakeForm from './StakeForm';
+import StakingDashboard from './StakingDashboard';
+import RewardCalculator from './RewardCalculator';
+import NetworkBanner from './NetworkBanner';
+import WalletStatus from './WalletStatus';
+import Claim from './ClaimHFV';
+import '../index.css';
 
-const App = () => { 
+const App = () => {
   return (
-  <div className="app-container">
-    <h1>HFV Staking DApp</h1>
-    <ConnectWallet />
-    <NetworkBanner />
-    <StakeForm />
-    <StakingDashboard />
-    <Claim />
-    <RewardCalculator />
-    <WalletStatus />
-  </div>
+    <div className="app-wrapper">
+      <div className="app-header glow-frame" style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+        <img src="/hfv-logo.png" alt="HFV Logo" className="logo" />
+        <h1 style={{ marginTop: '0.5rem' }}>HFV Staking DApp</h1>
+      </div>
+
+      <div className="main-content">
+        <div className="glow-frame">
+          <ConnectWallet />
+        </div>
+
+        <div className="glow-frame">
+          <NetworkBanner />
+        </div>
+
+        <div className="glow-frame">
+          <StakeForm />
+        </div>
+
+        <div className="glow-frame">
+          <StakingDashboard />
+        </div>
+
+        <div className="glow-frame">
+          <Claim />
+        </div>
+
+        <div className="glow-frame">
+          <RewardCalculator />
+        </div>
+
+        <div className="glow-frame">
+          <WalletStatus />
+        </div>
+      </div>
+    </div>
   );
 };
 
