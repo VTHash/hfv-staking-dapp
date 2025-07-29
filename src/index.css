@@ -93,38 +93,49 @@ body {
 
 /* Glow frame for each section */
 .glow-frame {
-  background-color: #111;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 0 20px #00ffcc33, 0 0 40px #00ffcc11;
-  border: 2px solid #00ffcc44;
   position: relative;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: #111;
+  margin-bottom: 2rem;
   z-index: 1;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  max-width: 960px;
+  width: 100%;
+  animation: borderPulse 4s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(0, 255, 180, 0.3);
 }
 
 .glow-frame::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
   z-index: -1;
-  background: conic-gradient(from 0deg, #00ffcc, #00ccff, #00ffcc);
-  border-radius: 1.2rem;
-  filter: blur(12px);
+  border-radius: 18px;
+  background: linear-gradient(270deg, #00ffcc, #00ccff, #00ffcc);
+  background-size: 600% 600%;
+  animation: pulseGradient 8s ease-in-out infinite;
+  filter: blur(4px);
   opacity: 0.8;
-  animation: rotate 8s linear infinite;
 }
 
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
+@keyframes pulseGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes borderPulse {
+  0%, 100% {
+    box-shadow: 0 0 16px #00ffcc, 0 0 24px #00ccff;
   }
-  100% {
-    transform: rotate(360deg);
+  50% {
+    box-shadow: 0 0 32px #00ccff, 0 0 40px #00ffcc;
   }
 }
+
 
 /* Buttons */
 .glow-button, .wallet-btn {
