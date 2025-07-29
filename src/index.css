@@ -1,220 +1,141 @@
-/* Global Reset */ 
-body { margin: 0; 
-  padding: 0; 
-  font-family: "Arial", sans-serif; 
-  background-color: #000; 
-  color: #00ffcc; box-sizing: border-box; 
+body {
+  background-color: #000;
+  color: #00ff99;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-*, *:before, *:after { box-sizing: inherit; 
-}
-
-html { scroll-behavior: smooth; 
-  -webkit-tap-highlight-color: transparent; 
-}
-
-/* Responsive Wrapper */ 
-.app-container { padding: 1rem; 
-  display: flex; flex-direction: column; 
-  align-items: center; 
-  max-width: 480px;
-   margin: 0 auto; 
-   width: 100%; 
-  }
-
-.logo { width: 48px; height: 48px; 
-  margin-bottom: 1rem; 
-  animation: pulse-logo 2s ease-in-out infinite; 
-}
-
-@keyframes pulse-logo { 0%, 100% { transform: scale(1); 
-  filter: drop-shadow(0 0 5px #00ffcc); 
-} 
-50% { transform: scale(1.05); 
-  filter: drop-shadow(0 0 12px #00ffcc); 
-  } 
-}
-
-/* Glow Section Frames */ 
-.glow-frame { background: #111; 
-  border-radius: 1rem; 
-  padding: 1.25rem; 
-  margin-bottom: 1.5rem; 
-  width: 100%; box-shadow: 0 0 10px #00ffcc44; 
-  position: relative; 
-  overflow: hidden; 
- }
-
-.glow-frame::before 
-{ content: ""; 
-  position: absolute; 
-  top: -2px; left: -2px; 
-  right: -2px; 
-  bottom: -2px; z-index: -1; 
-  border-radius: 1.25rem; 
-  background: conic-gradient(from 0deg, #00ffcc, #00ccff, #00ffcc); 
-  filter: blur(6px); opacity: 0.6; 
-  animation: softGlow 6s linear infinite; 
-}
-
-@keyframes softGlow {
-   0% { filter: blur(6px); 
-} 
-50% { filter: blur(10px); 
-} 
-100% { filter: blur(6px); 
-  } 
-}
-
-/* Buttons */ 
-.glow-button, .wallet-btn, .claim-button, .walletconnect-button { padding: 0.75rem 1.25rem; font-size: 1rem; 
-  font-weight: bold; 
-  border-radius: 0.75rem; 
-  border: 1px solid #00ffcc; 
-  color: #00ffcc; 
-  background-color: black; box-shadow: 0 0 8px #00ffcc33; 
-  transition: all 0.3s ease-in-out; 
-  cursor: pointer; 
-  width: 100%; 
-  margin-top: 0.5rem; 
- }
-
-.glow-button:hover, .wallet-btn:hover, .claim-button:hover, .walletconnect-button:hover { background-color: #001f1f; 
-  box-shadow: 0 0 12px #00ffccaa; 
-}
-
-.walletconnect-button img { height: 18px; width: 18px;
-   object-fit: contain; 
-}
-
-/* Inputs */ 
-.input-field, select { width: 100%; padding: 0.75rem; 
-  border-radius: 0.5rem; background-color: #111; 
-  border: 1px solid #00ffcc; 
-  color: #00ffcc; 
-  margin-top: 0.5rem; 
-  margin-bottom: 1rem; 
-  font-size: 1rem; 
-}
-
-.section-title { font-size: 1.25rem; 
-  font-weight: bold; 
-  margin-bottom: 1rem; 
-  color: #00ffcc; 
-  text-align: center; 
-}
-
-.status-text { margin-top: 0.5rem; 
-  font-size: 0.95rem; 
-  color: #00cc99; 
-  text-align: center; 
-}
-
-/* Claim & Dashboard Lists */ 
-.claim-container li, 
-.dashboard-container li { background: #111; 
-  border-radius: 0.5rem; 
-  padding: 0.75rem;
-   margin-bottom: 0.75rem; 
-   box-shadow: 0 0 6px #00ffcc22; 
-   list-style: none; 
-   font-size: 0.95rem; 
-  }
-
-/* Mobile Optimization */
- @media screen and (max-width: 480px)
-  { .app-container { padding: 1rem 0.75rem; 
-  }
-
-.logo { width: 40px; height: 40px;
- }
-
-.glow-frame { padding: 1rem;
-   margin-bottom: 1rem; }
-
-.section-title { font-size: 1.1rem; 
-}
-
-.glow-button, .wallet-btn, .claim-button, .walletconnect-button { font-size: 0.95rem; padding: 0.6rem 1rem; 
-}
-
-.input-field, select { font-size: 0.95rem; 
-  } 
-}
-
-/* Additional Utility */ 
-.text-center { text-align: center; 
-}
-
-.mt-1 { margin-top: 1rem; 
-} .mb-1 { margin-bottom: 1rem; 
-} .mb-2 { margin-bottom: 2rem; 
-}
-
-.walletconnect-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 16px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: transparent;
-  color: #00ffcc;
-  border: 2px solid #00ffcc;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 280px;
-  margin: 0 auto;
-  box-shadow: 0 0 10px #00ffcc55;
-}
-
-.walletconnect-button:hover {
-  background-color: rgba(0, 255, 204, 0.1);
-  box-shadow: 0 0 16px #00ffccaa;
-}
-
-.walletconnect-logo {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-}
-
-.walletconnect-button img {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-.walletconnect-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background-color: transparent;
-  border: 1px solid #00ffcc;
-  border-radius:
-
-  .logo-title-wrapper {
+.app-wrapper {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #000;
+  color: #00ff99;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .logo {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 8px;
+  width: 80px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px #00ff99);
 }
 
 .app-title {
-  font-size: 1.5rem;
-  color: #00ffcc;
+  font-size: 1.8rem;
+  color: #00ff99;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.glow-frame {
+  border: 1px solid #00ff99;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 255, 153, 0.25);
+  background-color: #0a0a0a;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
   text-align: center;
+}
+
+.input-field,
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #00ff99;
+  background-color: #000;
+  color: #00ff99;
+  margin-bottom: 1rem;
+}
+
+.glow-button {
+  background-color: transparent;
+  border: 1px solid #00ff99;
+  padding: 12px;
+  font-size: 1rem;
+  color: #00ff99;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.glow-button:hover {
+  background-color: #00ff99;
+  color: #000;
+  box-shadow: 0 0 15px #00ff99;
+}
+
+.success-text,
+.warning-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.success-text {
+  color: #00ff99;
+}
+
+.warning-text {
+  color: #ffaa00;
+}
+
+.wallet-status,
+.network-banner {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+@media screen and (max-width: 600px) {
+  .app-title {
+    font-size: 1.5rem;
+  }
+
+  .logo {
+    width: 60px;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+  }
+
+  .input-field,
+  select,
+  .glow-button {
+    font-size: 0.95rem;
+  }
+}
+
+/* WalletConnect Modal (minor fix for z-index if needed) */
+.walletconnect-modal {
+  z-index: 9999 !important;
+}
+
+/* Soft separator */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #00ff99;
+  opacity: 0.2;
+  margin: 2rem 0;
 }
