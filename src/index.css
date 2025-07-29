@@ -142,3 +142,32 @@ img[alt="walletconnect"] {
     max-width: 100px;
   }
 }
+
+/* Override WalletConnect QR Modal size on mobile */
+@media screen and (max-width: 600px) {
+  .walletconnect-modal__container {
+    max-width: 90% !important;
+    max-height: 90% !important;
+    top: 5% !important;
+    left: 5% !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .walletconnect-modal__base {
+    transform: scale(0.8) !important;
+    transform-origin: top center !important;
+  }
+
+  .walletconnect-modal__mobile {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 10px !important;
+  }
+
+  .walletconnect-modal__image {
+    max-width: 200px !important;
+    height: auto !important;
+  }
+}
