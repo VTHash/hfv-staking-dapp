@@ -17,11 +17,8 @@ const App = () => {
       </div>
 
       <div className="main-content">
-        <div className="glow-frame">
-          <div className="walletconnect-button-container">
-  <button className="glow-button">
-    <img src="/wallet-connect-logo.png" alt="WalletConnect Logo" className="walletconnect-icon" />
-    Connect Wallet
+        <div className="glow-frame">       
+    <Connect Wallet />
   </button>
 </div>
             
