@@ -28,9 +28,9 @@ export default function ConnectWallet({ onWalletConnected }) {
   };
 
   return (
-  <div className="walletconnect-wrapper">
+  <div className="glow-frame">
     {!address ? (
-      <button className="walletconnect-button" onClick={connectWalletConnect}>
+      <button className="glow-button" onClick={connectWalletConnect}>
         <img
           src="/wallett-connect-logo.png"
           alt="WalletConnect"
