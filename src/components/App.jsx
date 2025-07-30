@@ -18,9 +18,6 @@ const App = () => {
 
       <div className="main-content">
         <div className="glow-frame">       
-    <Connect Wallet />
-  </button>
-</div>
             
           <ConnectWallet />
           <NetworkBanner />
