@@ -30,11 +30,10 @@ export default function ConnectWallet({ onWalletConnected }) {
   return (
     <div className="section-card center">
       {!address ? (
-        <button className="walletconnect-button" 
-        onClick={connectWalletConnect}>
-          <img src="/wallet-connect-logo.png" alt="WalletConnect" />
-          Connect with WalletConnect
-        </button>
+        <button className="walletconnect-button" onClick={connectWalletConnect}>
+  <img src="/wallet-connect-logo.png" alt="WalletConnect Logo" className="walletconnect-logo" />
+  Connect with WalletConnect
+</button>
       ) : (
         <p className="status-text">
           ✅ Connected: <strong>{address.slice(0, 6)}...{address.slice(-4)}</strong>
