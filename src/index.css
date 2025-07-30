@@ -131,28 +131,20 @@ body {
   font-weight: bold;
 }
 
-.connect-wallet-container {
+.walletconnect-button-container {
   display: flex;
   justify-content: center;
-  margin-top: 1.5rem;
+  align-items: center;
+  margin-top: 1rem;
 }
 
-.connect-wallet-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  color: #00ff99;
-  background-color: black;
-  border: 2px solid #00ff99;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+.walletconnect-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  margin-right: 8px;
+  vertical-align: middle;
 }
-
-.connect-wallet-button:hover {
-  background-color: #00ff99;
-  color: black;
-}
-
 .live-stats-container {
   background: #000;
   border: 2px solid #00ff99;
