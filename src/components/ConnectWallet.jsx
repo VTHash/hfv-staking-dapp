@@ -28,17 +28,21 @@ export default function ConnectWallet({ onWalletConnected }) {
   };
 
   return (
-    <div className="section-card center">
-      {!address ? (
-        <button className="walletconnect-button" onClick={connectWalletConnect}>
-  <img src="/wallett-connect-logo.png" alt="WalletConnect" className="walletconnect-icon" />
-  Connect Wallet
-</button>
-      ) : (
-        <p className="status-text">
-          ✅ Connected: <strong>{address.slice(0, 6)}...{address.slice(-4)}</strong>
-        </p>
-      )}
-    </div>
-  );
+  <div className="walletconnect-wrapper">
+    {!address ? (
+      <button className="walletconnect-button" onClick={connectWalletConnect}>
+        <img
+          src="/wallett-connect-logo.png"
+          alt="WalletConnect"
+          className="walletconnect-icon"
+        />
+        Connect Wallet
+      </button>
+    ) : (
+      <p className="status-text">
+        Connected: <strong>{address.slice(0, 6)}...{address.slice(-4)}</strong>
+      </p>
+    )}
+  </div>
+);
 }
