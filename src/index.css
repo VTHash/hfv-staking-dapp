@@ -131,6 +131,31 @@ body {
   font-weight: bold;
 }
 
+/* Container wraps the modal tightly */
+.walletconnect-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Keep modal hidden unless triggered */
+.walletconnect-modal,
+.walletconnect-modal__base {
+  z-index: 9999 !important;
+  position: absolute !important;
+  top: 60px !important; /* or adjust as needed */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Resize wallet logo */
+.walletconnect-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
 .walletconnect-button-container {
   display: flex;
   justify-content: center;
