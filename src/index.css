@@ -72,10 +72,18 @@ color: #00ffcc;
 text-shadow: 0 0 8px #00ffcc; 
 }
 
-.glow-frame p, 
-.glow-frame span, 
-.glow-frame label 
-{ 
+.glow-button,
+.glow-frame button {
+  font-size: 1.2rem;
+  padding: 16px 0;
+  height: auto;
+}
+
+.glow-frame label,
+.glow-frame p,
+.glow-frame span {
+  font-weight: 500;
+}
 
 font-size: 1rem; 
 color: #00ffcc; 
