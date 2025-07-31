@@ -133,19 +133,44 @@ margin-top: 1rem;
 { 
 .logo 
 { 
-width: 60px;  }
+width: 60px;  
+}
 
-.app-title { font-size: 1.6rem; }
+.app-title { 
+font-size: 1.6rem; 
+}
 
-.glow-button { font-size: 1.2rem; padding: 14px; }
+.glow-button 
+{ 
+font-size: 1.2rem; 
+padding: 14px; 
+}
 
-.main-content { padding: 8px; }
+.main-content 
+{ 
+padding: 8px; 
+}
 
-.glow-frame { padding: 20px; margin: 16px 0; }
+.glow-frame 
+{ padding: 20px; 
+margin: 16px 0; 
+}
 
-.glow-frame h2, .glow-frame h3 { font-size: 1.4rem; } }
+.glow-frame h2, 
+.glow-frame h3 
+{ 
+font-size: 1.4rem; 
+} 
+}
 
-.section-card { padding: 20px; border-radius: 12px; background: #000; box-shadow: 0 0 14px #00ff99; width: 100%; margin-bottom: 20px; }
+.section-card 
+{ 
+padding: 20px; 
+border-radius: 12px; 
+background: #000; 
+box-shadow: 0 0 14px #00ff99; 
+width: 100%; margin-bottom: 20px; 
+}
 
 
 
