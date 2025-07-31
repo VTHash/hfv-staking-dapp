@@ -270,3 +270,76 @@ body {
   margin-left: 6px;
   vertical-align: middle;
 }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.app-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 10px; /* Reduced padding for tight fit */
+  box-sizing: border-box;
+}
+
+.app-header {
+  margin-top: 0;  /* Remove margin-top if you have any extra spacing */
+}
+
+.main-content {
+  width: 100%;
+  max-width: 100%;
+  padding: 10px;  /* Adjust padding to fit well on mobile screens */
+  box-sizing: border-box;
+}
+
+.glow-frame {
+  width: 100%;
+  max-width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 0; /* Remove margin to make the containers fit perfectly */
+}
+
+input, select, button {
+  width: 100%;  /* Ensure inputs and buttons stretch properly */
+  padding: 10px; /* Increase padding for better touch usability */
+  box-sizing: border-box;
+}
+
+/* For responsive typography */
+.app-title {
+  font-size: 1.6rem; /* Adjust font size for mobile */
+}
+
+@media screen and (max-width: 600px) {
+  /* Ensure the logo is centered and has no extra margin */
+  .app-header img {
+    width: 60px;
+    height: auto;
+    margin-bottom: 10px;  /* Tighten the space around the logo */
+  }
+
+  /* Mobile optimization for button */
+  .glow-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+  }
+
+  .main-content {
+    padding: 8px; /* Adjust mobile padding */
+  }
+
+  .glow-frame {
+    padding: 15px;  /* Less padding for smaller screens */
+  }
+
+  .section-card {
+    padding: 0 10px; /* Ensures there’s no space between the card content and the edges */
+  }
+}
