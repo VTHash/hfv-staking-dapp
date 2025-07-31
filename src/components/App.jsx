@@ -18,8 +18,10 @@ const App = () => {
 
       <div className="main-content">
         <div className="glow-frame">       
-            
-          <ConnectWallet />
+            <ConnectWallet />
+          </div>
+        
+        <div className="glow-frame">
           <NetworkBanner />
         </div>
 
