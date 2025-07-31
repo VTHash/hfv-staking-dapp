@@ -1,492 +1,151 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  background: #000;
-  color: #00ff99;
-  font-family: 'Arial', sans-serif;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
+body, html { margin: 0; 
+padding: 0; 
+background: #000; 
+color: #00ff99; 
+font-family: 'Arial', sans-serif; 
+width: 100%; 
+min-height: 100vh; 
+overflow-x: hidden; 
 }
 
-.main-content {
-  padding: 16px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+.app-wrapper { width: 100%; 
+height: 100%; 
+padding: 10px; 
+box-sizing: border-box; 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+background-color: #000; 
+color: #00ff99; 
 }
 
-.glow {
-  box-shadow: 0 0 10px #00ff99, 0 0 20px #00ffcc;
+.app-header { display: flex; 
+flex-direction: column; 
+align-items: center; 
+text-align: center; 
+margin-bottom: 2rem; 
 }
 
-.app-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-bottom: 2rem;
+.logo { width: 80px; 
+margin-bottom: 1rem; 
+filter: drop-shadow(0 0 10px #00ff99); 
 }
 
-.app-header img {
-  width: 64px;
-  height: auto;
+.app-title { font-size: 1.8rem; 
+font-weight: bold; 
+color: #00ffcc; 
+margin-top: 0.75rem; 
+text-shadow: 0 0 6px #00ffcc, 0 0 12px #00ffcc; 
+text-align: center; 
 }
 
-.app-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #00ffcc;
-  margin-top: 0.75rem;
-  text-shadow: 0 0 6px #00ffcc, 0 0 12px #00ffcc;
+.main-content { padding: 16px; 
+width: 100%; 
+max-width: 600px; 
+margin: 0 auto; 
+display: flex; 
+flex-direction: column; 
+gap: 24px; 
 }
 
-.app-wrapper {
-  min-height: 100vh;
-  background-color: #000;
-  color: #00ff99;
-  display: flex;
-  flex-direction: column; /* Stack header + content */
-  align-items: center;
-  padding: 20px;
+.glow-frame { width: 95vw; 
+max-width: 600px; 
+padding: 24px 20px; 
+margin: 16px auto; 
+border: 1px solid #00ff99; 
+border-radius: 16px; 
+box-shadow: 0 0 18px #00ff99; 
+background-color: #0a0a0a; 
+box-sizing: border-box; 
 }
 
-.glow-frame {
-  width: 100%;
-  max-width: 560px;
-  margin: 24px auto;
-  padding: 24px 20px;
-  background-color: #000;
-  border-radius: 14px;
-  box-shadow: 0 0 12px #00ff99, 0 0 24px #001f10;
-}
-  /* Increase font sizes for better mobile readability */
-h2, h3 {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #00ffcc;
-  margin-bottom: 1rem;
-  text-align: center;
+.glow-frame h2, 
+.glow-frame h3, 
+.glow-frame h4 
+{ 
+
+  font-size: 1.3rem; 
+font-weight: bold; 
+text-align: center; 
+margin-bottom: 1rem; 
+color: #00ffcc; 
+text-shadow: 0 0 8px #00ffcc; 
 }
 
-input, select, button {
-  font-size: 1rem;
-  padding: 12px 16px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+.glow-frame p, 
+.glow-frame span, 
+.glow-frame label 
+{ 
+
+font-size: 1rem; 
+color: #00ffcc; 
+text-align: center; 
 }
 
-label, p {
-  font-size: 1rem;
-  color: #00ffcc;
+input, select, button 
+{ 
+width: 100%; 
+font-size: 1.1rem; 
+padding: 12px; 
+margin: 8px 0; 
+border-radius: 8px; 
+box-sizing: border-box; 
 }
 
-/* Form elements (stake inputs, select, buttons) */
-input, select, button {
-  font-size: 1rem;
-  padding: 12px 16px;
-  border-radius: 6px;
-  width: 100%;
-  box-sizing: border-box;
+.network-banner 
+{ 
+font-size: 0.95rem; 
+padding: 12px; 
+margin-top: 12px; 
+text-align: center; 
+background-color: #111; 
+border-radius: 8px; 
+box-shadow: 0 0 10px #00ff99; 
+color: #00ffcc; 
 }
 
-/* Paragraphs and labels inside sections */
-p, label {
-  font-size: 1rem;
-}
-  margin-bottom: 24px; /* Adds spacing between boxes */
-}
-
-.logo {
-  width: 80px;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 0 10px #00ff99);
+.walletconnect-wrapper 
+{ 
+position: relative; 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
 }
 
-.app-title {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
+.walletconnect-icon 
+{ 
+width: 16px; 
+height: 16px; 
+margin-right: 8px; 
+vertical-align: middle; 
+object-fit: contain; 
 }
 
-.buy-container {
-  background-color: #0a0a0a;
-  border: 1px solid #00ff99;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 0 20px rgba(0, 255, 153, 0.4);
-  margin-bottom: 2rem;
+.walletconnect-button-container 
+{ 
+display: flex; 
+justify-content: center; 
+align-items: center; 
+margin-top: 1rem; 
 }
 
-.section-title {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: #00ff99;
-}
+@media screen and (max-width: 600px) 
+{ 
+.logo 
+{ 
+width: 60px;  }
 
-.input-field {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #00ff99;
-  background-color: #000;
-  color: #00ff99;
-  margin-bottom: 1rem;
-}
+.app-title { font-size: 1.6rem; }
 
-.buy-button {
-  background-color: transparent;
-  border: 1px solid #00ff99;
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: #00ff99;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+.glow-button { font-size: 1.2rem; padding: 14px; }
 
-.buy-button:hover {
-  background-color: #00ff99;
-  color: #000;
-  box-shadow: 0 0 12px #00ff99;
-}
+.main-content { padding: 8px; }
 
-.success-text {
-  color: #00ff99;
-  margin-top: 1rem;
-  font-weight: bold;
-}
+.glow-frame { padding: 20px; margin: 16px 0; }
 
-.claim-container {
-  background-color: #0a0a0a;
-  border: 1px solid #00ff99;
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 2rem;
-  box-shadow: 0 0 20px rgba(0, 255, 153, 0.4);
-}
+.glow-frame h2, .glow-frame h3 { font-size: 1.4rem; } }
 
-.stat-line {
-  color: #00ff99;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
+.section-card { padding: 20px; border-radius: 12px; background: #000; box-shadow: 0 0 14px #00ff99; width: 100%; margin-bottom: 20px; }
 
-.claim-button {
-  background-color: transparent;
-  border: 1px solid #00ff99;
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: #00ff99;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-}
 
-.claim-button:hover {
-  background-color: #00ff99;
-  color: #000;
-  box-shadow: 0 0 12px #00ff99;
-}
 
-.success-text {
-  color: #00ff99;
-  margin-top: 1rem;
-  font-weight: bold;
-}
-
-/* Container wraps the modal tightly */
-.walletconnect-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Keep modal hidden unless triggered */
-.walletconnect-modal,
-.walletconnect-modal__base {
-  z-index: 9999 !important;
-  position: absolute !important;
-  top: 60px !important; /* or adjust as needed */
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-}
-
-/* Resize wallet logo */
-.walletconnect-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-.walletconnect-button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.walletconnect-icon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-.live-stats-container {
-  background: #000;
-  border: 2px solid #00ff99;
-  padding: 2rem;
-  border-radius: 16px;
-  margin: 2rem auto;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 0 20px #00ff99;
-}
-
-.live-stats-title {
-  text-align: center;
-  color: #00ff99;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-}
-
-.stats-bar {
-  background-color: #1f1f1f;
-  border-radius: 10px;
-  height: 24px;
-  overflow: hidden;
-  margin-bottom: 1rem;
-  box-shadow: inset 0 0 5px #00ff99;
-}
-
-.stats-bar-sold {
-  height: 100%;
-  background: linear-gradient(90deg, #00ff99, #007755);
-  transition: width 0.5s ease-in-out;
-}
-
-.stats-info {
-  color: #ffffff;
-  font-size: 1rem;
-  text-align: center;
-}
-
-.wallet-connection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-.glow-button {
-  background-color: #00ff95;
-  border: none;
-  color: black;
-  padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #00ff95;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.glow-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #00ff95;
-}
-
-.wallet-address {
-  color: #00ff95;
-  font-size: 0.9rem;
-  font-family: monospace;
-}
-
-/* Token Logos */
-.token-logo {
-  width: 20px;
-  height: 20px;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-.app-wrapper {
-  width: 100%;
-  height: 100%;
-  padding: 10px; /* Reduced padding for tight fit */
-  box-sizing: border-box;
-}
-
-.app-header {
-  margin-top: 0;  /* Remove margin-top if you have any extra spacing */
-}
-
-.main-content {
-  width: 100%;
-  max-width: 100%;
-  padding: 10px;  /* Adjust padding to fit well on mobile screens */
-  box-sizing: border-box;
-}
-
-.glow-frame {
-  width: 100%;
-  max-width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  margin: 0; /* Remove margin to make the containers fit perfectly */
-}
-
-input, select, button {
-  width: 100%;  /* Ensure inputs and buttons stretch properly */
-  padding: 10px; /* Increase padding for better touch usability */
-  box-sizing: border-box;
-}
-
-/* For responsive typography */
-.app-title {
-  font-size: 1.6rem; /* Adjust font size for mobile */
-}
-
-@media screen and (max-width: 600px) {
-  /* Ensure the logo is centered and has no extra margin */
-  .app-header img {
-    width: 60px;
-    height: auto;
-    margin-bottom: 10px;  /* Tighten the space around the logo */
-  }
-
-  /* Mobile optimization for button */
-  .glow-button {
-    width: 100%;
-    padding: 12px;
-    font-size: 1.2rem;
-  }
-
-  .main-content {
-    padding: 8px; /* Adjust mobile padding */
-  }
-
-  .glow-frame {
-    padding: 15px;  /* Less padding for smaller screens */
-  }
-
-  .section-card {
-    padding: 0 10px; /* Ensures there’s no space between the card content and the edges */
-  }
-}
-
-.glow-frame {
-  width: 100%;
-  max-width: 100%;
-  padding: 24px;
-  margin: 12px 0;
-  box-sizing: border-box;
-  border-radius: 12px;
-  box-shadow: 0 0 16px #00ff99, 0 0 4px #00ff99;
-  background-color: #000000;
-}
-
-.glow-frame h2,
-.glow-frame h3,
-.glow-frame label,
-.glow-frame p {
-  font-size: 1.2rem;
-  color: #00ff99;
-  text-align: center;
-}
-
-input,
-select,
-button {
-  width: 100%;
-  font-size: 1.1rem;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  box-sizing: border-box;
-}
-
-@media screen and (max-width: 600px) {
-  .glow-frame {
-    padding: 20px;
-    margin: 16px 0;
-  }
-
-  .glow-frame h2,
-  .glow-frame h3 {
-    font-size: 1.4rem;
-  }
-
-  .glow-button {
-    font-size: 1.2rem;
-    padding: 14px;
-  }
-}
-
-.section-card {
-  padding: 20px;
-  border-radius: 12px;
-  background: #000;
-  box-shadow: 0 0 14px #00ff99;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-/* Expand glow frames and improve mobile UI font sizing */
-
-.glow-frame {
-  width: 95vw;
-  max-width: 600px;
-  padding: 24px 20px;
-  margin: 16px auto;
-  border: 1px solid #00ff99;
-  border-radius: 16px;
-  box-shadow: 0 0 18px #00ff99;
-  background-color: #000;
-}
-
-/* Bigger form elements */
-.glow-frame input,
-.glow-frame select,
-.glow-frame button {
-  width: 100%;
-  padding: 14px;
-  font-size: 1rem;
-  border-radius: 8px;
-  margin: 8px 0;
-}
-
-/* Make section titles more visible */
-.glow-frame h2,
-.glow-frame h3,
-.glow-frame h4 {
-  font-size: 1.3rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #00ffcc;
-  text-shadow: 0 0 8px #00ffcc;
-}
-
-/* For info or status messages */
-.glow-frame p,
-.glow-frame span,
-.glow-frame label {
-  font-size: 1rem;
-  color: #00ffcc;
-  text-align: center;
-}
-
-/* Resize the warning bar */
-.network-banner {
-  font-size: 0.95rem;
-  padding: 12px;
-  margin-top: 12px;
-}
