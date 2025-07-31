@@ -48,6 +48,7 @@ body {
   width: 100%;
   max-width: 700px;
   text-align: center;
+  margin-bottom: 24px; /* Adds spacing between boxes */
 }
 
 .logo {
