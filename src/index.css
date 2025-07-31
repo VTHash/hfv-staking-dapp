@@ -343,3 +343,60 @@ input, select, button {
     padding: 0 10px; /* Ensures there’s no space between the card content and the edges */
   }
 }
+
+.glow-frame {
+  width: 100%;
+  max-width: 100%;
+  padding: 24px;
+  margin: 12px 0;
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 0 16px #00ff99, 0 0 4px #00ff99;
+  background-color: #000000;
+}
+
+.glow-frame h2,
+.glow-frame h3,
+.glow-frame label,
+.glow-frame p {
+  font-size: 1.2rem;
+  color: #00ff99;
+  text-align: center;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 600px) {
+  .glow-frame {
+    padding: 20px;
+    margin: 16px 0;
+  }
+
+  .glow-frame h2,
+  .glow-frame h3 {
+    font-size: 1.4rem;
+  }
+
+  .glow-button {
+    font-size: 1.2rem;
+    padding: 14px;
+  }
+}
+
+.section-card {
+  padding: 20px;
+  border-radius: 12px;
+  background: #000;
+  box-shadow: 0 0 14px #00ff99;
+  width: 100%;
+  margin-bottom: 20px;
+}
