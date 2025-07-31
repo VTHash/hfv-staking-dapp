@@ -180,5 +180,110 @@ box-shadow: 0 0 14px #00ff99;
 width: 100%; margin-bottom: 20px; 
 }
 
+/* Reset spacing and body layout */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #00ff99;
+  font-family: 'Arial', sans-serif;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* App wrapper fills screen and centers */
+.app-wrapper {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Full width glow sections with spacing */
+.glow-frame {
+  width: 95vw;
+  max-width: 600px;
+  margin: 16px 0;
+  padding: 24px;
+  background: #000;
+  border: 1px solid #00ff99;
+  border-radius: 16px;
+  box-shadow: 0 0 16px #00ff99, 0 0 4px #00ff99;
+  box-sizing: border-box;
+}
+
+/* Headings inside boxes */
+.glow-frame h2,
+.glow-frame h3 {
+  font-size: 1.4rem;
+  color: #00ffcc;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 6px #00ffcc;
+}
+
+/* Paragraphs and labels */
+.glow-frame label,
+.glow-frame p,
+.glow-frame span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #00ffcc;
+  text-align: center;
+}
+
+/* Input, select, button — fully expanded */
+.glow-frame input,
+.glow-frame select,
+.glow-frame button {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Bigger glowing buttons */
+.glow-button,
+.glow-frame button {
+  background: #00ff95;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00ff95;
+  border: none;
+  cursor: pointer;
+}
+
+.glow-button:hover,
+.glow-frame button:hover {
+  box-shadow: 0 0 20px #00ff95;
+  transform: scale(1.03);
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 600px) {
+  .glow-frame {
+    padding: 20px;
+    margin: 18px 0;
+  }
+
+  .glow-frame h2,
+  .glow-frame h3 {
+    font-size: 1.5rem;
+  }
+
+  .glow-frame input,
+  .glow-frame select,
+  .glow-frame button {
+    font-size: 1.15rem;
+    padding: 16px;
+  }
+}
 
 
