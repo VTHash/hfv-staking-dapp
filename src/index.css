@@ -35,7 +35,7 @@ body {
   background-color: #000;
   color: #00ff99;
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Stack header + content */
   align-items: center;
   padding: 20px;
 }
