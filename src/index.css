@@ -400,3 +400,55 @@ button {
   width: 100%;
   margin-bottom: 20px;
 }
+
+/* Expand glow frames and improve mobile UI font sizing */
+
+.glow-frame {
+  width: 95vw;
+  max-width: 600px;
+  padding: 24px 20px;
+  margin: 16px auto;
+  border: 1px solid #00ff99;
+  border-radius: 16px;
+  box-shadow: 0 0 18px #00ff99;
+  background-color: #000;
+}
+
+/* Bigger form elements */
+.glow-frame input,
+.glow-frame select,
+.glow-frame button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+/* Make section titles more visible */
+.glow-frame h2,
+.glow-frame h3,
+.glow-frame h4 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #00ffcc;
+  text-shadow: 0 0 8px #00ffcc;
+}
+
+/* For info or status messages */
+.glow-frame p,
+.glow-frame span,
+.glow-frame label {
+  font-size: 1rem;
+  color: #00ffcc;
+  text-align: center;
+}
+
+/* Resize the warning bar */
+.network-banner {
+  font-size: 0.95rem;
+  padding: 12px;
+  margin-top: 12px;
+}
