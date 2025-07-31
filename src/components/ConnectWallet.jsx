@@ -28,6 +28,7 @@ export default function ConnectWallet({ onWalletConnected }) {
   };
 
   return (
+    <>
     {!address ? (
       <button className="glow-button" onClick={connectWalletConnect}>
         <img
