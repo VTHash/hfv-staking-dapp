@@ -1,169 +1,129 @@
-/* Reset and body layout */
+/* ==== Base Reset ==== */
 body, html {
   margin: 0;
   padding: 0;
   background: #000;
   color: #00ff99;
   font-family: 'Arial', sans-serif;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* App wrapper fills screen */
+/* ==== App Wrapper ==== */
 .app-wrapper {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
-  box-sizing: border-box;
 }
 
-/* Header */
+/* ==== Header ==== */
 .app-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 }
 
 .logo {
-  width: 72px;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 0 8px #00ff99);
+  width: 80px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px #00ff99);
 }
 
 .app-title {
   font-size: 1.8rem;
-  color: #00ffcc;
-  text-shadow: 0 0 6px #00ffcc;
   font-weight: bold;
+  text-shadow: 0 0 8px #00ffcc;
+  color: #00ffcc;
 }
 
-/* Glowing content box */
+/* ==== HUD Frame ==== */
 .glow-frame {
   width: 95vw;
   max-width: 600px;
+  margin: 16px 0;
   padding: 24px 20px;
-  margin: 20px auto;
+  background: #000;
+  border: 1px solid #00ff99;
   border-radius: 16px;
-  background-color: #000;
-  box-shadow: 0 0 18px #00ff99, 0 0 4px #00ff99;
-  box-sizing: border-box;
+  box-shadow: 0 0 20px #00ff99;
 }
 
-/* Typography inside sections */
-.glow-frame h2,
-.glow-frame h3,
-.glow-frame h4 {
+/* ==== Text Elements ==== */
+.glow-frame h2, h3, h4 {
   font-size: 1.3rem;
   font-weight: bold;
-  color: #00ffcc;
   text-align: center;
   margin-bottom: 1rem;
+  color: #00ffcc;
   text-shadow: 0 0 6px #00ffcc;
 }
 
-.glow-frame p,
-.glow-frame span,
-.glow-frame label {
-  font-size: 1rem;
-  color: #00ffcc;
+.glow-frame p, label, span {
+  font-size: 1.1rem;
   text-align: center;
+  color: #00ffcc;
 }
 
-/* Input + Button styles */
+/* ==== Form Elements ==== */
 .glow-frame input,
 .glow-frame select,
 .glow-frame button {
-  font-size: 1.1rem;
-  padding: 14px;
   width: 100%;
+  font-size: 1.2rem;
+  padding: 16px;
+  border-radius: 10px;
   margin: 10px 0;
-  border-radius: 10px;
   box-sizing: border-box;
-}
-
-/* Connect wallet button */
-.glow-button {
-  background-color: #00ff95;
-  border: none;
-  color: black;
-  padding: 14px 24px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #00ff95;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.glow-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 18px #00ff95;
-}
-
-/* Status or address text */
-.wallet-address {
-  font-size: 1rem;
-  font-family: monospace;
-  color: #00ff95;
-  margin-top: 8px;
-}
-
-/* Network warning bar */
-.network-banner {
-  font-size: 1rem;
-  text-align: center;
-  padding: 12px;
-  background-color: #0a0a0a;
   border: 1px solid #00ff99;
-  border-radius: 12px;
-  box-shadow: 0 0 12px #00ff99;
-  margin-top: 16px;
+  background: #000;
+  color: #00ff99;
 }
 
-/* WalletConnect icon inside button */
+.glow-frame button {
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.glow-frame button:hover {
+  background: #00ff99;
+  color: #000;
+  box-shadow: 0 0 12px #00ff99;
+}
+
+/* ==== WalletConnect Logo ==== */
 .walletconnect-icon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   margin-right: 8px;
   vertical-align: middle;
 }
 
-/* Section spacing if needed */
-.section-gap {
-  height: 20px;
-  width: 100%;
-  box-shadow: 0 0 10px #00ff99;
-  margin: 12px 0;
-  border-radius: 10px;
-}
-
-/* Responsive tweaks */
+/* ==== Mobile Tuning ==== */
 @media screen and (max-width: 600px) {
+  .logo {
+    width: 60px;
+  }
+
   .app-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .glow-frame {
-    padding: 20px 16px;
-    margin: 16px 0;
+    padding: 20px;
   }
 
-  .glow-frame h2,
-  .glow-frame h3 {
-    font-size: 1.3rem;
+  .glow-frame h2, h3 {
+    font-size: 1.4rem;
   }
 
-  .glow-button {
+  .glow-frame input,
+  .glow-frame select,
+  .glow-frame button {
     font-size: 1.1rem;
     padding: 14px;
   }
-
-  .logo {
-    width: 64px;
-  }
 }
-
