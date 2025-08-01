@@ -1,289 +1,169 @@
-body, html { margin: 0; 
-padding: 0; 
-background: #000; 
-color: #00ff99; 
-font-family: 'Arial', sans-serif; 
-width: 100%; 
-min-height: 100vh; 
-overflow-x: hidden; 
-}
-
-.app-wrapper { width: 100%; 
-height: 100%; 
-padding: 10px; 
-box-sizing: border-box; 
-display: flex; 
-flex-direction: column; 
-align-items: center; 
-background-color: #000; 
-color: #00ff99; 
-}
-
-.app-header { display: flex; 
-flex-direction: column; 
-align-items: center; 
-text-align: center; 
-margin-bottom: 2rem; 
-}
-
-.logo { width: 80px; 
-margin-bottom: 1rem; 
-filter: drop-shadow(0 0 10px #00ff99); 
-}
-
-.app-title { font-size: 1.8rem; 
-font-weight: bold; 
-color: #00ffcc; 
-margin-top: 0.75rem; 
-text-shadow: 0 0 6px #00ffcc, 0 0 12px #00ffcc; 
-text-align: center; 
-}
-
-.main-content { padding: 16px; 
-width: 100%; 
-max-width: 600px; 
-margin: 0 auto; 
-display: flex; 
-flex-direction: column; 
-gap: 24px; 
-}
-
-.glow-frame { width: 95vw; 
-max-width: 600px; 
-padding: 24px 20px; 
-margin: 16px auto; 
-border: 1px solid #00ff99; 
-border-radius: 16px; 
-box-shadow: 0 0 18px #00ff99; 
-background-color: #0a0a0a; 
-box-sizing: border-box; 
-}
-
-.glow-frame h2, 
-.glow-frame h3, 
-.glow-frame h4 
-{ 
-
-  font-size: 1.3rem; 
-font-weight: bold; 
-text-align: center; 
-margin-bottom: 1rem; 
-color: #00ffcc; 
-text-shadow: 0 0 8px #00ffcc; 
-}
-
-.glow-button,
-.glow-frame button {
-  font-size: 1.2rem;
-  padding: 16px 0;
-  height: auto;
-}
-
-.glow-frame label,
-.glow-frame p,
-.glow-frame span {
-  font-weight: 500;
-}
-
-font-size: 1rem; 
-color: #00ffcc; 
-text-align: center; 
-}
-
-input, select, button 
-{ 
-width: 100%; 
-font-size: 1.1rem; 
-padding: 12px; 
-margin: 8px 0; 
-border-radius: 8px; 
-box-sizing: border-box; 
-}
-
-.network-banner 
-{ 
-font-size: 0.95rem; 
-padding: 12px; 
-margin-top: 12px; 
-text-align: center; 
-background-color: #111; 
-border-radius: 8px; 
-box-shadow: 0 0 10px #00ff99; 
-color: #00ffcc; 
-}
-
-.walletconnect-wrapper 
-{ 
-position: relative; 
-display: flex; 
-flex-direction: column; 
-align-items: center; 
-}
-
-.walletconnect-icon 
-{ 
-width: 16px; 
-height: 16px; 
-margin-right: 8px; 
-vertical-align: middle; 
-object-fit: contain; 
-}
-
-.walletconnect-button-container 
-{ 
-display: flex; 
-justify-content: center; 
-align-items: center; 
-margin-top: 1rem; 
-}
-
-@media screen and (max-width: 600px) 
-{ 
-.logo 
-{ 
-width: 60px;  
-}
-
-.app-title { 
-font-size: 1.6rem; 
-}
-
-.glow-button 
-{ 
-font-size: 1.2rem; 
-padding: 14px; 
-}
-
-.main-content 
-{ 
-padding: 8px; 
-}
-
-.glow-frame 
-{ padding: 20px; 
-margin: 16px 0; 
-}
-
-.glow-frame h2, 
-.glow-frame h3 
-{ 
-font-size: 1.4rem; 
-} 
-}
-
-.section-card 
-{ 
-padding: 20px; 
-border-radius: 12px; 
-background: #000; 
-box-shadow: 0 0 14px #00ff99; 
-width: 100%; margin-bottom: 20px; 
-}
-
-/* Reset spacing and body layout */
+/* Reset and body layout */
 body, html {
   margin: 0;
   padding: 0;
   background: #000;
   color: #00ff99;
   font-family: 'Arial', sans-serif;
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* App wrapper fills screen and centers */
+/* App wrapper fills screen */
 .app-wrapper {
-  width: 100%;
-  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* Full width glow sections with spacing */
-.glow-frame {
-  width: 95vw;
-  max-width: 600px;
-  margin: 16px 0;
-  padding: 24px;
-  background: #000;
-  border: 1px solid #00ff99;
-  border-radius: 16px;
-  box-shadow: 0 0 16px #00ff99, 0 0 4px #00ff99;
+  padding: 16px;
   box-sizing: border-box;
 }
 
-/* Headings inside boxes */
+/* Header */
+.app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  width: 72px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 8px #00ff99);
+}
+
+.app-title {
+  font-size: 1.8rem;
+  color: #00ffcc;
+  text-shadow: 0 0 6px #00ffcc;
+  font-weight: bold;
+}
+
+/* Glowing content box */
+.glow-frame {
+  width: 95vw;
+  max-width: 600px;
+  padding: 24px 20px;
+  margin: 20px auto;
+  border-radius: 16px;
+  background-color: #000;
+  box-shadow: 0 0 18px #00ff99, 0 0 4px #00ff99;
+  box-sizing: border-box;
+}
+
+/* Typography inside sections */
 .glow-frame h2,
-.glow-frame h3 {
-  font-size: 1.4rem;
+.glow-frame h3,
+.glow-frame h4 {
+  font-size: 1.3rem;
+  font-weight: bold;
   color: #00ffcc;
   text-align: center;
   margin-bottom: 1rem;
   text-shadow: 0 0 6px #00ffcc;
 }
 
-/* Paragraphs and labels */
-.glow-frame label,
 .glow-frame p,
-.glow-frame span {
+.glow-frame span,
+.glow-frame label {
   font-size: 1rem;
-  font-weight: 500;
   color: #00ffcc;
   text-align: center;
 }
 
-/* Input, select, button — fully expanded */
+/* Input + Button styles */
 .glow-frame input,
 .glow-frame select,
 .glow-frame button {
-  width: 100%;
   font-size: 1.1rem;
   padding: 14px;
+  width: 100%;
   margin: 10px 0;
-  border-radius: 8px;
+  border-radius: 10px;
   box-sizing: border-box;
 }
 
-/* Bigger glowing buttons */
-.glow-button,
-.glow-frame button {
-  background: #00ff95;
-  color: #000;
-  font-weight: bold;
-  font-size: 1.2rem;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #00ff95;
+/* Connect wallet button */
+.glow-button {
+  background-color: #00ff95;
   border: none;
+  color: black;
+  padding: 14px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ff95;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.glow-button:hover,
-.glow-frame button:hover {
-  box-shadow: 0 0 20px #00ff95;
-  transform: scale(1.03);
+.glow-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px #00ff95;
 }
 
-/* Mobile-specific adjustments */
-@media (max-width: 600px) {
+/* Status or address text */
+.wallet-address {
+  font-size: 1rem;
+  font-family: monospace;
+  color: #00ff95;
+  margin-top: 8px;
+}
+
+/* Network warning bar */
+.network-banner {
+  font-size: 1rem;
+  text-align: center;
+  padding: 12px;
+  background-color: #0a0a0a;
+  border: 1px solid #00ff99;
+  border-radius: 12px;
+  box-shadow: 0 0 12px #00ff99;
+  margin-top: 16px;
+}
+
+/* WalletConnect icon inside button */
+.walletconnect-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Section spacing if needed */
+.section-gap {
+  height: 20px;
+  width: 100%;
+  box-shadow: 0 0 10px #00ff99;
+  margin: 12px 0;
+  border-radius: 10px;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 600px) {
+  .app-title {
+    font-size: 1.6rem;
+  }
+
   .glow-frame {
-    padding: 20px;
-    margin: 18px 0;
+    padding: 20px 16px;
+    margin: 16px 0;
   }
 
   .glow-frame h2,
   .glow-frame h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
-  .glow-frame input,
-  .glow-frame select,
-  .glow-frame button {
-    font-size: 1.15rem;
-    padding: 16px;
+  .glow-button {
+    font-size: 1.1rem;
+    padding: 14px;
+  }
+
+  .logo {
+    width: 64px;
   }
 }
-
 
