@@ -77,4 +77,14 @@ input, select, button {
   border-radius: 10px;
 }
 
+.walletconnect-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  margin-right: 6px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+
 
