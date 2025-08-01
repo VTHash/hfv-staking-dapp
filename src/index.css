@@ -93,8 +93,20 @@ input, select, button {
   margin: 16px auto;
   border: 1px solid #00ff99;
   border-radius: 16px;
-  background-color: rgba(0, 64, 32, 0.3); /* Soft green tint */
-  box-shadow: 0 0 18px #00ff99;
+  background-color: #000;
+  animation: pulseGlow 4s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 10px #00ff99, 0 0 20px #00ffcc;
+  }
+  50% {
+    box-shadow: 0 0 18px #00ffcc, 0 0 32px #00ff99;
+  }
+  100% {
+    box-shadow: 0 0 10px #00ff99, 0 0 20px #00ffcc;
+  }
 }
 
 
