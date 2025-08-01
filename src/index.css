@@ -86,5 +86,16 @@ input, select, button {
   display: inline-block;
 }
 
+.glow-frame {
+  width: 95vw;
+  max-width: 600px;
+  padding: 24px 20px;
+  margin: 16px auto;
+  border: 1px solid #00ff99;
+  border-radius: 16px;
+  background-color: rgba(0, 64, 32, 0.3); /* Soft green tint */
+  box-shadow: 0 0 18px #00ff99;
+}
+
 
 
