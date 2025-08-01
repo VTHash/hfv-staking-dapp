@@ -1,5 +1,5 @@
-/* ==== Base Reset ==== */
-html, body {
+/* Base Layout */
+body, html {
   margin: 0;
   padding: 0;
   background: #000;
@@ -8,9 +8,10 @@ html, body {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-/* ==== App Container ==== */
+/* App wrapper for full screen layout */
 .app-wrapper {
   width: 100%;
   padding: 16px;
@@ -20,85 +21,86 @@ html, body {
   align-items: center;
 }
 
-/* ==== Header ==== */
+/* Header */
 .app-header {
   text-align: center;
   margin-bottom: 2rem;
 }
 
 .logo {
-  width: 90px;
+  width: 100px;
+  filter: drop-shadow(0 0 10px #00ff99);
   margin-bottom: 1rem;
-  filter: drop-shadow(0 0 12px #00ff99);
 }
 
 .app-title {
-  font-size: 2.1rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: #00ffcc;
-  text-shadow: 0 0 10px #00ffcc;
+  text-shadow: 0 0 12px #00ffcc;
 }
 
-/* ==== Glow Frame ==== */
+/* Glow Frame (Section Box) */
 .glow-frame {
-  width: 96vw;
-  max-width: 640px;
-  margin: 20px 0;
+  width: 100%;
+  max-width: 100%;
   padding: 32px 24px;
-  background-color: #000;
-  border: 1px solid #00ff99;
+  margin: 24px 0;
+  background: #0a0a0a;
   border-radius: 18px;
-  box-shadow: 0 0 22px #00ff99, 0 0 10px #003322;
+  border: 1px solid #00ff99;
+  box-shadow: 0 0 24px #00ff99;
 }
 
-/* ==== Text ==== */
+/* Text */
 .glow-frame h2,
 .glow-frame h3,
 .glow-frame label {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  text-align: center;
   color: #00ffcc;
-  margin-bottom: 1.2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
   text-shadow: 0 0 8px #00ffcc;
 }
 
 .glow-frame p,
 .glow-frame span {
-  font-size: 1.3rem;
-  text-align: center;
+  font-size: 1.4rem;
   color: #00ffcc;
-  margin-bottom: 1rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
 }
 
-/* ==== Inputs & Buttons ==== */
-.glow-frame input,
-.glow-frame select,
-.glow-frame button {
+/* Form Fields */
+input,
+select,
+button {
   width: 100%;
-  padding: 18px;
-  font-size: 1.2rem;
+  padding: 20px;
+  font-size: 1.3rem;
+  border-radius: 12px;
   margin-bottom: 1.2rem;
-  border-radius: 10px;
-  box-sizing: border-box;
-  border: 1px solid #00ff99;
   background: #000;
   color: #00ff99;
+  border: 1px solid #00ff99;
+  box-sizing: border-box;
 }
 
-.glow-frame button {
+/* Buttons */
+button {
   background: transparent;
   cursor: pointer;
   transition: 0.3s ease;
 }
 
-.glow-frame button:hover {
-  background-color: #00ff99;
+button:hover {
+  background: #00ff99;
   color: #000;
-  box-shadow: 0 0 14px #00ff99;
+  box-shadow: 0 0 16px #00ff99;
 }
 
-/* ==== WalletConnect Icon ==== */
+/* WalletConnect icon */
 .walletconnect-icon {
   width: 20px;
   height: 20px;
@@ -106,14 +108,19 @@ html, body {
   vertical-align: middle;
 }
 
-/* ==== Mobile Adjustments ==== */
+/* Add space between sections */
+.section-card {
+  margin-bottom: 32px;
+}
+
+/* Mobile Scaling */
 @media screen and (max-width: 600px) {
   .logo {
-    width: 70px;
+    width: 80px;
   }
 
   .app-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 
   .glow-frame {
@@ -122,13 +129,18 @@ html, body {
 
   .glow-frame h2,
   .glow-frame h3 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
-  .glow-frame input,
-  .glow-frame select,
-  .glow-frame button {
+  .glow-frame p,
+  .glow-frame span {
+    font-size: 1.3rem;
+  }
+
+  input,
+  select,
+  button {
     font-size: 1.2rem;
-    padding: 16px;
+    padding: 18px;
   }
 }
