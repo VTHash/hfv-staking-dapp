@@ -8,6 +8,8 @@ import '../index.css';
 
 const App = () => {
   return (
+    <div className="app-glow-frame">
+      <div className="hud-container">
        <div className="app-wrapper">   
       <div className="app-header logo-title-wrapper">
         <img src="/hfv-logo.png" alt="HFV Logo" className="logo" />
@@ -48,18 +50,15 @@ const App = () => {
         </div>
 
         </div>
+        </div>
+      
       </div>
-    
+    </div>
+
   );
 };
 
-export default function App() {
-  return (
-    <div className="app-glow-frame">
-      <div className="hud-container">
-        
-      </div>
-    </div>
-  );
-}
+export default App;
+
+  
 
