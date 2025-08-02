@@ -124,11 +124,18 @@ body {
 }
 
 .walletconnect-icon {
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
-  margin-right: 6px;
+  margin-right: 8px;
   vertical-align: middle;
+}
+
+.wallet-button {
+  display: flex ;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 @keyframes pulseGlow {
