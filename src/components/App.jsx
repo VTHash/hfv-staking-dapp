@@ -53,4 +53,13 @@ const App = () => {
   );
 };
 
-export default App;
+export default function App() {
+  return (
+    <div className="app-glow-frame">
+      <div className="hud-container">
+        
+      </div>
+    </div>
+  );
+}
+

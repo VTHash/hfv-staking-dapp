@@ -212,3 +212,30 @@ body {
 .badge:hover {
   transform: scale(1.05);
 }
+
+.app-glow-frame {
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 20px #00ff99, 0 0 40px #00ff99 inset;
+  animation: pulseGlowFrame 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlowFrame {
+  0% {
+    box-shadow: 0 0 20px #00ff99, 0 0 40px #00ff99 inset;
+  }
+  50% {
+    box-shadow: 0 0 30px #00ff99, 0 0 60px #00ff99 inset;
+  }
+  100% {
+    box-shadow: 0 0 20px #00ff99, 0 0 40px #00ff99 inset;
+  }
+}
+
+body {
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+}
