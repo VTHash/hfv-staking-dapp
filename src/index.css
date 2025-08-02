@@ -144,3 +144,62 @@ body {
   .glow-frame input, .glow-frame select, .glow-frame button { font-size: 1.05rem; padding: 14px; }
   .logo { width: 72px; }
 }
+
+.badge-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.badge-icon {
+  max-width: 100px;
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px #00ffcc);
+  transition: transform 0.2s ease;
+}
+
+.badge-icon:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 10px #00ffcc);
+}
+
+.badge.ens {
+  max-width: 48px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.badge.dentity {
+  max-width: 120px;
+  aspect-ratio: 2.8 / 1;
+  object-fit: contain;
+}
+
+.badge.lens {
+  max-width: 110px;
+  aspect-ratio: 2.6 / 1;
+  object-fit: contain;
+}
+
+.badge-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.badge {
+  display: inline-block;
+  filter: drop-shadow(0 0 4px #00ffcc);
+  transition: transform 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}

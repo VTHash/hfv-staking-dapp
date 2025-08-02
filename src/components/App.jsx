@@ -3,8 +3,6 @@ import ConnectWallet from './ConnectWallet';
 import StakeForm from './StakeForm';
 import StakingDashboard from './StakingDashboard';
 import RewardCalculator from './RewardCalculator';
-import NetworkBanner from './NetworkBanner';
-import WalletStatus from './WalletStatus';
 import Claim from './ClaimHFV';
 import '../index.css';
 
@@ -16,14 +14,22 @@ const App = () => {
         <h1 className="app-title">HFV Staking DApp</h1>
       </div>
 
+      <div className="badge-row">
+  <a href="https://app.dentity.com/andreihabliuc.eth" target="_blank" rel="noopener noreferrer">
+    <img src="/dentity-logo.png" alt="Dentity Verified" className="badge-icon" />
+  </a>
+  <a href="https://lens.xyz/handle/hfvprotocol" target="_blank" rel="noopener noreferrer">
+    <img src="/lens-logo.png" alt="Lens Profile" className="badge-icon" />
+  </a>
+  <a href="https://app.ens.domains/name/andreihabliuc.eth" target="_blank" rel="noopener noreferrer">
+    <img src="/ens-logo.png" alt="ENS Profile" className="badge-icon" />
+  </a>
+</div>
+
       <div className="main-content">
         <div className="glow-frame">       
             <ConnectWallet />
           </div>
-        
-        <div className="glow-frame">
-          <NetworkBanner />
-        </div>
 
         <div className="glow-frame">
           <StakeForm />
@@ -41,8 +47,6 @@ const App = () => {
           <RewardCalculator />
         </div>
 
-        <div className="glow-frame">
-          <WalletStatus />
         </div>
       </div>
     </div>
