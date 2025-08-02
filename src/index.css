@@ -176,7 +176,7 @@ body {
 }
 
 .badge.ens {
-  max-width: 24px;
+  max-width: 16px;
   aspect-ratio: 1 / 1;
   object-fit: contain;
   margin-right:6px;
