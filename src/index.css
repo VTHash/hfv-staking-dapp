@@ -179,8 +179,16 @@ body {
   max-width: 16px;
   aspect-ratio: 1 / 1;
   object-fit: contain;
-  margin-right:6px;
+  margin-right: 6px;
   vertical-align: middle;
+  filter: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+.badge-icon:not(.ens):hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 10px #00ffcc);
 }
 
 .badge.dentity {
