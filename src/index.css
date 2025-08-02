@@ -239,3 +239,22 @@ body {
   margin: 0;
   padding: 0;
 }
+
+@keyframes pulseLogo {
+  0% {
+    filter: drop-shadow(0 0 4px #00ff99);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px #00ff99);
+    transform: scale(1.05);
+  }
+  100% {
+    filter: drop-shadow(0 0 4px #00ff99);
+    transform: scale(1);
+  }
+}
+
+.pulsate-logo {
+  animation: pulseLogo 2.5s ease-in-out infinite;
+}

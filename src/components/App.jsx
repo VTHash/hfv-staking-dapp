@@ -12,7 +12,7 @@ const App = () => {
       <div className="hud-container">
        <div className="app-wrapper">   
       <div className="app-header logo-title-wrapper">
-        <img src="/hfv-logo.png" alt="HFV Logo" className="logo" />
+        <img src="/hfv-logo.png" alt="HFV Logo" className="logo pulsate-logo" />
         <h1 className="app-title">HFV Staking DApp</h1>
       </div>
 
