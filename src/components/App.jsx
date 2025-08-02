@@ -18,7 +18,7 @@ const App = () => {
   <a href="https://app.dentity.com/andreihabliuc.eth" target="_blank" rel="noopener noreferrer">
     <img src="/dentity-logo.png" alt="Dentity Verified" className="badge-icon" />
   </a>
-  <a href="https://lens.xyz/handle/hfvprotocol" target="_blank" rel="noopener noreferrer">
+  <a href="https://onboarding.lens.xyz/handle/hfvprotocol" target="_blank" rel="noopener noreferrer">
     <img src="/lens-logo.png" alt="Lens Profile" className="badge-icon" />
   </a>
   <a href="https://app.ens.domains/name/andreihabliuc.eth" target="_blank" rel="noopener noreferrer">
