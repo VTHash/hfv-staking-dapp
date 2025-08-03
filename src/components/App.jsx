@@ -49,6 +49,23 @@ const App = () => {
           <RewardCalculator />
         </div>
 
+        <div className="glow-frame" style={{ textAlign: "center", marginTop: "2rem" }}>
+  <p style={{ color: "#00ffae", fontWeight: "bold", fontSize: "1.1rem", marginBottom: "0.5rem" }}>
+    Powered by Etherscan
+  </p>
+  <a
+    href="https://etherscan.io/address/0x46E7007d6515B4f260f3CbC82f4672622eace802"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img
+      src="https://etherscan.io/images/brandassets/etherscan-logo-light-circle.png"
+      alt="Etherscan Logo"
+      className="etherscan-logo"
+    />
+  </a>
+</div>
+
         </div>
         </div>
       

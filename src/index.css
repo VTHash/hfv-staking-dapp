@@ -266,3 +266,14 @@ body {
 .pulsate-logo {
   animation: pulseLogo 2.5s ease-in-out infinite;
 }
+
+.etherscan-logo {
+  height: 32px;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 4px #00ffae);
+  transition: transform 0.3s ease;
+}
+
+.etherscan-logo:hover {
+  transform: scale(1.05);
+}
