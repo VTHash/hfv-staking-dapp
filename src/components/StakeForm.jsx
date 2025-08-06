@@ -17,7 +17,12 @@ const handleStake = async () => { if (!stakingAddress || !tokenAddress || !amoun
  console.log("🔍 tokenAddress:", tokenAddress);
 console.log("🔍 stakingAddress:", stakingAddress);
 console.log("🔍 tokenAbi:", tokenAbi);
-console.log("🔍 stakingAbi:", stakingAbi);                                
+console.log("🔍 stakingAbi:", stakingAbi);
+console.log("stakingAbi raw:", stakingAbi);
+console.log("stakingAbi is array?", Array.isArray(stakingAbi));
+console.log("tokenAbi raw:", tokenAbi);
+console.log("tokenAbi is array?", Array.isArray(tokenAbi));
+                                 
 try {
   const stakeAmount = parseFloat(amount);
   if (stakeAmount > 500) {
