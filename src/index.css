@@ -67,7 +67,7 @@ body {
   background-size: cover;       /* Fit image inside the box */
   background-position: center;  /* Center the image */
   background-repeat: no-repeat; /* Prevent tiling */
-  background-color: rgba(0, 0, 0, 0.6); /* Dark overlay for text readability */
+  background-color: #22352a;
   border: 1px solid #00ff99;
   box-shadow: 0 0 16px rgba(0, 255, 153, 0.5), 0 0 6px #00ff99;
   animation: pulseGlow 4s infinite ease-in-out;
@@ -78,7 +78,6 @@ body {
  background-size: cover;
  background-position: center;
  background-repeat: no-repeat;
- background-color: rgba(0, 0, 0, 0.6); /* optional overlay for text contrast */
 }
 
 .glow-frame h2, .glow-frame h3, .glow-frame h4 {
