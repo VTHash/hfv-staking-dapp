@@ -54,8 +54,8 @@ try {
   setAmount('');
   setDuration('');
 } catch (err) {
-  console.error(err);
-  setStatus('❌ Stake failed');
+  console.error("Stake Error:", err);
+setStatus(`❌ Stake failed: ${err?.reason || err?.message || "Unknown error"}`);
 }
 
 };
