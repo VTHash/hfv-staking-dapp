@@ -4,6 +4,9 @@ import EthereumProvider from '@walletconnect/ethereum-provider';
 import stakingAbi from '../abi/HFVStaking.json'; 
 import tokenAbi from '../abi/HFVToken.json';
 
+const stakingAbi = HFVStaking.abi;
+const tokenAbi = HFVToken.abi;
+
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS; 
 const tokenAddress = import.meta.env.VITE_HFV_TOKEN_ADDRESS;
 
