@@ -310,8 +310,8 @@ body::after {
 }
 
 .glow-frame {
-  background-image: url("public/background.png"); 
+  background-image: url("./background.png"); 
   background-size: cover;       /* Fit inside the box */
   background-position: center;  /* Center the image */
-  background-repeat: no-repeat; /* Prevent tiling */
+  background-repeat: no-repeat; 
 }
