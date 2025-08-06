@@ -14,6 +14,10 @@ export default function StakeForm() {
 
 const handleStake = async () => { if (!stakingAddress || !tokenAddress || !amount || !duration) return;
 
+ console.log("🔍 tokenAddress:", tokenAddress);
+console.log("🔍 stakingAddress:", stakingAddress);
+console.log("🔍 tokenAbi:", tokenAbi);
+console.log("🔍 stakingAbi:", stakingAbi);                                
 try {
   const stakeAmount = parseFloat(amount);
   if (stakeAmount > 500) {
@@ -53,9 +57,9 @@ try {
   setStatus('✅ Stake successful!');
   setAmount('');
   setDuration('');
-} catch (err) {
+catch (err) {
   console.error("Stake Error:", err);
-setStatus(`❌ Stake failed: ${err?.reason || err?.message || "Unknown error"}`);
+  setStatus(`❌ Stake failed: ${err?.reason || err?.message || JSON.stringify(err)}`);
 }
 
 };
