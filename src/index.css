@@ -314,4 +314,5 @@ body::after {
   background-size: cover;       /* Fit inside the box */
   background-position: center;  /* Center the image */
   background-repeat: no-repeat; 
+  background-color: transparent; /* Ensure no black background covers it */
 }
