@@ -1,8 +1,8 @@
 {
-	"address": "0x46E7007d6515B4f260f3CbC82f4672622eace802",
-	"abi":
-[
-	{
+	"address": "0x69D3739f63c9fb8fB33c41ABDaa8e53bf94bb710",
+	"abi": 
+	[
+	   {
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -288,9 +288,3 @@
 		"type": "function"
 	}
 ]}
-
-
-
-
-
-
