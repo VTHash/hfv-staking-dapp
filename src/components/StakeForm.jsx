@@ -1,8 +1,8 @@
 import React, { useState } from 'react'; 
 import { ethers, BrowserProvider } from 'ethers'; 
 import EthereumProvider from '@walletconnect/ethereum-provider'; 
-import stakingAbi from '../abi/HFVStaking.json'; 
-import tokenAbi from '../abi/HFVToken.json';
+import HFVStaking from '../abi/HFVStaking.json'; 
+import HFVToken from '../abi/HFVToken.json';
 
 const stakingAbi = HFVStaking.abi;
 const tokenAbi = HFVToken.abi;
