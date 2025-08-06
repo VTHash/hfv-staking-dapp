@@ -67,7 +67,7 @@ body {
   background-size: cover;       /* Fit image inside the box */
   background-position: center;  /* Center the image */
   background-repeat: no-repeat; /* Prevent tiling */
-  background-color: #22352a;
+  background-color: #1a2f33;
   border: 1px solid #00ff99;
   box-shadow: 0 0 16px rgba(0, 255, 153, 0.5), 0 0 6px #00ff99;
   animation: pulseGlow 4s infinite ease-in-out;
