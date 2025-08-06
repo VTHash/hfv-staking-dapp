@@ -60,7 +60,7 @@ try {
 
 };
 
-return ( <div className="stake-form">
+return ( <div className="glow-frame stake-form">
    <h3 className="section-title">Stake HFV Tokens</h3>
     <input className="input-field" type="number" placeholder="Amount to stake" 
     value={amount} onChange={(e) => setAmount(e.target.value)} /> 
