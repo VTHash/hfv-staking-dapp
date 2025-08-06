@@ -18,7 +18,7 @@ export default function NetworkBanner() {
   const isCorrectNetwork = chainId === 1;
 
   return (
-    <div className="status-text">
+    <div className="glow-frame status-text">
       {chainId ? (
         isCorrectNetwork ? (
           <span>✅ Connected to Ethereum Mainnet</span>
