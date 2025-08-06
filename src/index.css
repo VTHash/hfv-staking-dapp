@@ -308,3 +308,10 @@ body::after {
     background: rgba(0, 0, 0, 0.20);
   }
 }
+
+.glow-frame {
+  background-image: url("public/background.png"); /* Replace with your image path */
+  background-size: cover;       /* Fit inside the box */
+  background-position: center;  /* Center the image */
+  background-repeat: no-repeat; /* Prevent tiling */
+}
