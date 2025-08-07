@@ -9,76 +9,65 @@ const tokenAbi = HFVToken.abi;
 
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 const tokenAddress = import.meta.env.VITE_HFV_TOKEN_ADDRESS;
-const projectId = import.meta.env.VITE_PROJECT_ID;
 
 export default function StakeForm() {
   const [amount, setAmount] = useState('');
   const [duration, setDuration] = useState('');
   const [status, setStatus] = useState('');
-  const [isApproved, setIsApproved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const connectProvider = async () => {
+  const getProviderAndSigner = async () => {
+    let provider;
     if (window.ethereum) {
-      return new BrowserProvider(window.ethereum);
+      provider = new BrowserProvider(window.ethereum);
     } else {
-      const walletConnect = await EthereumProvider.init({
-        projectId: projectId,
+      provider = await EthereumProvider.init({
+        projectId: import.meta.env.VITE_PROJECT_ID,
         chains: [1],
         showQrModal: true,
         methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
       });
-      return new BrowserProvider(walletConnect);
+      provider = new BrowserProvider(provider);
     }
+    const signer = await provider.getSigner();
+    return { provider, signer };
   };
 
   const handleApprove = async () => {
-    if (!amount || !stakingAddress || !tokenAddress) return;
+    if (!tokenAddress || !stakingAddress || !amount) return;
     setIsLoading(true);
-    setStatus('🔄 Connecting wallet...');
-
+    setStatus('📝 Approving HFV...');
     try {
-      const provider = await connectProvider();
-      const signer = await provider.getSigner();
+      const { signer } = await getProviderAndSigner();
       const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
       const amountInWei = ethers.parseUnits(amount, 18);
-
-      setStatus('🔐 Awaiting approval...');
-      const approveTx = await tokenContract.approve(stakingAddress, amountInWei);
-      await approveTx.wait();
-
-      setIsApproved(true);
-      setStatus('✅ Approval successful! You can now stake.');
+      const tx = await tokenContract.approve(stakingAddress, amountInWei);
+      await tx.wait();
+      setStatus('✅ Approved HFV tokens for staking.');
     } catch (err) {
       console.error('Approval Error:', err);
-      setStatus(`❌ Approval failed: ${err.reason || err.message || 'Unknown error'}`);
+      setStatus(`❌ Approval failed: ${err?.reason || err?.message}`);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleStake = async () => {
-    if (!amount || !duration || !isApproved || isLoading) return;
+    if (!stakingAddress || !amount || !duration) return;
     setIsLoading(true);
-    setStatus('🔄 Connecting wallet...');
-
+    setStatus('⏳ Staking in progress...');
     try {
-      const provider = await connectProvider();
-      const signer = await provider.getSigner();
+      const { signer } = await getProviderAndSigner();
       const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
       const amountInWei = ethers.parseUnits(amount, 18);
-
-      setStatus('⚡ Sending stake transaction...');
-      const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
-      await stakeTx.wait();
-
+      const tx = await stakingContract.stake(amountInWei, Number(duration));
+      await tx.wait();
       setStatus('✅ Stake successful!');
       setAmount('');
       setDuration('');
-      setIsApproved(false);
     } catch (err) {
       console.error('Stake Error:', err);
-      setStatus(`❌ Stake failed: ${err.reason || err.message || 'Unknown error'}`);
+      setStatus(`❌ Stake failed: ${err?.reason || err?.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +76,6 @@ export default function StakeForm() {
   return (
     <div className="stake-form">
       <h3 className="section-title">Stake HFV Tokens</h3>
-
       <input
         className="input-field"
         type="number"
@@ -95,7 +83,6 @@ export default function StakeForm() {
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
-
       <select
         className="input-field"
         value={duration}
@@ -108,19 +95,10 @@ export default function StakeForm() {
         <option value={12 * 30 * 86400}>12 Months</option>
       </select>
 
-      <button
-        onClick={handleApprove}
-        className="glow-button"
-        disabled={isLoading}
-      >
+      <button onClick={handleApprove} className="glow-button" disabled={isLoading}>
         {isLoading ? 'Processing...' : 'Approve'}
       </button>
-
-      <button
-        onClick={handleStake}
-        className="glow-button"
-        disabled={!isApproved || isLoading}
-      >
+      <button onClick={handleStake} className="glow-button" disabled={isLoading}>
         {isLoading ? 'Processing...' : 'Stake'}
       </button>
 
