@@ -25,50 +25,53 @@ console.log("🔍 stakingAddress:", stakingAddress);
 console.log("🔍 tokenAbi:", tokenAbi);
 console.log("🔍 stakingAbi:", stakingAbi);
 try {
-  const stakeAmount = parseFloat(amount);
-  if (stakeAmount > 500) {
-    setStatus('❌ Max 500 HFV per period');
-    return;
+    const stakeAmount = parseFloat(amount);
+    if (stakeAmount > 500) {
+      setStatus('❌ Max 500 HFV per period');
+      return;
+    }
+
+    setStatus('🔄 Connecting...');
+
+    let provider;
+    if (window.ethereum) {
+      provider = new BrowserProvider(window.ethereum);
+    } else {
+      provider = await EthereumProvider.init({
+        projectId: import.meta.env.VITE_PROJECT_ID,
+        chains: [1],
+        showQrModal: true,
+        methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+      });
+      await provider.enable();
+      provider = new BrowserProvider(provider);
+    }
+
+    const signer = await provider.getSigner();
+    const userAddress = await signer.getAddress();
+    const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+    const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+
+    const amountInWei = ethers.parseUnits(amount, 18);
+
+    const allowance = await tokenContract.allowance(userAddress, stakingAddress);
+    if (allowance < amountInWei) {
+      setStatus('📝 Approving HFV...');
+      const approvalTx = await tokenContract.approve(stakingAddress, amountInWei);
+      await approvalTx.wait();
+    }
+
+    setStatus('⏳ Staking in progress...');
+    const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
+    await stakeTx.wait();
+
+    setStatus('✅ Stake successful!');
+    setAmount('');
+    setDuration('');
+  } catch (err) {
+    console.error("Stake Error:", err);
+    setStatus(`❌ Stake failed: ${err?.reason || err?.message || JSON.stringify(err)}`);
   }
-
-  setStatus('🔄 Connecting...');
-
-  let provider;
-  if (window.ethereum) {
-    provider = new BrowserProvider(window.ethereum);
-  } else {
-    provider = await EthereumProvider.init({
-      projectId: import.meta.env.VITE_PROJECT_ID,
-      chains: [1],
-      showQrModal: true,
-      methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-    });
-    await provider.enable();
-    provider = new BrowserProvider(provider);
-  }
-
-  const signer = await provider.getSigner();
-  const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
-  const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-
-  const amountInWei = ethers.parseUnits(amount, 18);
-  setStatus('📝 Approving HFV...');
-  const approvalTx = await tokenContract.approve(stakingAddress, amountInWei);
-  await approvalTx.wait();
-
-  setStatus('⏳ Staking in progress...');
-  const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
-  await stakeTx.wait();
-
-  setStatus('✅ Stake successful!');
-  setAmount('');
-  setDuration('');
-} 
-  catch (err) {
-  console.error("Stake Error:", err);
-  setStatus(`❌ Stake failed: ${err?.reason || err?.message || JSON.stringify(err)}`);
-}
-
 };
 
 return ( <div className="stake-form">
