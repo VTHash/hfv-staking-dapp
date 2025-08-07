@@ -15,7 +15,11 @@ export default function StakeForm() {
   const [duration, setDuration] = useState(''); 
   const [status, setStatus] = useState('');
 
-const handleStake = async () => { if (!stakingAddress || !tokenAddress || !amount || !duration) return;
+const handleStake = async () => {
+  if (isLoading) return; // prevent double-clicking
+  if (!stakingAddress || !tokenAddress || !amount || !duration) return;
+
+  setIsLoading(true);
 console.log("stakingAbi raw:", stakingAbi);
 console.log("stakingAbi is array?", Array.isArray(stakingAbi));
 console.log("tokenAbi raw:", tokenAbi);
@@ -24,10 +28,11 @@ console.log("🔍 tokenAddress:", tokenAddress);
 console.log("🔍 stakingAddress:", stakingAddress);
 console.log("🔍 tokenAbi:", tokenAbi);
 console.log("🔍 stakingAbi:", stakingAbi);
-try {
+ try {
     const stakeAmount = parseFloat(amount);
     if (stakeAmount > 500) {
       setStatus('❌ Max 500 HFV per period');
+      setIsLoading(false);
       return;
     }
 
@@ -43,26 +48,23 @@ try {
         showQrModal: true,
         methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
       });
-      await provider.enable();
       provider = new BrowserProvider(provider);
     }
-     const accounts = await provider.send("eth_accounts", []);
-     if (accounts.length === 0) {
-     await provider.send("eth_requestAccounts", []);
-}
+
+    const accounts = await provider.send("eth_accounts", []);
+    if (accounts.length === 0) {
+      await provider.send("eth_requestAccounts", []);
+    }
+
     const signer = await provider.getSigner();
     const userAddress = await signer.getAddress();
     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
     const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
 
     const amountInWei = ethers.parseUnits(amount, 18);
-
-    const allowance = await tokenContract.allowance(userAddress, stakingAddress);
-    if (allowance < amountInWei) {
-      setStatus('📝 Approving HFV...');
-      const approvalTx = await tokenContract.approve(stakingAddress, amountInWei);
-      await approvalTx.wait();
-    }
+    setStatus('📝 Approving HFV...');
+    const approvalTx = await tokenContract.approve(stakingAddress, amountInWei);
+    await approvalTx.wait();
 
     setStatus('⏳ Staking in progress...');
     const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
@@ -74,6 +76,8 @@ try {
   } catch (err) {
     console.error("Stake Error:", err);
     setStatus(`❌ Stake failed: ${err?.reason || err?.message || JSON.stringify(err)}`);
+  } finally {
+    setIsLoading(false); // enable the button again
   }
 };
 
@@ -87,7 +91,9 @@ return ( <div className="stake-form">
        <option value={3 * 30 * 86400}>3 Months</option>
         <option value={6 * 30 * 86400}>6 Months</option>
          <option value={12 * 30 * 86400}>12 Months</option> 
-         </select> <button className="glow-button" onClick={handleStake}> Stake </button>
+         </select> <button className="glow-button" onClick={handleStake} disabled={isLoading}>
+  {isLoading ? 'Processing...' : 'Stake'}
+</button>
           <p className="status-text">{status}
             </p> 
             </div> 
