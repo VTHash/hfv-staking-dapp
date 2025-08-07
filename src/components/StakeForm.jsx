@@ -57,32 +57,75 @@ export default function StakeForm() {
     }
   };
 
-  const handleStake = async () => {
-    if (!isApproved || !amount || !duration || !stakingAddress) return;
+ const handleStake = async () => {
+  if (isLoading || !stakingAddress || !tokenAddress || !amount || !duration) return;
 
+  setIsLoading(true);
+
+  try {
+    const stakeAmount = parseFloat(amount);
+    if (stakeAmount > 500) {
+      setStatus('❌ Max 500 HFV per period');
+      setIsLoading(false);
+      return;
+    }
+
+    setStatus('🔄 Connecting...');
+
+    let provider;
+    if (window.ethereum) {
+      provider = new BrowserProvider(window.ethereum);
+    } else {
+      provider = await EthereumProvider.init({
+        projectId: import.meta.env.VITE_PROJECT_ID,
+        chains: [1],
+        showQrModal: true,
+        methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+      });
+      provider = new BrowserProvider(provider);
+    }
+
+    const signer = await provider.getSigner();
+    const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+    const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+    const amountInWei = ethers.parseUnits(amount, 18);
+
+    // ✅ Step 1: Approve
     try {
-      setIsStaking(true);
-      setStatus('⏳ Sending stake transaction...');
+      setStatus('📝 Approving HFV...');
+      const approvalTx = await tokenContract.approve(stakingAddress, amountInWei);
+      console.log("🔄 Approval tx sent:", approvalTx.hash);
+      await approvalTx.wait();
+      console.log("✅ Approval confirmed:", approvalTx.hash);
+    } catch (err) {
+      console.error("❌ Approval error:", err);
+      setStatus(`❌ Approval failed: ${err?.reason || err?.message}`);
+      setIsLoading(false);
+      return;
+    }
 
-      const provider = await connectProvider();
-      const signer = await provider.getSigner();
-      const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-      const amountInWei = ethers.parseUnits(amount, 18);
-
-      const tx = await stakingContract.stake(amountInWei, Number(duration));
-      await tx.wait();
+    // ✅ Step 2: Stake
+    try {
+      setStatus('⏳ Staking in progress...');
+      const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
+      console.log("🔄 Stake tx sent:", stakeTx.hash);
+      await stakeTx.wait();
+      console.log("✅ Stake confirmed:", stakeTx.hash);
 
       setStatus('✅ Stake successful!');
       setAmount('');
       setDuration('');
-      setIsApproved(false);
     } catch (err) {
-      console.error('Stake Error:', err);
-      setStatus(`❌ Stake failed: ${err?.reason || err?.message || 'Check if already staked 500 HFV'}`);
-    } finally {
-      setIsStaking(false);
+      console.error("❌ Stake error:", err);
+      setStatus(`❌ Stake failed: ${err?.reason || err?.message}`);
     }
-  };
+  } catch (err) {
+    console.error("❌ Unknown error:", err);
+    setStatus(`❌ Failed: ${err?.reason || err?.message || 'Unknown error'}`);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="stake-form">
