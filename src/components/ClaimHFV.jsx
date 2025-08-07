@@ -1,107 +1,75 @@
-import React, { useEffect, useState } from 'react'; 
-import { ethers, BrowserProvider } from 'ethers'; 
-import stakingAbi from '../abi/HFVStaking.json';
+import React, { useState } from 'react';
+import { ethers, BrowserProvider } from 'ethers';
+import EthereumProvider from '@walletconnect/ethereum-provider';
+import HFVStaking from '../abi/HFVStaking.json';
 
+const stakingAbi = HFVStaking.abi;
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
+const projectId = import.meta.env.VITE_PROJECT_ID;
 
-export default function ClaimHFV() { 
-  const [provider, setProvider] = useState(null); 
-  const [signer, setSigner] = useState(null); 
-  const [address, setAddress] = useState(''); 
-  const [stakes, setStakes] = useState([]); 
-  const [claimingIndex, setClaimingIndex] = useState(null);
+export default function ClaimHFV() {
+  const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-useEffect(() => { 
-  const init = async () => { 
-    if (!window.ethereum) return;
-
-const browserProvider = new BrowserProvider(window.ethereum);
-  const signer = await browserProvider.getSigner();
-  const addr = await signer.getAddress();
-
-  setProvider(browserProvider);
-  setSigner(signer);
-  setAddress(addr);
-};
-init();
-
-}, []);
-
-useEffect(() => { 
-  const fetchStakes = async () => { 
-    if (!stakingAddress || !signer || !address) return;
-
-try {
-    const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-    const count = await contract.getStakeCount(address);
-    const now = Math.floor(Date.now() / 1000);
-    const result = [];
-
-    for (let i = 0; i < count; i++) {
-      const s = await contract.stakes(address, i);
-      const unlockTime = Number(s.startTimestamp) + Number(s.duration);
-      const isClaimable = !s.claimed && now >= unlockTime;
-
-      result.push({
-        index: i,
-        amount: ethers.formatUnits(s.amount, 18),
-        unlockTime,
-        claimed: s.claimed,
-        isClaimable,
+  const connectProvider = async () => {
+    if (window.ethereum) {
+      return new BrowserProvider(window.ethereum);
+    } else {
+      const wc = await EthereumProvider.init({
+        projectId,
+        chains: [1],
+        showQrModal: true,
+        methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
       });
+      return new BrowserProvider(wc);
     }
+  };
 
-    setStakes(result);
-  } catch (err) {
-    console.error('Error fetching stakes:', err);
-  }
-};
+  const handleClaim = async () => {
+    setIsLoading(true);
+    setStatus('🔄 Connecting wallet...');
 
-fetchStakes();
+    try {
+      const provider = await connectProvider();
+      const signer = await provider.getSigner();
+      const userAddress = await signer.getAddress();
+      const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
 
-}, [signer, address]);
+      const stakeCount = await stakingContract.getStakeCount(userAddress);
+      if (stakeCount === 0) {
+        setStatus('❌ No stakes found.');
+        setIsLoading(false);
+        return;
+      }
 
-const handleClaim = async (index) => { 
-  if (!signer || !stakingAddress) return;
+      let claimedAny = false;
 
-try {
-  setClaimingIndex(index);
-  const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-  const tx = await contract.claim(index);
-  await tx.wait();
-  alert(`✅ Claimed stake #${index}`);
-  setClaimingIndex(null);
-} catch (err) {
-  console.error('Claim failed:', err);
-  alert('❌ Claim failed.');
-  setClaimingIndex(null);
+      for (let i = 0; i < stakeCount; i++) {
+        const reward = await stakingContract.getPendingReward(userAddress, i);
+        if (reward > 0n) {
+          setStatus(`⚡ Claiming stake #${i}...`);
+          const tx = await stakingContract.claim(i);
+          await tx.wait();
+          claimedAny = true;
+        }
+      }
+
+      setStatus(claimedAny ? '✅ Rewards claimed!' : 'ℹ️ Nothing claimable.');
+    } catch (err) {
+      console.error('Claim Error:', err);
+      setStatus(`❌ Claim failed: ${err.reason || err.message || 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="claim-hfv">
+      <h3 className="section-title">Claim Available Rewards</h3>
+      <button className="glow-button" onClick={handleClaim} disabled={isLoading}>
+        {isLoading ? 'Processing...' : 'Claim'}
+      </button>
+      <p className="status-text">{status}</p>
+    </div>
+  );
 }
-
-};
-
-return ( <div className="claim-container"> 
-<h3 className="section-title">Claim Available Rewards</h3> 
-{stakes.length === 0 ? ( <p>No stakes found.</p> ) : ( <ul> {stakes.map((s) => 
-( <li key={s.index} className="glow-subframe">
-   <strong>Amount:</strong> {s.amount} HFV<br />
-    <strong>Unlocks:</strong> 
-    {new Date(s.unlockTime * 1000).toLocaleDateString()}<br /> 
-    <strong>Claimed:</strong> {s.claimed ? 'Yes' : 'No'}
-     {s.isClaimable && !s.claimed && ( <button className="claim-button" onClick={() => handleClaim(s.index)}
-      disabled={claimingIndex === s.index} >
-         {claimingIndex === s.index ? 'Claiming...' : 'Claim'} 
-         </button> 
-         )
-         } 
-         </li> 
-         )
-        )
-        } 
-        </ul> 
-        )
-        } 
-        </div> 
-        
-      ); 
-    }
-
