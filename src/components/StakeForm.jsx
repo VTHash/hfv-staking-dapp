@@ -46,7 +46,10 @@ try {
       await provider.enable();
       provider = new BrowserProvider(provider);
     }
-
+     const accounts = await provider.send("eth_accounts", []);
+     if (accounts.length === 0) {
+     await provider.send("eth_requestAccounts", []);
+}
     const signer = await provider.getSigner();
     const userAddress = await signer.getAddress();
     const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
