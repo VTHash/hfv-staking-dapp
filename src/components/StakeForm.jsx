@@ -52,30 +52,50 @@ export default function StakeForm() {
   };
 
   const handleStake = async () => {
-    if (!amount || !duration) return;
-    setIsLoading(true);
-    try {
-      setStatus('🔄 Staking...');
+  if (isLoading) return;
+  if (!stakingAddress || !tokenAddress || !amount || !duration) {
+    setStatus("❌ Please fill all fields");
+    return;
+  }
 
-      const provider = await connectProvider();
-      const signer = await provider.getSigner();
-      const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+  setIsLoading(true);
+  setStatus('🔄 Preparing stake...');
 
-      const amountInWei = ethers.parseUnits(amount, 18);
-      const tx = await stakingContract.stake(amountInWei, Number(duration));
-      await tx.wait();
+  try {
+    let provider;
 
-      setStatus('✅ Stake successful!');
-      setAmount('');
-      setDuration('');
-      setIsApproved(false);
-    } catch (err) {
-      console.error('Stake Error:', err);
-      setStatus(`❌ Stake failed: ${err?.reason || err?.message}`);
-    } finally {
-      setIsLoading(false);
+    if (window.ethereum) {
+      provider = new BrowserProvider(window.ethereum);
+    } else {
+      provider = await EthereumProvider.init({
+        projectId: import.meta.env.VITE_PROJECT_ID,
+        chains: [1],
+        showQrModal: true,
+      });
+      provider = new BrowserProvider(provider);
     }
-  };
+
+    const signer = await provider.getSigner();
+    const userAddress = await signer.getAddress();
+
+    const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+
+    const amountInWei = ethers.parseUnits(amount, 18);
+
+    // 🔓 Stake: allow wallet to decide
+    const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
+    await stakeTx.wait();
+
+    setStatus("✅ Stake successful!");
+    setAmount('');
+    setDuration('');
+  } catch (err) {
+    console.error("Stake error:", err);
+    setStatus(`❌ Stake failed: ${err.reason || err.message}`);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="stake-form">
