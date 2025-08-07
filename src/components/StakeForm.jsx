@@ -15,85 +15,70 @@ export default function StakeForm() {
   const [duration, setDuration] = useState('');
   const [status, setStatus] = useState('');
   const [isApproving, setIsApproving] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
   const [isStaking, setIsStaking] = useState(false);
-  const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
 
-  const connectWallet = async () => {
-    let prov;
+  const connectProvider = async () => {
     if (window.ethereum) {
-      prov = new BrowserProvider(window.ethereum);
+      return new BrowserProvider(window.ethereum);
     } else {
-      const walletConnect = await EthereumProvider.init({
+      const walletConnectProvider = await EthereumProvider.init({
         projectId: import.meta.env.VITE_PROJECT_ID,
         chains: [1],
         showQrModal: true,
         methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
       });
-      prov = new BrowserProvider(walletConnect);
+      return new BrowserProvider(walletConnectProvider);
     }
-
-    const accounts = await prov.send("eth_accounts", []);
-    if (accounts.length === 0) {
-      await prov.send("eth_requestAccounts", []);
-    }
-
-    const sgnr = await prov.getSigner();
-    setProvider(prov);
-    setSigner(sgnr);
-    return sgnr;
   };
 
   const handleApprove = async () => {
-    if (!amount || parseFloat(amount) > 500) {
-      setStatus('❌ Amount required and max 500 HFV per period');
-      return;
-    }
+    if (!amount || !tokenAddress || !stakingAddress) return;
 
     try {
       setIsApproving(true);
-      setStatus('🔄 Connecting wallet...');
-      const sgnr = await connectWallet();
+      setStatus('🔄 Approving HFV...');
 
-      const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, sgnr);
+      const provider = await connectProvider();
+      const signer = await provider.getSigner();
+      const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
       const amountInWei = ethers.parseUnits(amount, 18);
 
-      setStatus('📝 Sending approval transaction...');
       const tx = await tokenContract.approve(stakingAddress, amountInWei);
       await tx.wait();
 
-      setStatus('✅ Approval successful. You can now stake.');
+      setIsApproved(true);
+      setStatus('✅ Approval successful! You can now stake.');
     } catch (err) {
-      console.error("Approve Error:", err);
-      setStatus(`❌ Approve failed: ${err?.reason || err?.message}`);
+      console.error('Approval Error:', err);
+      setStatus(`❌ Approval failed: ${err?.reason || err?.message || 'Unknown error'}`);
     } finally {
       setIsApproving(false);
     }
   };
 
   const handleStake = async () => {
-    if (!amount || !duration || parseFloat(amount) > 500) {
-      setStatus('❌ Amount and duration required (Max 500 HFV)');
-      return;
-    }
+    if (!isApproved || !amount || !duration || !stakingAddress) return;
 
     try {
       setIsStaking(true);
-      setStatus('🔄 Preparing to stake...');
+      setStatus('⏳ Sending stake transaction...');
 
-      const amountInWei = ethers.parseUnits(amount, 18);
+      const provider = await connectProvider();
+      const signer = await provider.getSigner();
       const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+      const amountInWei = ethers.parseUnits(amount, 18);
 
-      setStatus('🚀 Sending stake transaction...');
       const tx = await stakingContract.stake(amountInWei, Number(duration));
       await tx.wait();
 
       setStatus('✅ Stake successful!');
       setAmount('');
       setDuration('');
+      setIsApproved(false);
     } catch (err) {
-      console.error("Stake Error:", err);
-      setStatus(`❌ Stake failed: ${err?.reason || err?.message}`);
+      console.error('Stake Error:', err);
+      setStatus(`❌ Stake failed: ${err?.reason || err?.message || 'Check if already staked 500 HFV'}`);
     } finally {
       setIsStaking(false);
     }
@@ -123,18 +108,14 @@ export default function StakeForm() {
         <option value={12 * 30 * 86400}>12 Months</option>
       </select>
 
-      <button
-        className="glow-button"
-        onClick={handleApprove}
-        disabled={isApproving || isStaking}
-      >
+      <button className="glow-button" onClick={handleApprove} disabled={isApproving}>
         {isApproving ? 'Approving...' : 'Approve'}
       </button>
 
       <button
         className="glow-button"
         onClick={handleStake}
-        disabled={isStaking || isApproving}
+        disabled={!isApproved || isStaking}
       >
         {isStaking ? 'Staking...' : 'Stake'}
       </button>
