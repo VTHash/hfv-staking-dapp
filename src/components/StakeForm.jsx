@@ -3,7 +3,7 @@ import { ethers, BrowserProvider } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
 import HFVStaking from '../abi/HFVStaking.json';
 import HFVToken from '../abi/HFVToken.json';
-
+import { Interface } from 'ethers';
 const stakingAbi = HFVStaking.abi;
 const tokenAbi = HFVToken.abi;
 
@@ -83,7 +83,9 @@ export default function StakeForm() {
     const amountInWei = ethers.parseUnits(amount, 18);
 
     setStatus('📝 Sending stake transaction...');
-const data = stakingContract.interface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
+
+const stakingInterface = new Interface(stakingAbi);
+    const txData = stakingContract.interface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
 
 const stakeTx = await signer.sendTransaction({
   to: stakingAddress,
