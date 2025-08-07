@@ -14,7 +14,7 @@ export default function StakeForm() {
   const [amount, setAmount] = useState(''); 
   const [duration, setDuration] = useState(''); 
   const [status, setStatus] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
 const handleStake = async () => {
   if (isLoading) return; // prevent double-clicking
   if (!stakingAddress || !tokenAddress || !amount || !duration) return;
