@@ -82,10 +82,15 @@ export default function StakeForm() {
 
     const amountInWei = ethers.parseUnits(amount, 18);
 
-    // 🔓 Stake: allow wallet to decide
     setStatus('📝 Sending stake transaction...');
-const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
-setStatus(`📨 Stake sent: ${stakeTx.hash}`);
+const data = stakingContract.interface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
+
+const stakeTx = await signer.sendTransaction({
+  to: stakingAddress,
+  data
+});
+
+setStatus(`📤 Stake sent: ${stakeTx.hash}`);
 await stakeTx.wait();
 
     setStatus("✅ Stake successful!");
