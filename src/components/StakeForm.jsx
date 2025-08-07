@@ -9,123 +9,80 @@ const tokenAbi = HFVToken.abi;
 
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 const tokenAddress = import.meta.env.VITE_HFV_TOKEN_ADDRESS;
+const projectId = import.meta.env.VITE_PROJECT_ID;
 
 export default function StakeForm() {
   const [amount, setAmount] = useState('');
   const [duration, setDuration] = useState('');
   const [status, setStatus] = useState('');
-  const [isApproving, setIsApproving] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
-  const [isStaking, setIsStaking] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const connectProvider = async () => {
     if (window.ethereum) {
       return new BrowserProvider(window.ethereum);
     } else {
-      const walletConnectProvider = await EthereumProvider.init({
-        projectId: import.meta.env.VITE_PROJECT_ID,
+      const walletConnect = await EthereumProvider.init({
+        projectId: projectId,
         chains: [1],
         showQrModal: true,
         methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
       });
-      return new BrowserProvider(walletConnectProvider);
+      return new BrowserProvider(walletConnect);
     }
   };
 
   const handleApprove = async () => {
-    if (!amount || !tokenAddress || !stakingAddress) return;
+    if (!amount || !stakingAddress || !tokenAddress) return;
+    setIsLoading(true);
+    setStatus('🔄 Connecting wallet...');
 
     try {
-      setIsApproving(true);
-      setStatus('🔄 Approving HFV...');
-
       const provider = await connectProvider();
       const signer = await provider.getSigner();
       const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
       const amountInWei = ethers.parseUnits(amount, 18);
 
-      const tx = await tokenContract.approve(stakingAddress, amountInWei);
-      await tx.wait();
+      setStatus('🔐 Awaiting approval...');
+      const approveTx = await tokenContract.approve(stakingAddress, amountInWei);
+      await approveTx.wait();
 
       setIsApproved(true);
       setStatus('✅ Approval successful! You can now stake.');
     } catch (err) {
       console.error('Approval Error:', err);
-      setStatus(`❌ Approval failed: ${err?.reason || err?.message || 'Unknown error'}`);
+      setStatus(`❌ Approval failed: ${err.reason || err.message || 'Unknown error'}`);
     } finally {
-      setIsApproving(false);
+      setIsLoading(false);
     }
   };
 
- const handleStake = async () => {
-  if (isLoading || !stakingAddress || !tokenAddress || !amount || !duration) return;
+  const handleStake = async () => {
+    if (!amount || !duration || !isApproved || isLoading) return;
+    setIsLoading(true);
+    setStatus('🔄 Connecting wallet...');
 
-  setIsLoading(true);
-
-  try {
-    const stakeAmount = parseFloat(amount);
-    if (stakeAmount > 500) {
-      setStatus('❌ Max 500 HFV per period');
-      setIsLoading(false);
-      return;
-    }
-
-    setStatus('🔄 Connecting...');
-
-    let provider;
-    if (window.ethereum) {
-      provider = new BrowserProvider(window.ethereum);
-    } else {
-      provider = await EthereumProvider.init({
-        projectId: import.meta.env.VITE_PROJECT_ID,
-        chains: [1],
-        showQrModal: true,
-        methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-      });
-      provider = new BrowserProvider(provider);
-    }
-
-    const signer = await provider.getSigner();
-    const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
-    const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-    const amountInWei = ethers.parseUnits(amount, 18);
-
-    // ✅ Step 1: Approve
     try {
-      setStatus('📝 Approving HFV...');
-      const approvalTx = await tokenContract.approve(stakingAddress, amountInWei);
-      console.log("🔄 Approval tx sent:", approvalTx.hash);
-      await approvalTx.wait();
-      console.log("✅ Approval confirmed:", approvalTx.hash);
-    } catch (err) {
-      console.error("❌ Approval error:", err);
-      setStatus(`❌ Approval failed: ${err?.reason || err?.message}`);
-      setIsLoading(false);
-      return;
-    }
+      const provider = await connectProvider();
+      const signer = await provider.getSigner();
+      const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+      const amountInWei = ethers.parseUnits(amount, 18);
 
-    // ✅ Step 2: Stake
-    try {
-      setStatus('⏳ Staking in progress...');
+      setStatus('⚡ Sending stake transaction...');
       const stakeTx = await stakingContract.stake(amountInWei, Number(duration));
-      console.log("🔄 Stake tx sent:", stakeTx.hash);
       await stakeTx.wait();
-      console.log("✅ Stake confirmed:", stakeTx.hash);
 
       setStatus('✅ Stake successful!');
       setAmount('');
       setDuration('');
+      setIsApproved(false);
     } catch (err) {
-      console.error("❌ Stake error:", err);
-      setStatus(`❌ Stake failed: ${err?.reason || err?.message}`);
+      console.error('Stake Error:', err);
+      setStatus(`❌ Stake failed: ${err.reason || err.message || 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
     }
-  } catch (err) {
-    console.error("❌ Unknown error:", err);
-    setStatus(`❌ Failed: ${err?.reason || err?.message || 'Unknown error'}`);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <div className="stake-form">
@@ -151,16 +108,20 @@ export default function StakeForm() {
         <option value={12 * 30 * 86400}>12 Months</option>
       </select>
 
-      <button className="glow-button" onClick={handleApprove} disabled={isApproving}>
-        {isApproving ? 'Approving...' : 'Approve'}
+      <button
+        onClick={handleApprove}
+        className="glow-button"
+        disabled={isLoading}
+      >
+        {isLoading ? 'Processing...' : 'Approve'}
       </button>
 
       <button
-        className="glow-button"
         onClick={handleStake}
-        disabled={!isApproved || isStaking}
+        className="glow-button"
+        disabled={!isApproved || isLoading}
       >
-        {isStaking ? 'Staking...' : 'Stake'}
+        {isLoading ? 'Processing...' : 'Stake'}
       </button>
 
       <p className="status-text">{status}</p>
