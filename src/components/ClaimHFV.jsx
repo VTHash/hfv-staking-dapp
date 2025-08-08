@@ -10,20 +10,22 @@ const projectId = import.meta.env.VITE_PROJECT_ID;
 export default function ClaimHFV() {
   const [status, setStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+const [walletType, setWalletType] = useState('metamask');
   const connectProvider = async () => {
-    if (window.ethereum) {
-      return new BrowserProvider(window.ethereum);
-    } else {
-      const wc = await EthereumProvider.init({
-        projectId,
-        chains: [1],
-        showQrModal: true,
-        methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-      });
-      return new BrowserProvider(wc);
-    }
-  };
+  if (walletType === 'metamask') {
+    return new BrowserProvider(window.ethereum);
+  }
+
+  const wcProvider = await EthereumProvider.init({
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    chains: [1],
+    showQrModal: true,
+    methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+  });
+
+  return new BrowserProvider(wcProvider);
+};
+
 
   const handleClaim = async () => {
     setIsLoading(true);

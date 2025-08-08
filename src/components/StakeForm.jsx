@@ -16,12 +16,11 @@ export default function StakeForm() {
   const [status, setStatus] = useState('');
   const [isApproved, setIsApproved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+ const [walletType, setWalletType] = useState('metamask');
   const connectProvider = async () => {
-    if (window.ethereum) {
-      return new BrowserProvider(window.ethereum);
-    }
-
+  if (walletType === 'metamask') {
+    return new BrowserProvider(window.ethereum);
+  }
     const wcProvider = await EthereumProvider.init({
       projectId: import.meta.env.VITE_PROJECT_ID,
       chains: [1],
@@ -122,7 +121,7 @@ export default function StakeForm() {
         <option value={6 * 30 * 86400}>6 Months</option>
         <option value={12 * 30 * 86400}>12 Months</option>
       </select>
-
+      <WalletToggle onSelect={setWalletType} />
       <button onClick={handleApprove} className="glow-button">
         Approve
       </button>
