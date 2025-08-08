@@ -3,7 +3,7 @@ import { ethers, BrowserProvider, Interface } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
 import HFVStaking from '../abi/HFVStaking.json';
 import HFVToken from '../abi/HFVToken.json';
-import WalletToggle from 'src/WalletToggle.jsx'; 
+import WalletToggle from 'src/WalletToggle.jsx'; // ✅ Adjust path if needed
 
 const stakingAbi = HFVStaking.abi;
 const tokenAbi = HFVToken.abi;
@@ -21,18 +21,19 @@ export default function StakeForm() {
 
   const connectProvider = async () => {
     if (walletType === 'metamask') {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length === 0) {
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
-        }
-      } catch (err) {
-        console.error("MetaMask connect error:", err);
-        throw err;
+      if (!window.ethereum) throw new Error("MetaMask not available");
+
+      // ✅ Check if already connected
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+
+      if (!accounts || accounts.length === 0) {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
       }
+
       return new BrowserProvider(window.ethereum);
     }
 
+    // ✅ WalletConnect fallback
     const wcProvider = await EthereumProvider.init({
       projectId: import.meta.env.VITE_PROJECT_ID,
       chains: [1],
@@ -50,7 +51,7 @@ export default function StakeForm() {
       const signer = await provider.getSigner();
       const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
 
-      const amountInWei = BigInt(amount); // Assuming HFV token has 0 decimals
+      const amountInWei = BigInt(amount); // HFV has 0 decimals
       const tx = await tokenContract.approve(stakingAddress, amountInWei);
       await tx.wait();
 
@@ -101,6 +102,7 @@ export default function StakeForm() {
   return (
     <div className="stake-form">
       <h3 className="section-title">Stake HFV Tokens</h3>
+
       <input
         className="input-field"
         type="number"
@@ -108,6 +110,7 @@ export default function StakeForm() {
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
+
       <select
         className="input-field"
         value={duration}
