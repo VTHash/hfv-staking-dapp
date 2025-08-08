@@ -3,7 +3,7 @@ import { ethers, BrowserProvider, Interface } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
 import HFVStaking from '../abi/HFVStaking.json';
 import HFVToken from '../abi/HFVToken.json';
-import WalletToggle from 'src/WalletToggle.jsx'; // ✅ Adjust path if needed
+import WalletToggle from './WalletToggle.jsx';
 
 const stakingAbi = HFVStaking.abi;
 const tokenAbi = HFVToken.abi;

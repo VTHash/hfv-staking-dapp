@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import stakingAbi from '../abi/HFVStaking.json';
-
+import WalletToggle from './WalletToggle';
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 
 export default function StakingDashboard() {

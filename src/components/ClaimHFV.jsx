@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ethers, BrowserProvider } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
 import HFVStaking from '../abi/HFVStaking.json';
-import WalletToggle from ./WalletToggle.jsx;
+import WalletToggle from './WalletToggle.jsx';
 const stakingAbi = HFVStaking.abi;
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 const projectId = import.meta.env.VITE_PROJECT_ID;
