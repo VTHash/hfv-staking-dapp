@@ -39,7 +39,7 @@ export default function StakeForm() {
       const signer = await provider.getSigner();
       const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
 
-      const amountInWei = ethers.parseUnits(amount, 18);
+      const amountInWei = BigInt(amount);
       const tx = await tokenContract.approve(stakingAddress, amountInWei);
       await tx.wait();
 
@@ -79,7 +79,7 @@ export default function StakeForm() {
     const userAddress = await signer.getAddress();
 
     const iface = new ethers.Interface(stakingAbi);
-    const amountInWei = ethers.parseUnits(amount, 18);
+    const amountInWei = BigInt(amount);
     const data = iface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
 
     const tx = await signer.sendTransaction({
