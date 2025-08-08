@@ -67,33 +67,27 @@ export default function StakeForm() {
     if (window.ethereum) {
       provider = new BrowserProvider(window.ethereum);
     } else {
-      provider = await EthereumProvider.init({
+      const wcProvider = await EthereumProvider.init({
         projectId: import.meta.env.VITE_PROJECT_ID,
         chains: [1],
         showQrModal: true,
       });
-      provider = new BrowserProvider(provider);
+      provider = new BrowserProvider(wcProvider);
     }
 
     const signer = await provider.getSigner();
     const userAddress = await signer.getAddress();
 
-    const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-
+    const iface = new ethers.Interface(stakingAbi);
     const amountInWei = ethers.parseUnits(amount, 18);
+    const data = iface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
 
-    setStatus('📝 Sending stake transaction...');
+    const tx = await signer.sendTransaction({
+      to: stakingAddress,
+      data: data,
+    });
 
-const stakingInterface = new Interface(stakingAbi);
-    const txData = stakingContract.interface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
-
-const stakeTx = await signer.sendTransaction({
-  to: stakingAddress,
-  data
-});
-
-setStatus(`📤 Stake sent: ${stakeTx.hash}`);
-await stakeTx.wait();
+    await tx.wait();
 
     setStatus("✅ Stake successful!");
     setAmount('');
@@ -105,6 +99,7 @@ await stakeTx.wait();
     setIsLoading(false);
   }
 };
+
 
   return (
     <div className="stake-form">
