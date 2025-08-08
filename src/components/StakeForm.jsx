@@ -20,21 +20,29 @@ export default function StakeForm() {
   const [walletType, setWalletType] = useState('metamask');
 
   const connectProvider = async () => {
-    if (walletType === 'metamask') {
-      await window.ethereum.request({ method: 'eth_requestAccounts' }); // ✅ Ensure only called once
-      return new BrowserProvider(window.ethereum);
+  if (walletType === 'metamask') {
+    const isMetaMaskConnected = await window.ethereum.request({ method: 'eth_accounts' });
+
+    if (isMetaMaskConnected.length === 0) {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+      } catch (error) {
+        throw new Error("User rejected wallet connection.");
+      }
     }
 
-    const wcProvider = await EthereumProvider.init({
-      projectId: import.meta.env.VITE_PROJECT_ID,
-      chains: [1],
-      showQrModal: true,
-      methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-    });
+    return new BrowserProvider(window.ethereum);
+  }
 
-    return new BrowserProvider(wcProvider);
-  };
+  const wcProvider = await EthereumProvider.init({
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    chains: [1],
+    showQrModal: true,
+    methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+  });
 
+  return new BrowserProvider(wcProvider);
+};
   const handleApprove = async () => {
     try {
       setStatus('📝 Approving...');
