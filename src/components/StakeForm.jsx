@@ -21,18 +21,27 @@ export default function StakeForm() {
 
   const connectProvider = async () => {
   if (walletType === 'metamask') {
-    const isMetaMaskConnected = await window.ethereum.request({ method: 'eth_accounts' });
-
-    if (isMetaMaskConnected.length === 0) {
-      try {
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts.length === 0) {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
-      } catch (error) {
-        throw new Error("User rejected wallet connection.");
       }
+    } catch (err) {
+      console.error("MetaMask connect error:", err);
+      throw err;
     }
-
     return new BrowserProvider(window.ethereum);
   }
+
+  const wcProvider = await EthereumProvider.init({
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    chains: [1],
+    showQrModal: true,
+    methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+  });
+
+  return new BrowserProvider(wcProvider);
+};
 
   const wcProvider = await EthereumProvider.init({
     projectId: import.meta.env.VITE_PROJECT_ID,
