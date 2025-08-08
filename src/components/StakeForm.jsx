@@ -20,38 +20,29 @@ export default function StakeForm() {
   const [walletType, setWalletType] = useState('metamask');
 
   const connectProvider = async () => {
-  if (walletType === 'metamask') {
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-      if (accounts.length === 0) {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
+    if (walletType === 'metamask') {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length === 0) {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+        }
+      } catch (err) {
+        console.error("MetaMask connect error:", err);
+        throw err;
       }
-    } catch (err) {
-      console.error("MetaMask connect error:", err);
-      throw err;
+      return new BrowserProvider(window.ethereum);
     }
-    return new BrowserProvider(window.ethereum);
-  }
 
-  const wcProvider = await EthereumProvider.init({
-    projectId: import.meta.env.VITE_PROJECT_ID,
-    chains: [1],
-    showQrModal: true,
-    methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-  });
+    const wcProvider = await EthereumProvider.init({
+      projectId: import.meta.env.VITE_PROJECT_ID,
+      chains: [1],
+      showQrModal: true,
+      methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+    });
 
-  return new BrowserProvider(wcProvider);
-};
+    return new BrowserProvider(wcProvider);
+  };
 
-  const wcProvider = await EthereumProvider.init({
-    projectId: import.meta.env.VITE_PROJECT_ID,
-    chains: [1],
-    showQrModal: true,
-    methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-  });
-
-  return new BrowserProvider(wcProvider);
-};
   const handleApprove = async () => {
     try {
       setStatus('📝 Approving...');
@@ -59,7 +50,7 @@ export default function StakeForm() {
       const signer = await provider.getSigner();
       const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
 
-      const amountInWei = BigInt(amount); // ⚠️ Assuming HFV token has 0 decimals
+      const amountInWei = BigInt(amount); // Assuming HFV token has 0 decimals
       const tx = await tokenContract.approve(stakingAddress, amountInWei);
       await tx.wait();
 
@@ -85,7 +76,7 @@ export default function StakeForm() {
       const provider = await connectProvider();
       const signer = await provider.getSigner();
 
-      const iface = new Interface(stakingAbi); // ✅ Correct import
+      const iface = new Interface(stakingAbi);
       const amountInWei = BigInt(amount);
       const data = iface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
 
