@@ -19,17 +19,19 @@ export default function StakeForm() {
  const [walletType, setWalletType] = useState('metamask');
   const connectProvider = async () => {
   if (walletType === 'metamask') {
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
     return new BrowserProvider(window.ethereum);
   }
-    const wcProvider = await EthereumProvider.init({
-      projectId: import.meta.env.VITE_PROJECT_ID,
-      chains: [1],
-      showQrModal: true,
-      methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-    });
 
-    return new BrowserProvider(wcProvider);
-  };
+  const wcProvider = await EthereumProvider.init({
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    chains: [1],
+    showQrModal: true,
+    methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+  });
+
+  return new BrowserProvider(wcProvider);
+};
 
   const handleApprove = async () => {
     try {
