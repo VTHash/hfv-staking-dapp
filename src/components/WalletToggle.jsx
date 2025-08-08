@@ -1,17 +1,29 @@
-// WalletToggle.jsx import React, { useState } from 'react';
+import { useState } from 'react';
 
-export default function WalletToggle({ onSelect }) 
-{ 
-const [selected, setSelected] = useState('metamask');
+export default function WalletToggle({ onSelect, initial = 'metamask' }) {
+  const [selected, setSelected] = useState(initial);
 
-const handleSelect = (wallet) => { setSelected(wallet); 
-    onSelect(wallet); };
+  const choose = (val) => {
+    setSelected(val);
+    onSelect?.(val);
+  };
 
-return ( <div className="wallet-toggle">
-     <button className={selected === 'metamask' ? 'active' : ''} onClick={() =>
-     handleSelect('metamask')} > MetaMask </button>
-      <button className={selected === 'walletconnect' ? 'active' : ''} onClick={() => 
-      handleSelect('walletconnect')} > WalletConnect </button> 
-      </div> 
-      );
-     }
+  return (
+    <div className="wallet-toggle" style={{ display: 'flex', gap: 8, margin: '8px 0' }}>
+      <button
+        type="button"
+        className={`glow-button ${selected === 'metamask' ? 'active' : ''}`}
+        onClick={() => choose('metamask')}
+      >
+        MetaMask
+      </button>
+      <button
+        type="button"
+        className={`glow-button ${selected === 'walletconnect' ? 'active' : ''}`}
+        onClick={() => choose('walletconnect')}
+      >
+        WalletConnect
+      </button>
+    </div>
+  );
+}
