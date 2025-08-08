@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ethers, BrowserProvider } from 'ethers';
+import { ethers, BrowserProvider, Interface } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
 import HFVStaking from '../abi/HFVStaking.json';
 import HFVToken from '../abi/HFVToken.json';
-import WalletToggle from src/WalletToggle.jsx;
+import WalletToggle from 'src/WalletToggle.jsx'; 
+
 const stakingAbi = HFVStaking.abi;
 const tokenAbi = HFVToken.abi;
 
@@ -16,22 +17,23 @@ export default function StakeForm() {
   const [status, setStatus] = useState('');
   const [isApproved, setIsApproved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
- const [walletType, setWalletType] = useState('metamask');
+  const [walletType, setWalletType] = useState('metamask');
+
   const connectProvider = async () => {
-  if (walletType === 'metamask') {
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    return new BrowserProvider(window.ethereum);
-  }
+    if (walletType === 'metamask') {
+      await window.ethereum.request({ method: 'eth_requestAccounts' }); // ✅ Ensure only called once
+      return new BrowserProvider(window.ethereum);
+    }
 
-  const wcProvider = await EthereumProvider.init({
-    projectId: import.meta.env.VITE_PROJECT_ID,
-    chains: [1],
-    showQrModal: true,
-    methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
-  });
+    const wcProvider = await EthereumProvider.init({
+      projectId: import.meta.env.VITE_PROJECT_ID,
+      chains: [1],
+      showQrModal: true,
+      methods: ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData'],
+    });
 
-  return new BrowserProvider(wcProvider);
-};
+    return new BrowserProvider(wcProvider);
+  };
 
   const handleApprove = async () => {
     try {
@@ -40,7 +42,7 @@ export default function StakeForm() {
       const signer = await provider.getSigner();
       const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
 
-      const amountInWei = BigInt(amount);
+      const amountInWei = BigInt(amount); // ⚠️ Assuming HFV token has 0 decimals
       const tx = await tokenContract.approve(stakingAddress, amountInWei);
       await tx.wait();
 
@@ -53,54 +55,40 @@ export default function StakeForm() {
   };
 
   const handleStake = async () => {
-  if (isLoading) return;
-  if (!stakingAddress || !tokenAddress || !amount || !duration) {
-    setStatus("❌ Please fill all fields");
-    return;
-  }
-
-  setIsLoading(true);
-  setStatus('🔄 Preparing stake...');
-
-  try {
-    let provider;
-
-    if (window.ethereum) {
-      provider = new BrowserProvider(window.ethereum);
-    } else {
-      const wcProvider = await EthereumProvider.init({
-        projectId: import.meta.env.VITE_PROJECT_ID,
-        chains: [1],
-        showQrModal: true,
-      });
-      provider = new BrowserProvider(wcProvider);
+    if (isLoading) return;
+    if (!stakingAddress || !tokenAddress || !amount || !duration) {
+      setStatus("❌ Please fill all fields");
+      return;
     }
 
-    const signer = await provider.getSigner();
-    const userAddress = await signer.getAddress();
+    setIsLoading(true);
+    setStatus('🔄 Preparing stake...');
 
-    const iface = new ethers.Interface(stakingAbi);
-    const amountInWei = BigInt(amount);
-    const data = iface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
+    try {
+      const provider = await connectProvider();
+      const signer = await provider.getSigner();
 
-    const tx = await signer.sendTransaction({
-      to: stakingAddress,
-      data: data,
-    });
+      const iface = new Interface(stakingAbi); // ✅ Correct import
+      const amountInWei = BigInt(amount);
+      const data = iface.encodeFunctionData("stake", [amountInWei, Number(duration)]);
 
-    await tx.wait();
+      const tx = await signer.sendTransaction({
+        to: stakingAddress,
+        data: data,
+      });
 
-    setStatus("✅ Stake successful!");
-    setAmount('');
-    setDuration('');
-  } catch (err) {
-    console.error("Stake error:", err);
-    setStatus(`❌ Stake failed: ${err.reason || err.message}`);
-  } finally {
-    setIsLoading(false);
-  }
-};
+      await tx.wait();
 
+      setStatus("✅ Stake successful!");
+      setAmount('');
+      setDuration('');
+    } catch (err) {
+      console.error("Stake error:", err);
+      setStatus(`❌ Stake failed: ${err.reason || err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="stake-form">
@@ -123,7 +111,9 @@ export default function StakeForm() {
         <option value={6 * 30 * 86400}>6 Months</option>
         <option value={12 * 30 * 86400}>12 Months</option>
       </select>
+
       <WalletToggle onSelect={setWalletType} />
+
       <button onClick={handleApprove} className="glow-button">
         Approve
       </button>
