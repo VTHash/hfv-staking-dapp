@@ -341,3 +341,149 @@ body::after {
     background: rgba(0, 0, 0, 0.20);
   }
 }
+
+/* Base: edge-to-edge + no horizontal scroll */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+/* Shared containers */
+.app-wrapper,
+.stake-form,
+.staking-dashboard {
+  width: 100%;
+}
+
+/* Cards/HUDs */
+.glow-subframe {
+  padding: 16px;
+  border-radius: 14px;
+}
+
+/* Inputs & buttons default (desktop/tablet) */
+.input-field,
+select.input-field,
+.glow-button {
+  font-size: 16px;
+  line-height: 1.25;
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+
+/* Titles & status */
+.section-title {
+  font-size: 22px;
+  line-height: 1.2;
+  margin: 12px 0;
+  text-align: center;
+}
+.status-text {
+  font-size: 14px;
+  line-height: 1.3;
+  text-align: center;
+  margin-top: 10px;
+  opacity: 0.9;
+}
+
+/* Wallet toggle buttons */
+.wallet-toggle .glow-button {
+  padding: 10px 14px;
+  min-width: 120px;
+}
+
+/* Lists */
+.staking-dashboard ul {
+  list-style: none;
+  padding: 0 12px;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+.staking-dashboard li.glow-subframe {
+  display: block;
+}
+
+/* --- Mobile tweaks --- */
+@media (max-width: 768px) {
+  /* Use full viewport width; remove side gutters */
+  .app-wrapper {
+    width: 100vw;
+    max-width: 100vw;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Bigger titles + spacing */
+  .section-title {
+    font-size: 24px;
+    margin: 14px 0;
+  }
+
+  /* Larger, thumb-friendly inputs and buttons */
+  .input-field,
+  select.input-field,
+  .glow-button {
+    font-size: 18px;
+    padding: 14px 16px; /* 44px+ tap height */
+    border-radius: 14px;
+  }
+
+  /* Primary CTA sizing */
+  .glow-button {
+    min-height: 48px;
+    min-width: 44px;
+  }
+
+  /* Wallet toggle */
+  .wallet-toggle {
+    display: flex;
+    gap: 10px;
+    padding: 0 12px;
+    margin: 8px 0 12px;
+  }
+  .wallet-toggle .glow-button {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 18px;
+  }
+
+  /* Card padding & readable text */
+  .glow-subframe {
+    padding: 18px;
+    border-radius: 16px;
+  }
+  .glow-subframe strong {
+    display: inline-block;
+    min-width: 110px; /* nice label alignment */
+  }
+
+  /* Lists use tight grid and side breathing room */
+  .staking-dashboard ul {
+    gap: 14px;
+    padding: 0 12px;
+  }
+
+  /* Status text a bit bigger */
+  .status-text {
+    font-size: 16px;
+    margin: 12px 10px 0;
+  }
+
+  /* Form layout */
+  .stake-form {
+    padding: 0 12px;
+    display: grid;
+    gap: 12px;
+  }
+
+  /* Ensure no accidental horizontal overflow */
+  img, svg, canvas, video, iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+}
