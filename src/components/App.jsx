@@ -2,7 +2,6 @@ import React from 'react';
 import ConnectWallet from './ConnectWallet';
 import StakeForm from './StakeForm';
 import StakingDashboard from './StakingDashboard';
-import RewardCalculator from './RewardCalculator';
 import Claim from './ClaimHFV';
 import '../index.css';
 
