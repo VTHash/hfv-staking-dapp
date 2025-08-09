@@ -5,44 +5,41 @@ import HFVStaking from '../abi/HFVStaking.json';
 const stakingAbi = HFVStaking.abi;
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 
+// Human labels for the supported durations (seconds)
 const PERIOD_LABELS = {
   1814400: '21 Days',
   7776000: '3 Months',
   15552000: '6 Months',
   31104000: '12 Months',
-  31536000: '12 Months',
+  31536000: '12 Months', // just in case some deployments used 365d
 };
+
 const fmtPeriod = (sec) => PERIOD_LABELS[sec] || `${Math.round(Number(sec) / 86400)} Days`;
-const fmtAmount = (v) => (typeof v === 'bigint' ? v.toString() : String(v));
 
 export default function StakingDashboard() {
+  const [address, setAddress] = useState('');
   const [stakes, setStakes] = useState([]);
   const [summary, setSummary] = useState([]);
-  const [address, setAddress] = useState('');
   const [status, setStatus] = useState('');
 
+  // Ask MetaMask only when needed; otherwise read silently
   const ensureConnected = useCallback(async (forcePrompt = false) => {
     if (!window.ethereum) throw new Error('Wallet not available');
-    // Silent check first
-    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-    if (accounts && accounts.length > 0 && !forcePrompt) return accounts[0];
 
-    // Not connected or user wants to switch: prompt
-    try {
-      const req = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      return req[0];
-    } catch (e) {
-      // User rejected, or pending request; surface clean message
-      throw new Error(e?.message || 'Wallet connection was cancelled.');
-    }
+    // Try silent first
+    const silent = await window.ethereum.request({ method: 'eth_accounts' });
+    if (!forcePrompt && silent && silent.length > 0) return silent[0];
+
+    // Prompt user
+    const req = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    return req[0];
   }, []);
 
   const loadStakes = useCallback(async () => {
     try {
       setStatus('');
-      if (!window.ethereum || !stakingAddress) return;
+      if (!stakingAddress) throw new Error('Missing staking address');
 
-      // connect if needed (silent if already connected)
       const addr = await ensureConnected(false);
       if (!addr) {
         setAddress('');
@@ -51,63 +48,67 @@ export default function StakingDashboard() {
         return;
       }
       setAddress(addr);
-+ console.log('🔗 Using stakingAddress', stakingAddress);
-+ console.log('👛 Loading stakes for', addr);
 
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(stakingAddress, stakingAbi, provider);
 
+      // getStakeCount(address) -> uint256
       const rawCount = await contract.getStakeCount(addr);
-const count = Number(rawCount);
-console.log('🧱 stakeCount =', rawCount.toString?.() ?? String(rawCount), '(Number ->', count, ')');
-
+      const count = Number(rawCount);
 
       const rows = [];
-      const sums = {};
+      const sums = {}; // durationSec -> BigInt total
 
       for (let i = 0; i < count; i++) {
         const s = await contract.stakes(addr, i);
+        // Contract fields (ethers v6): numbers are BigInt-like, booleans are boolean
         const amount = BigInt(s.amount);
         const startSec = Number(s.startTimestamp);
         const durationSec = Number(s.duration);
+        const claimed = Boolean(s.claimed);
+
         const unlockMs = (startSec + durationSec) * 1000;
 
         rows.push({
           index: i,
-          amount,
-          amountFmt: fmtAmount(amount),
+          amount, // keep BigInt in memory
+          amountFmt: amount.toString(), // render-safe
           startFmt: new Date(startSec * 1000).toLocaleString(),
           durationSec,
           periodLabel: fmtPeriod(durationSec),
-          claimed: Boolean(s.claimed),
+          claimed,
           unlocked: Date.now() >= unlockMs,
         });
 
-        sums[durationSec] = (sums[durationSec] || 0n) + amount;
+        const key = durationSec;
+        sums[key] = (sums[key] || 0n) + amount;
       }
 
+      // Period summary (ordered)
       const order = [1814400, 7776000, 15552000, 31104000, 31536000];
       const sumRows = order
         .filter((k) => (sums[k] || 0n) > 0n)
-        .map((k) => ({ label: fmtPeriod(k), amountFmt: fmtAmount(sums[k]) }));
+        .map((k) => ({ label: fmtPeriod(k), amountFmt: (sums[k] || 0n).toString() }));
 
       setStakes(rows);
       setSummary(sumRows);
     } catch (err) {
       console.error('Load stakes error:', err);
       setStatus(`❌ ${err?.reason || err?.message || 'Failed to load stakes'}`);
+      setStakes([]);
+      setSummary([]);
     }
   }, [ensureConnected]);
 
   const connectOrSwitch = async () => {
     try {
       setStatus('🔄 Connecting wallet…');
-      const addr = await ensureConnected(true); // force prompt to choose/switch
+      const addr = await ensureConnected(true); // force prompt to pick/switch
       setAddress(addr);
       await loadStakes();
       setStatus('');
     } catch (e) {
-      setStatus(`❌ ${e.message}`);
+      setStatus(`❌ ${e?.message || 'Wallet connection cancelled'}`);
     }
   };
 
@@ -117,16 +118,19 @@ console.log('🧱 stakeCount =', rawCount.toString?.() ?? String(rawCount), '(Nu
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+
       const tx = await contract.claim(index);
       await tx.wait();
+
       setStatus(`✅ Stake #${index} claimed!`);
       loadStakes();
     } catch (err) {
-      console.error('Claim Error:', err);
+      console.error('Claim error:', err);
       setStatus(`❌ Claim failed: ${err?.reason || err?.message || 'Unknown error'}`);
     }
   };
 
+  // Initial load + react to account/chain changes
   useEffect(() => {
     loadStakes();
 
@@ -145,7 +149,8 @@ console.log('🧱 stakeCount =', rawCount.toString?.() ?? String(rawCount), '(Nu
   return (
     <div className="staking-dashboard">
       <h3 className="section-title">Your Active Stakes</h3>
-<p className="tiny-muted">Stake count (debug): {stakes.length}</p>
+      <p className="tiny-muted">Stake count (debug): {stakes.length}</p>
+
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
         <span className="tiny-muted">
           {address ? <>Connected: {address.slice(0,6)}…{address.slice(-4)}</> : 'Wallet not connected'}
@@ -156,12 +161,13 @@ console.log('🧱 stakeCount =', rawCount.toString?.() ?? String(rawCount), '(Nu
         <button className="glow-button small" onClick={loadStakes}>Refresh</button>
       </div>
 
-      <div className="glow-subframe">
+      {/* Period totals */}
+      <div className="glow-subframe" style={{ marginBottom: 12 }}>
         <strong>Periods Summary</strong>
         {summary.length === 0 ? (
           <p>No stakes found.</p>
         ) : (
-          <ul className="simple-list">
+          <ul className="simple-list" style={{ marginTop: 6 }}>
             {summary.map((row, i) => (
               <li key={i}>{row.label} — {row.amountFmt} HFV</li>
             ))}
@@ -169,11 +175,14 @@ console.log('🧱 stakeCount =', rawCount.toString?.() ?? String(rawCount), '(Nu
         )}
       </div>
 
+      {/* Individual stakes */}
       {stakes.length > 0 && (
         <ul>
           {stakes.map((s) => (
-            <li key={s.index} className="glow-subframe">
-              <div><strong>Period:</strong> {s.periodLabel} — {s.amountFmt} HFV</div>
+            <li key={s.index} className="glow-subframe" style={{ marginBottom: 10 }}>
+              <div><strong>#</strong> {s.index}</div>
+              <div><strong>Period:</strong> {s.periodLabel}</div>
+              <div><strong>Amount:</strong> {s.amountFmt} HFV</div>
               <div><strong>Start:</strong> {s.startFmt}</div>
               <div><strong>Status:</strong> {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}</div>
               {!s.claimed && s.unlocked && (
@@ -186,7 +195,7 @@ console.log('🧱 stakeCount =', rawCount.toString?.() ?? String(rawCount), '(Nu
         </ul>
       )}
 
-      {status && <p className="status-text">{status}</p>}
+      {status && <p className="status-text" style={{ marginTop: 8 }}>{status}</p>}
     </div>
   );
 }
