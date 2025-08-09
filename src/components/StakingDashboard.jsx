@@ -51,11 +51,18 @@ export default function StakingDashboard() {
         return;
       }
       setAddress(addr);
++ console.log('🔗 Using stakingAddress', stakingAddress);
++ console.log('👛 Loading stakes for', addr);
 
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(stakingAddress, stakingAbi, provider);
 
       const count = Number(await contract.getStakeCount(addr));
+      + const rawCount = await contract.getStakeCount(addr);
++ const count = Number(rawCount);
++ console.log('📦 stakeCount =', rawCount, '(Number ->', count, ')');
+
+
       const rows = [];
       const sums = {};
 
@@ -139,7 +146,7 @@ export default function StakingDashboard() {
   return (
     <div className="staking-dashboard">
       <h3 className="section-title">Your Active Stakes</h3>
-
+<p className="tiny-muted">Stake count (debug): {stakes.length}</p>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
         <span className="tiny-muted">
           {address ? <>Connected: {address.slice(0,6)}…{address.slice(-4)}</> : 'Wallet not connected'}
