@@ -44,9 +44,6 @@ const App = () => {
           <Claim />
         </div>
 
-        <div className="glow-frame">
-          <RewardCalculator />
-        </div>
 
         <div className="glow-frame" style={{ textAlign: "center", marginTop: "2rem" }}>
   <p style={{ color: "#00ffae", fontWeight: "bold", fontSize: "1.1rem", marginBottom: "0.5rem" }}>
