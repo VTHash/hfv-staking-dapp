@@ -57,9 +57,9 @@ export default function StakingDashboard() {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(stakingAddress, stakingAbi, provider);
 
-      const count = Number(await contract.getStakeCount(addr));
-      
- console.log('📦 stakeCount =', rawCount, '(Number ->', count, ')');
+      const rawCount = await contract.getStakeCount(addr);
+const count = Number(rawCount);
+console.log('🧱 stakeCount =', rawCount.toString?.() ?? String(rawCount), '(Number ->', count, ')');
 
 
       const rows = [];
