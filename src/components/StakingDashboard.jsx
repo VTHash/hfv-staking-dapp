@@ -176,8 +176,7 @@ export default function StakingDashboard() {
       </div>
 
       {/* Individual stakes */}
-      {/* Individual stakes */}
-{stakes.length > 0 && (
+      {stakes.length > 0 && (
   <ul>
     {stakes.map((s) => (
       <li
@@ -196,7 +195,10 @@ export default function StakingDashboard() {
         <div><strong>Start:</strong> {s.startFmt}</div>
         <div><strong>Status:</strong> {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}</div>
         {!s.claimed && s.unlocked && (
-          <button className="glow-button small" onClick={() => handleClaim(s.index)}>
+          <button
+            className="glow-button small"
+            onClick={() => handleClaim(s.index)}
+          >
             Claim
           </button>
         )}
@@ -204,4 +206,3 @@ export default function StakingDashboard() {
     ))}
   </ul>
 )}
-;
