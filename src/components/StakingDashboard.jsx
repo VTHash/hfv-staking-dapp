@@ -162,22 +162,21 @@ export default function StakingDashboard() {
       </div>
 
       {/* Period totals */}
-      <div className="glow-subframe" style={{ marginBottom: 12 }}>
-        <strong>Periods Summary</strong>
-        {summary.length === 0 ? (
-          <p>No stakes found.</p>
-        ) : (
-          <ul className="simple-list" style={{ marginTop: 6 }}>
-            {summary.map((row, i) => (
-              <li key={i}>{row.label} — {row.amountFmt} HFV</li>
-            )
-                        )}
-          </ul>
-        )}
-      </div>
+     <div className="glow-subframe" style={{ marginBottom: 12 }}>
+  <strong>Periods Summary</strong>
+  {summary.length === 0 ? (
+    <p>No stakes found.</p>
+  ) : (
+    <ul className="simple-list" style={{ marginTop: 6 }}>
+      {summary.map((row, i) => (
+        <li key={i}>{row.label} — {row.amountFmt} HFV</li>
+      ))}
+    </ul>
+  )}
+</div>
 
-      {/* Individual stakes */}
-      {stakes.length > 0 && (
+{/* Individual stakes */}
+{stakes.length > 0 && (
   <ul>
     {stakes.map((s) => (
       <li
@@ -204,10 +203,6 @@ export default function StakingDashboard() {
           </button>
         )}
       </li>
-      )
-      )
-    }
+    ))}
   </ul>
 )}
- </div>
-   );
