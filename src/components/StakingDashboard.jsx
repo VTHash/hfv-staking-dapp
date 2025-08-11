@@ -170,7 +170,8 @@ export default function StakingDashboard() {
           <ul className="simple-list" style={{ marginTop: 6 }}>
             {summary.map((row, i) => (
               <li key={i}>{row.label} — {row.amountFmt} HFV</li>
-            ))}
+            )
+                        )}
           </ul>
         )}
       </div>
@@ -203,7 +204,9 @@ export default function StakingDashboard() {
           </button>
         )}
       </li>
-    ))}
+      )
+      )
+    }
   </ul>
 )}
  </div>
