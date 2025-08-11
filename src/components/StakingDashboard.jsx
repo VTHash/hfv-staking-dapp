@@ -176,26 +176,31 @@ export default function StakingDashboard() {
       </div>
 
       {/* Individual stakes */}
-      {stakes.length > 0 && (
-        <ul>
-          {stakes.map((s) => (
-            <li key={s.index} className="glow-subframe" style={{ marginBottom: 10 }}>
-              <div><strong>#</strong> {s.index}</div>
-              <div><strong>Period:</strong> {s.periodLabel}</div>
-              <div><strong>Amount:</strong> {s.amountFmt} HFV</div>
-              <div><strong>Start:</strong> {s.startFmt}</div>
-              <div><strong>Status:</strong> {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}</div>
-              {!s.claimed && s.unlocked && (
-                <button className="glow-button small" onClick={() => handleClaim(s.index)}>
-                  Claim
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {status && <p className="status-text" style={{ marginTop: 8 }}>{status}</p>}
-    </div>
-  );
-}
+      {/* Individual stakes */}
+{stakes.length > 0 && (
+  <ul>
+    {stakes.map((s) => (
+      <li
+        key={s.index}
+        className="glow-subframe"
+        style={{
+          marginBottom: 10,
+          color: '#eafff8',
+          border: '1px solid #7cfcc9',
+          background: 'rgba(0,0,0,0.4)',
+        }}
+      >
+        <div><strong>#</strong> {s.index}</div>
+        <div><strong>Period:</strong> {s.periodLabel}</div>
+        <div><strong>Amount:</strong> {s.amountFmt} HFV</div>
+        <div><strong>Start:</strong> {s.startFmt}</div>
+        <div><strong>Status:</strong> {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}</div>
+        {!s.claimed && s.unlocked && (
+          <button className="glow-button small" onClick={() => handleClaim(s.index)}>
+            Claim
+          </button>
+        )}
+      </li>
+    ))}
+  </ul>
+)}
