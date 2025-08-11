@@ -206,3 +206,6 @@ export default function StakingDashboard() {
     ))}
   </ul>
 )}
+</div>
+);
+}
