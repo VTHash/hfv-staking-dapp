@@ -249,3 +249,32 @@ body::after {
   max-width: 110px;
   aspect-ratio: 2.6 / 1;
 }
+
+/* --- Full-width mobile expansion --- */
+@media (max-width: 768px) {
+  html, body {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .app-wrapper {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .glow-frame {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important; /* remove corner rounding for true edge fit */
+    margin: 0 !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  .glow-subframe {
+    width: 100% !important;
+  }
+}
