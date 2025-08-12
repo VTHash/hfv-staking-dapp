@@ -1,6 +1,37 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { ethers } from 'ethers';
 import HFVStaking from '../abi/HFVStaking.json';
+const styles = {
+  card: {
+    padding: 18,
+    borderRadius: 14,
+    background: 'linear-gradient(145deg, rgba(0,255,153,0.06), rgba(0,255,153,0.16))',
+    border: '1px solid #00ff99',
+    boxShadow: '0 0 8px rgba(0,255,153,0.45)',
+  },
+  listCard: {
+    marginBottom: 10,
+    color: '#eafff8',
+    border: '1px solid #00ff99',
+    background: 'linear-gradient(145deg, rgba(0,255,153,0.05), rgba(0,255,153,0.12))',
+    boxShadow: '0 0 12px rgba(0,255,153,0.45)',
+    borderRadius: 14,
+    padding: 16,
+  },
+  btn: {
+    background: 'linear-gradient(145deg, #00ff95, #00ffaa)',
+    color: '#000',
+    fontWeight: 700,
+    border: 'none',
+    borderRadius: 12,
+    padding: '12px 16px',
+    minHeight: 44,
+    cursor: 'pointer',
+    boxShadow: '0 0 12px #00ff95',
+    transition: 'transform .2s ease, box-shadow .2s ease',
+  },
+  row: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 },
+};
 
 const stakingAbi = HFVStaking.abi;
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
@@ -155,14 +186,14 @@ export default function StakingDashboard() {
         <span className="tiny-muted">
           {address ? <>Connected: {address.slice(0,6)}…{address.slice(-4)}</> : 'Wallet not connected'}
         </span>
-        <button className="glow-button small" onClick={connectOrSwitch}>
+        <button style={styles.btn} onClick={connectOrSwitch}>
           {address ? 'Switch Wallet' : 'Connect Wallet'}
         </button>
-        <button className="glow-button small" onClick={loadStakes}>Refresh</button>
+        <button style={{ ...styles.btn, marginLeft: 6 }} onClick={loadStakes}>Refresh</button>
       </div>
 
       {/* Period totals */}
-     <div className="glow-subframe" style={{ marginBottom: 12 }}>
+     <div style={{ ...styles.card, marginBottom: 12 }}>
   <strong>Periods Summary</strong>
   {summary.length === 0 ? (
     <p>No stakes found.</p>
@@ -179,28 +210,16 @@ export default function StakingDashboard() {
 {stakes.length > 0 && (
   <ul>
     {stakes.map((s) => (
-      <li
-        key={s.index}
-        className="glow-subframe"
-        style={{
-          marginBottom: 10,
-          color: '#eafff8',
-          border: '1px solid #7cfcc9',
-          background: 'rgba(0,0,0,0.4)',
-        }}
-      >
+      <li key={s.index} style={styles.listCard}>
         <div><strong>#</strong> {s.index}</div>
         <div><strong>Period:</strong> {s.periodLabel}</div>
         <div><strong>Amount:</strong> {s.amountFmt} HFV</div>
         <div><strong>Start:</strong> {s.startFmt}</div>
         <div><strong>Status:</strong> {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}</div>
         {!s.claimed && s.unlocked && (
-          <button
-            className="glow-button small"
-            onClick={() => handleClaim(s.index)}
-          >
-            Claim
-          </button>
+          <button style={styles.btn} onClick={() => handleClaim(s.index)}>
+  Claim
+</button>
         )}
       </li>
     ))}
