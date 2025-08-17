@@ -1,41 +1,142 @@
-/* --- Base Reset --- */
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
-  background-color: #000;
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   CYBERPUNK DESIGN SYSTEM
+   (global for entire app)
+   ========================= */
+@layer base {
+  :root {
+    /* Core cyberpunk colors */
+    --background: 0 0% 0%;
+    --foreground: 180 100% 80%;
+    
+    /* Neon accent colors */
+    --neon-cyan: 180 100% 50%;
+    --neon-green: 150 100% 50%;
+    --neon-blue: 210 100% 60%;
+    --neon-purple: 270 100% 60%;
+    
+    /* Card and surface colors */
+    --card: 195 45% 8%;
+    --card-foreground: 180 100% 80%;
+    --card-glow: 195 45% 15%;
+    
+    /* Primary theme colors */
+    --primary: 180 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --primary-glow: 180 100% 40%;
+    
+    /* Secondary colors */
+    --secondary: 195 45% 12%;
+    --secondary-foreground: 180 100% 80%;
+    
+    /* Muted colors */
+    --muted: 195 45% 10%;
+    --muted-foreground: 180 30% 60%;
+    
+    /* Accent colors */
+    --accent: 150 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    
+    /* Input and border colors */
+    --border: 180 100% 50%;
+    --input: 0 0% 0%;
+    --input-border: 180 100% 50%;
+    --ring: 180 100% 50%;
+    
+    /* Destructive colors */
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(145deg, hsl(195 45% 8%), hsl(195 60% 12%), hsl(195 45% 15%));
+    --gradient-glow: linear-gradient(145deg, hsla(180 100% 50% / 0.05), hsla(180 100% 50% / 0.15));
+    --gradient-button: linear-gradient(145deg, hsl(150 100% 50%), hsl(150 100% 45%));
+    
+    /* Shadows and glows */
+    --shadow-neon: 0 0 20px hsl(180 100% 50% / 0.6);
+    --shadow-glow: 0 0 30px hsl(180 100% 50% / 0.4);
+    --shadow-button: 0 0 20px hsl(150 100% 50% / 0.6);
+    
+    /* Animations */
+    --transition-glow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-pulse: pulse-glow 4s ease-in-out infinite;
+    
+    /* Border radius */
+    --radius: 0.75rem;
+    --radius-large: 1.125rem;
+  }
+
+  /* Base Reset (mobile-first) */
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Pulsating background overlay for whole app */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.05);
+    animation: pulse-bg 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Tailwind border token hookup (keeps shadcn/ui semantics) */
+  * { @apply border-border; }
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Pulsating background overlay */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.05);
-  animation: pulse-bg 10s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
+/* =========================
+   ANIMATIONS (single source)
+   ========================= */
 @keyframes pulse-bg {
   0%, 100% { background: rgba(0, 0, 0, 0.05); }
   50% { background: rgba(0, 0, 0, 0.20); }
 }
 
-/* --- Layout Containers --- */
+@keyframes pulse-glow {
+  0% { 
+    box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.6),
+                0 0 30px hsl(var(--neon-cyan) / 0.3); 
+  }
+  50% { 
+    box-shadow: 0 0 25px hsl(var(--neon-cyan) / 0.8),
+                0 0 50px hsl(var(--neon-cyan) / 0.4); 
+  }
+  100% { 
+    box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.6),
+                0 0 30px hsl(var(--neon-cyan) / 0.3); 
+  }
+}
+
+@keyframes pulse-logo {
+  0%   { filter: drop-shadow(0 0 8px hsl(var(--neon-green))); transform: scale(1); }
+  50%  { filter: drop-shadow(0 0 16px hsl(var(--neon-green))); transform: scale(1.05); }
+  100% { filter: drop-shadow(0 0 8px hsl(var(--neon-green))); transform: scale(1); }
+}
+
+/* =========================
+   LAYOUT / TYPOGRAPHY
+   ========================= */
 .app-wrapper {
   width: 100%;
   max-width: 100vw;
@@ -55,53 +156,19 @@ body::after {
   gap: 8px;
 }
 
-.app-header img {
-  max-width: 72px;
-  height: auto;
-}
+.app-header img { max-width: 72px; height: auto; }
 
 .app-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #00ffcc;
-  text-shadow: 0 0 6px #00ffcc, 0 0 12px #00ffcc;
+  color: hsl(var(--neon-cyan));
+  text-shadow: 0 0 6px hsl(var(--neon-cyan)), 0 0 12px hsl(var(--neon-cyan));
   margin: 0.75rem 0 1.5rem;
   text-align: center;
 }
 
-/* --- Glow HUD Frames --- */
-.glow-frame {
-  width: 95vw;
-  max-width: 620px;
-  padding: 28px 24px;
-  margin: 16px auto;
-  border-radius: 18px;
-  background: linear-gradient(145deg, #0d1f24, #163c42, #1d544f);
-  border: 1px solid #00ff99;
-  box-shadow: 0 0 16px rgba(0, 255, 153, 0.6), 0 0 8px #00ff99;
-  animation: pulseGlow 4s infinite ease-in-out;
-  position: relative;
-  z-index: 1;
-}
-
-.glow-subframe {
-  padding: 18px;
-  border-radius: 14px;
-  background: linear-gradient(145deg, rgba(0, 255, 153, 0.05), rgba(0, 255, 153, 0.15));
-  border: 1px solid #00ff99;
-  box-shadow: 0 0 8px rgba(0, 255, 153, 0.4);
-}
-
-/* Glow animation */
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 10px #00ff99, 0 0 20px #00ffcc; }
-  50% { box-shadow: 0 0 18px #00ffcc, 0 0 36px #00ff99; }
-  100% { box-shadow: 0 0 10px #00ff99, 0 0 20px #00ffcc; }
-}
-
-/* --- Text Elements --- */
 .section-title {
-  color: #00ffcc;
+  color: hsl(var(--neon-cyan));
   font-size: 1.4rem;
   margin: 12px 0;
   text-align: center;
@@ -115,147 +182,133 @@ body::after {
   padding: 0 10px;
 }
 
-/* --- Form Elements --- */
-.glow-frame input, 
-.glow-frame select, 
-.glow-frame button {
+/* =========================
+   HUD FRAMES / SURFACES
+   ========================= */
+@layer components {
+  .glow-frame {
+    width: 95vw;
+    max-width: 620px;
+    padding: 28px 24px;
+    margin: 16px auto;
+    border-radius: 18px;
+    background: var(--gradient-primary);
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-neon);
+    animation: var(--animation-pulse);
+    position: relative;
+    z-index: 1; /* above body overlay */
+  }
+
+  .glow-subframe {
+    padding: 18px;
+    border-radius: 14px;
+    background: var(--gradient-glow);
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-glow);
+  }
+
+  .neon-text {
+    color: hsl(var(--neon-cyan));
+    text-shadow: 0 0 8px hsl(var(--neon-cyan)), 0 0 16px hsl(var(--neon-cyan));
+  }
+}
+
+/* =========================
+   FORMS / BUTTONS / LOGO
+   ========================= */
+.glow-frame input,
+.glow-frame select,
+.glow-frame button,
+.cyber-input {
   width: 100%;
   font-size: 1.1rem;
   padding: 14px 16px;
   margin: 12px 0;
-  border-radius: 10px;
-  border: 1px solid #00ff99;
-  background: #000;
-  color: #00ffcc;
+  border-radius: 12px;
+  border: 1px solid hsl(var(--input-border));
+  background: hsl(var(--input));
+  color: hsl(var(--foreground));
+  transition: var(--transition-glow);
 }
 
-/* --- Buttons --- */
+.cyber-input:focus,
+.glow-frame input:focus,
+.glow-frame select:focus {
+  outline: none;
+  box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.5);
+}
+
 .glow-button {
-  background: linear-gradient(145deg, #00ff95, #00ffaa);
-  font-weight: bold;
+  background: var(--gradient-button);
+  font-weight: 700;
   border-radius: 12px;
-  color: black;
+  color: #000;
   cursor: pointer;
-  box-shadow: 0 0 12px #00ff95;
+  box-shadow: var(--shadow-button);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .glow-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 20px #00ff95;
+  box-shadow: 0 0 20px hsl(var(--neon-green) / 0.7);
 }
 
-/* --- Mobile Enhancements --- */
-@media (max-width: 768px) {
-  .app-title { font-size: 1.8rem; }
-  .section-title { font-size: 1.5rem; }
-  
-  .glow-frame {
-    padding: 36px 28px;
-    border-radius: 20px;
-  }
-  .glow-subframe {
-    padding: 22px;
-    font-size: 1.1rem;
-  }
-  
-  .glow-frame input, 
-  .glow-frame select, 
-  .glow-frame button {
-    font-size: 1.2rem;
-    padding: 16px;
-    border-radius: 14px;
-  }
-  .glow-button {
-    min-height: 52px;
-    font-size: 1.2rem;
-  }
-  }
-/* --- Logo Styles --- */
-.logo {
-  width: 80px;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 0 10px #00ff99);
-}
-
-.pulsate-logo {
-  animation: pulseLogo 2.5s ease-in-out infinite;
-}
-
-@keyframes pulseLogo {
-  0% {
-    filter: drop-shadow(0 0 4px #00ff99);
-    transform: scale(1);
-  }
-  50% {
-    filter: drop-shadow(0 0 10px #00ff99);
-    transform: scale(1.05);
-  }
-  100% {
-    filter: drop-shadow(0 0 4px #00ff99);
-    transform: scale(1);
-  }
-}
+.logo { width: 80px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px hsl(var(--neon-green))); }
+.logo-pulse { animation: pulse-logo 2.5s ease-in-out infinite; }
 
 /* Token / Wallet logos */
 .walletconnect-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  margin-right: 8px;
-  vertical-align: middle;
+  width: 20px; height: 20px; object-fit: contain; margin-right: 8px; vertical-align: middle;
 }
-
 .badge-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 1rem;
+  display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 1rem;
 }
-
 .badge-icon {
-  max-width: 100px;
-  width: 100px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 0 6px #00ffcc);
+  max-width: 100px; width: 100px; height: auto; object-fit: contain;
+  filter: drop-shadow(0 0 6px hsl(var(--neon-cyan)));
   transition: transform 0.2s ease;
 }
-
 .badge-icon:hover {
   transform: scale(1.05);
-  filter: drop-shadow(0 0 10px #00ffcc);
+  filter: drop-shadow(0 0 10px hsl(var(--neon-cyan)));
 }
+.badge.ens { max-width: 16px; aspect-ratio: 1/1; object-fit: contain; margin-right: 6px; filter: none !important; box-shadow: none !important; transition: none !important; }
+.badge.dentity { max-width: 120px; aspect-ratio: 2.8/1; }
+.badge.lens { max-width: 110px; aspect-ratio: 2.6/1; }
 
-/* Special sizing for specific badges */
-.badge.ens {
-  max-width: 16px;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-  margin-right: 6px;
-  vertical-align: middle;
-  filter: none !important;
-  box-shadow: none !important;
-  transition: none !important;
-}
-
-.badge.dentity {
-  max-width: 120px;
-  aspect-ratio: 2.8 / 1;
-}
-
-.badge.lens {
-  max-width: 110px;
-  aspect-ratio: 2.6 / 1;
-}
-
-/* --- Full-width mobile expansion --- */
+/* =========================
+   MOBILE ENHANCEMENTS
+   ========================= */
 @media (max-width: 768px) {
-  html, body {
-    width: 100%;
-    padding: 0;
-    margin: 0;
+  .app-title { font-size: 1.8rem; }
+  .section-title { font-size: 1.5rem; }
+
+  .glow-frame {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important; /* edge-to-edge on mobile */
+    margin: 0 !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    padding-top: 36px !important;
+    padding-bottom: 36px !important;
+  }
+
+  .glow-subframe {
+    width: 100% !important;
+    font-size: 1.1rem;
+    padding: 22px;
+  }
+
+  .cyber-input,
+  .glow-frame input,
+  .glow-frame select,
+  .glow-frame button,
+  .glow-button {
+    font-size: 1.2rem;
+    min-height: 52px;
+    border-radius: 14px;
+    padding: 16px;
   }
 
   .app-wrapper {
@@ -264,17 +317,7 @@ body::after {
     padding: 0 !important;
     margin: 0 !important;
   }
-
-  .glow-frame {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    border-radius: 0 !important; /* remove corner rounding for true edge fit */
-    margin: 0 !important;
-    padding-left: 18px !important;
-    padding-right: 18px !important;
-  }
-
-  .glow-subframe {
-    width: 100% !important;
-  }
 }
+
+
+
