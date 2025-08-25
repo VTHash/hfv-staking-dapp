@@ -319,5 +319,23 @@
   }
 }
 
+html, body, #root {
+  height: 100;
+  margin: 0;
+}
 
+body { 
+  background: url("/hfv-logo-bg.png") no-repeat center center fixed;
+background-size: cover;
+}
 
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* darkens for readability */
+  z-index: -1;
+}
