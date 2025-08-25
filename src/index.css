@@ -23,13 +23,6 @@
     overflow: hidden;
   }
 
-  /* Tailwind border token hookup (keeps shadcn/ui semantics) */
-  * { @apply border-border; }
-}
-
-/* =========================
-   ANIMATIONS (single source)
-   ========================= */
 @keyframes pulse-bg {
   0%, 100% { background: rgba(0, 0, 0, 0.05); }
   50% { background: rgba(0, 0, 0, 0.20); }
