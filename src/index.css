@@ -2,73 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* =========================
-   CYBERPUNK DESIGN SYSTEM
-   (global for entire app)
-   ========================= */
-@layer base {
-  :root {
-    /* Core cyberpunk colors */
-    --background: 0 0% 0%;
-    --foreground: 180 100% 80%;
-    
-    /* Neon accent colors */
-    --neon-cyan: 180 100% 50%;
-    --neon-green: 150 100% 50%;
-    --neon-blue: 210 100% 60%;
-    --neon-purple: 270 100% 60%;
-    
-    /* Card and surface colors */
-    --card: 195 45% 8%;
-    --card-foreground: 180 100% 80%;
-    --card-glow: 195 45% 15%;
-    
-    /* Primary theme colors */
-    --primary: 180 100% 50%;
-    --primary-foreground: 0 0% 0%;
-    --primary-glow: 180 100% 40%;
-    
-    /* Secondary colors */
-    --secondary: 195 45% 12%;
-    --secondary-foreground: 180 100% 80%;
-    
-    /* Muted colors */
-    --muted: 195 45% 10%;
-    --muted-foreground: 180 30% 60%;
-    
-    /* Accent colors */
-    --accent: 150 100% 50%;
-    --accent-foreground: 0 0% 0%;
-    
-    /* Input and border colors */
-    --border: 180 100% 50%;
-    --input: 0 0% 0%;
-    --input-border: 180 100% 50%;
-    --ring: 180 100% 50%;
-    
-    /* Destructive colors */
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 100%;
-    
-    /* Gradients */
-    --gradient-primary: linear-gradient(145deg, hsl(195 45% 8%), hsl(195 60% 12%), hsl(195 45% 15%));
-    --gradient-glow: linear-gradient(145deg, hsla(180 100% 50% / 0.05), hsla(180 100% 50% / 0.15));
-    --gradient-button: linear-gradient(145deg, hsl(150 100% 50%), hsl(150 100% 45%));
-    
-    /* Shadows and glows */
-    --shadow-neon: 0 0 20px hsl(180 100% 50% / 0.6);
-    --shadow-glow: 0 0 30px hsl(180 100% 50% / 0.4);
-    --shadow-button: 0 0 20px hsl(150 100% 50% / 0.6);
-    
-    /* Animations */
-    --transition-glow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --animation-pulse: pulse-glow 4s ease-in-out infinite;
-    
-    /* Border radius */
-    --radius: 0.75rem;
-    --radius-large: 1.125rem;
-  }
-
   /* Base Reset (mobile-first) */
   html, body {
     margin: 0;
@@ -88,17 +21,6 @@
     align-items: center;
     position: relative;
     overflow: hidden;
-  }
-
-  /* Pulsating background overlay for whole app */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.05);
-    animation: pulse-bg 10s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
   }
 
   /* Tailwind border token hookup (keeps shadcn/ui semantics) */
@@ -232,13 +154,6 @@
   transition: var(--transition-glow);
 }
 
-.cyber-input:focus,
-.glow-frame input:focus,
-.glow-frame select:focus {
-  outline: none;
-  box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.5);
-}
-
 .glow-button {
   background: var(--gradient-button);
   font-weight: 700;
@@ -338,4 +253,57 @@ body::before {
   height: 100%;
   background: rgba(0, 0, 0, 0.6); /* darkens for readability */
   z-index: -1;
+}
+
+/* Unblock page scroll */
+html, body {
+  min-height: 100%;
+  height: auto;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto; /* make sure vertical scroll is allowed */
+}
+
+/* Root/container should grow, not lock the viewport */
+#root, .app-wrapper {
+  min-height: 100vh;
+  height: auto; /* remove any height:100vh hard lock */
+  position: relative; /* ensure not fixed */
+}
+
+/* If  added a dark overlay earlier, make sure it can't intercept touches */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  pointer-events: none; /* critical on mobile so it doesn't block scroll/taps */
+  z-index: 0;
+}
+
+/* Mobile: avoid iOS issues with fixed backgrounds */
+@media (max-width: 768px) {
+  body { background-attachment: scroll; }
+}
+
+/* Transparent HUD-style section frame */
+.glow-frame,
+.hud-section,
+.section-card {
+  background: transparent !important; /* kill fills */
+  border: 1px solid rgba(0,255,170,0.28); /* neon edge */
+  border-radius: 18px;
+  box-shadow:
+    0 0 24px rgba(0,255,170,0.20),
+    inset 0 0 30px rgba(0,255,170,0.12);
+  padding: 16px;
+  position: relative;
+  z-index: 1; /* above the overlay */
+}
+
+.glow-frame *[class*="card"],
+.glow-frame .panel,
+.glow-frame .content {
+  background: transparent !important;
+  box-shadow: none;
 }
