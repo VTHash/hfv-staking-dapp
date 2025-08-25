@@ -448,3 +448,29 @@ body {
   .neon-btn,
   .glow-button{ animation: none; }
 }
+
+.neon-btn,
+.glow-button {
+  animation: neonPulse 2.4s ease-in-out infinite alternate,
+             textPulse 2s ease-in-out infinite alternate;
+  color: rgba(var(--neon), 0.9);
+  text-shadow:
+    0 0 4px rgba(var(--neon), .6),
+    0 0 8px rgba(var(--neon), .4);
+}
+
+@keyframes textPulse {
+  0% {
+    color: rgba(var(--neon), 0.8);
+    text-shadow:
+      0 0 4px rgba(var(--neon), .4),
+      0 0 8px rgba(var(--neon), .2);
+  }
+  100% {
+    color: rgba(var(--neon), 1);
+    text-shadow:
+      0 0 6px rgba(var(--neon), .9),
+      0 0 12px rgba(var(--neon), .7),
+      0 0 18px rgba(var(--neon), .5);
+  }
+}
