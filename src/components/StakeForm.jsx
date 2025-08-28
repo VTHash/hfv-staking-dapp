@@ -106,7 +106,7 @@ export default function StakeForm() {
       <input
         className="input-field"
         type="number"
-        placeholder="Amount to stake"
+        placeholder="Enter Amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
