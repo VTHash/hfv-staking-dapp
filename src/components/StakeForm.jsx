@@ -102,7 +102,7 @@ export default function StakeForm() {
   return (
     <div className="stake-form">
       <h3 className="section-title">Stake HFV Tokens</h3>
-
+<label className="ui-text">Amount to stake</label>
       <input
         className="input-field"
         type="number"
@@ -110,7 +110,7 @@ export default function StakeForm() {
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
-
+<label className="ui-text">Select lock duration</label>
       <select
         className="input-field"
         value={duration}
