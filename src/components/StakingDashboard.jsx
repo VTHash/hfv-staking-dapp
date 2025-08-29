@@ -49,128 +49,84 @@ const PERIOD_LABELS = {
 const fmtPeriod = (sec) =>
   PERIOD_LABELS[sec] || `${Math.round(Number(sec) / 86400)} Days`;
 
+// --- helpers ---
+const getInjected = () => (typeof window !== "undefined" ? window.ethereum : null);
+const normalizeAddress = (a) => (a && a.includes(":") ? a.split(":").pop() : a) || "";
+
+// Create WC provider when needed
+async function getWCProvider() {
+  if (!WC_PROJECT_ID) throw new Error("Missing VITE_PROJECT_ID for WalletConnect");
+  return EthereumProvider.init({
+    projectId: WC_PROJECT_ID,
+    showQrModal: true,
+    chains: [1],
+    methods: [
+      "eth_sendTransaction",
+      "eth_signTransaction",
+      "eth_sign",
+      "personal_sign",
+      "eth_signTypedData",
+      "eth_requestAccounts",
+      "wallet_switchEthereumChain",
+    ],
+    events: ["chainChanged", "accountsChanged", "disconnect"],
+  });
+}
+
 export default function StakingDashboard() {
   const [address, setAddress] = useState("");
-  const [provider, setProvider] = useState(null); // EIP-1193 provider (injected or WC)
+  const [provider, setProvider] = useState(null); // EIP-1193 (injected or WC)
   const [stakes, setStakes] = useState([]);
   const [summary, setSummary] = useState([]);
   const [status, setStatus] = useState("");
   const [wrongNetwork, setWrongNetwork] = useState(false);
 
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  // ---- helpers ----
-  const getInjected = () => (typeof window !== "undefined" ? window.ethereum : null);
-
-  const getWCProvider = async () => {
-    if (!WC_PROJECT_ID) throw new Error("Missing VITE_PROJECT_ID for WalletConnect");
-    return EthereumProvider.init({
-      projectId: WC_PROJECT_ID,
-      showQrModal: true,
-      chains: [1], // mainnet
-      methods: [
-        "eth_sendTransaction",
-        "eth_signTransaction",
-        "eth_sign",
-        "personal_sign",
-        "eth_signTypedData",
-        "eth_requestAccounts",
-        "wallet_switchEthereumChain",
-      ],
-      events: ["chainChanged", "accountsChanged", "disconnect"],
-    });
-  };
-
-  const ethersProvider = useCallback(() => {
+  const getEthersProvider = useCallback(() => {
     if (!provider) return null;
     return new ethers.BrowserProvider(provider);
   }, [provider]);
 
-  // ---- connect flow: injected first, WC fallback ----
-  const connectOrSwitch = async () => {
-    try {
-      setStatus("🔄 Connecting wallet…");
+  // Always resolve the signer’s true 0x address (works for injected & WC)
+  const getSignerAddress = useCallback(async (pOverride = null) => {
+    const p = pOverride || provider;
+    if (!p) return "";
+    const ep = new ethers.BrowserProvider(p);
+    const signer = await ep.getSigner();
+    const addr = await signer.getAddress();
+    return ethers.getAddress(addr); // checksum it
+  }, [provider]);
 
-      // 1) injected
-      const injected = getInjected();
-      if (injected) {
-        const req = await injected.request({ method: "eth_requestAccounts" });
-        const addr = req?.[0] || "";
-        setProvider(injected);
-        setAddress(addr);
-        setStatus("✅ Connected");
-        await loadStakes(injected, addr);
-        return;
-      }
-
-      // 2) WalletConnect
-      const wc = await getWCProvider();
-      await wc.connect(); // QR modal / deep link
-      const addr = wc.accounts?.[0] || "";
-      setProvider(wc);
-      setAddress(addr);
-      setStatus("✅ Connected (WalletConnect)");
-      await loadStakes(wc, addr);
-    } catch (e) {
-      setStatus(`❌ ${e?.message || "Wallet connection cancelled"}`);
-    }
-  };
-
-  // ---- switch to mainnet ----
-  const switchToMainnet = async () => {
-    try {
-      if (!provider) throw new Error("No wallet provider");
-      await provider.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x1" }],
-      });
-      setWrongNetwork(false);
-      setStatus("✅ Switched to Ethereum Mainnet");
-      await loadStakes(provider, address);
-    } catch (e) {
-      setStatus(`❌ ${e?.message || "Network switch failed"}`);
-    }
-  };
-
-  // ---- load stakes (can accept explicit p/a to avoid races) ----
   const loadStakes = useCallback(
-    async (pArg = null, aArg = "") => {
+    async (pOverride = null, aOverride = "") => {
       try {
         setStatus((s) => (s.startsWith("✅") ? s : ""));
         setWrongNetwork(false);
 
         if (!stakingAddress) throw new Error("Missing staking contract address");
 
-        const p = pArg || provider;
-        const addr = aArg || address;
-
+        const p = pOverride || provider;
         if (!p) {
-          const injected = getInjected();
-          setStatus(
-            injected
-              ? "⚠ Wallet not connected"
-              : isMobile
-              ? "❌ MetaMask not available — open in MetaMask browser or use WalletConnect."
-              : "❌ MetaMask extension not found — install or use WalletConnect."
-          );
-          setStakes([]);
-          setSummary([]);
+          setStatus("⚠ Wallet not connected");
+          setStakes([]); setSummary([]);
           return;
         }
+
+        // Use signer address for all reads (not raw provider accounts)
+        const addrRaw = aOverride || (await getSignerAddress(p));
+        const addr = normalizeAddress(addrRaw);
         if (!addr) {
           setStatus("⚠ Connect wallet to view stakes");
-          setStakes([]);
-          setSummary([]);
+          setStakes([]); setSummary([]);
           return;
         }
+        setAddress(addr);
 
         const ep = new ethers.BrowserProvider(p);
         const net = await ep.getNetwork();
         if (net.chainId !== 1n) {
           setWrongNetwork(true);
           setStatus("⚠ Wrong Network — please switch to Ethereum Mainnet");
-          setStakes([]);
-          setSummary([]);
+          setStakes([]); setSummary([]);
           return;
         }
 
@@ -183,7 +139,7 @@ export default function StakingDashboard() {
 
         for (let i = 0; i < count; i++) {
           const s = await contract.stakes(addr, i);
-          const amount = s.amount; // bigint (ethers v6)
+          const amount = s.amount; // bigint in ethers v6
           const startSec = Number(s.startTimestamp);
           const durationSec = Number(s.duration);
           const claimed = Boolean(s.claimed);
@@ -200,8 +156,7 @@ export default function StakingDashboard() {
             unlocked: Date.now() >= unlockMs,
           });
 
-          const key = durationSec;
-          sums[key] = (sums[key] || 0n) + amount;
+          sums[durationSec] = (sums[durationSec] || 0n) + amount;
         }
 
         const order = [1814400, 7776000, 15552000, 31104000, 31536000];
@@ -214,42 +169,98 @@ export default function StakingDashboard() {
         if (rows.length === 0) setStatus("ℹ No stakes found");
       } catch (err) {
         console.error("Load stakes error:", err);
-        setStatus(`❌ ${err?.reason || err?.message || "Failed to load stakes"}`);
-        setStakes([]);
-        setSummary([]);
+        const msg = err?.reason || err?.data?.message || err?.message || "Failed to load stakes";
+        setStatus(`❌ ${msg}`);
+        setStakes([]); setSummary([]);
       }
     },
-    [provider, address]
+    [provider, getSignerAddress]
   );
 
-  // initial load (silent if already authorized)
+  // Connect (injected first, then WC), then immediately load stakes
+  const connectOrSwitch = async () => {
+    try {
+      setStatus("🔄 Connecting wallet…");
+      const injected = getInjected();
+
+      if (injected) {
+        await injected.request({ method: "eth_requestAccounts" });
+        setProvider(injected);
+        const addr = await getSignerAddress(injected);
+        setAddress(addr);
+        setStatus("✅ Connected");
+        await loadStakes(injected, addr);
+        return;
+      }
+
+      const wc = await getWCProvider();
+      await wc.connect();
+      setProvider(wc);
+      const addr = await getSignerAddress(wc);
+      setAddress(addr);
+      setStatus("✅ Connected (WalletConnect)");
+      await loadStakes(wc, addr);
+    } catch (e) {
+      setStatus(`❌ ${e?.message || "Wallet connection cancelled"}`);
+    }
+  };
+
+  const switchToMainnet = async () => {
+    try {
+      if (!provider) throw new Error("No wallet provider");
+      await provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x1" }],
+      });
+      setWrongNetwork(false);
+      setStatus("✅ Switched to Ethereum Mainnet");
+      await loadStakes();
+    } catch (e) {
+      setStatus(`❌ ${e?.message || "Network switch failed"}`);
+    }
+  };
+
+  // Silent auto-load if user already authorized injected wallet
   useEffect(() => {
     (async () => {
       try {
         const injected = getInjected();
-        if (injected) {
-          const acc = await injected.request({ method: "eth_accounts" });
-          if (acc && acc.length) {
-            setProvider(injected);
-            setAddress(acc[0]);
-            await loadStakes(injected, acc[0]);
-          }
-          injected.on?.("accountsChanged", (accs) => {
-            const a = accs?.[0] || "";
-            setAddress(a);
-            if (a) loadStakes(injected, a);
-            else {
-              setStakes([]); setSummary([]); setStatus("ℹ Wallet disconnected");
-            }
-          });
-          injected.on?.("chainChanged", () => loadStakes(injected, address));
+        if (!injected) return;
+        const acc = await injected.request({ method: "eth_accounts" });
+        if (acc && acc.length) {
+          setProvider(injected);
+          const addr = await getSignerAddress(injected);
+          setAddress(addr);
+          await loadStakes(injected, addr);
         }
-      } catch (e) {
-        /* ignore silent errors */
-      }
+        injected.on?.("accountsChanged", async () => {
+          const a = await getSignerAddress(injected).catch(() => "");
+          setAddress(a || "");
+          if (a) loadStakes(injected, a);
+          else { setStakes([]); setSummary([]); setStatus("ℹ Wallet disconnected"); }
+        });
+        injected.on?.("chainChanged", () => loadStakes(injected));
+      } catch {/* no-op */}
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleClaim = async (index) => {
+    try {
+      if (!provider) throw new Error("No wallet provider");
+      setStatus(`⏳ Claiming stake #${index}…`);
+      const ep = getEthersProvider();
+      const signer = await ep.getSigner();
+      const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
+      const tx = await contract.claim(index);
+      await tx.wait();
+      setStatus(`✅ Stake #${index} claimed!`);
+      loadStakes();
+    } catch (err) {
+      console.error("Claim error:", err);
+      setStatus(`❌ ${err?.reason || err?.message || "Unknown error"}`);
+    }
+  };
 
   return (
     <div className="staking-dashboard neon-box">
@@ -303,7 +314,7 @@ export default function StakingDashboard() {
                     {s.claimed ? "Claimed" : s.unlocked ? "Unlocked" : "Locked"}
                   </div>
                   {!s.claimed && s.unlocked && (
-                    <button style={styles.btn} onClick={() => {/* optional claim hook here */}}>
+                    <button style={styles.btn} onClick={() => handleClaim(s.index)}>
                       Claim
                     </button>
                   )}
