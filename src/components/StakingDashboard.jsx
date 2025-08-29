@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { ethers } from 'ethers';
 import HFVStaking from '../abi/HFVStaking.json';
+
 const styles = {
   card: {
     padding: 18,
@@ -36,64 +37,85 @@ const styles = {
 const stakingAbi = HFVStaking.abi;
 const stakingAddress = import.meta.env.VITE_HFV_STAKING_ADDRESS;
 
-// Human labels for the supported durations (seconds)
 const PERIOD_LABELS = {
   1814400: '21 Days',
   7776000: '3 Months',
   15552000: '6 Months',
   31104000: '12 Months',
-  31536000: '12 Months', // just in case some deployments used 365d
+  31536000: '12 Months',
 };
-
-const fmtPeriod = (sec) => PERIOD_LABELS[sec] || `${Math.round(Number(sec) / 86400)} Days`;
+const fmtPeriod = (sec) =>
+  PERIOD_LABELS[sec] || `${Math.round(Number(sec) / 86400)} Days`;
 
 export default function StakingDashboard() {
   const [address, setAddress] = useState('');
   const [stakes, setStakes] = useState([]);
   const [summary, setSummary] = useState([]);
   const [status, setStatus] = useState('');
+  const [wrongNetwork, setWrongNetwork] = useState(false);
 
-  // Ask MetaMask only when needed; otherwise read silently
   const ensureConnected = useCallback(async (forcePrompt = false) => {
-    if (!window.ethereum) throw new Error('Wallet not available');
-
-    // Try silent first
+    if (!window.ethereum) throw new Error('MetaMask not available');
     const silent = await window.ethereum.request({ method: 'eth_accounts' });
     if (!forcePrompt && silent && silent.length > 0) return silent[0];
-
-    // Prompt user
     const req = await window.ethereum.request({ method: 'eth_requestAccounts' });
     return req[0];
   }, []);
 
+  const switchToMainnet = async () => {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x1' }], // Ethereum Mainnet
+      });
+      setStatus('✅ Switched to Ethereum Mainnet');
+      setWrongNetwork(false);
+      await loadStakes();
+    } catch (err) {
+      console.error('Switch network error:', err);
+      setStatus(`❌ ${err?.message || 'Network switch failed'}`);
+    }
+  };
+
   const loadStakes = useCallback(async () => {
     try {
       setStatus('');
-      if (!stakingAddress) throw new Error('Missing staking address');
+      setWrongNetwork(false);
+
+      if (!stakingAddress) throw new Error('Missing staking contract address');
 
       const addr = await ensureConnected(false);
       if (!addr) {
         setAddress('');
         setStakes([]);
         setSummary([]);
+        setStatus('⚠ Wallet not connected');
         return;
       }
       setAddress(addr);
 
       const provider = new ethers.BrowserProvider(window.ethereum);
+      const net = await provider.getNetwork();
+
+      if (net.chainId !== 1n) {
+        setWrongNetwork(true);
+        setStatus('⚠ Wrong Network — please switch to Ethereum Mainnet');
+        setStakes([]);
+        setSummary([]);
+        return;
+      }
+
       const contract = new ethers.Contract(stakingAddress, stakingAbi, provider);
 
-      // getStakeCount(address) -> uint256
       const rawCount = await contract.getStakeCount(addr);
       const count = Number(rawCount);
 
       const rows = [];
-      const sums = {}; // durationSec -> BigInt total
+      const sums = {};
 
       for (let i = 0; i < count; i++) {
         const s = await contract.stakes(addr, i);
-        // Contract fields (ethers v6): numbers are BigInt-like, booleans are boolean
-        const amount = BigInt(s.amount);
+        const amount = s.amount;
         const startSec = Number(s.startTimestamp);
         const durationSec = Number(s.duration);
         const claimed = Boolean(s.claimed);
@@ -102,8 +124,8 @@ export default function StakingDashboard() {
 
         rows.push({
           index: i,
-          amount, // keep BigInt in memory
-          amountFmt: amount.toString(), // render-safe
+          amount,
+          amountFmt: amount.toString(),
           startFmt: new Date(startSec * 1000).toLocaleString(),
           durationSec,
           periodLabel: fmtPeriod(durationSec),
@@ -115,14 +137,17 @@ export default function StakingDashboard() {
         sums[key] = (sums[key] || 0n) + amount;
       }
 
-      // Period summary (ordered)
       const order = [1814400, 7776000, 15552000, 31104000, 31536000];
       const sumRows = order
         .filter((k) => (sums[k] || 0n) > 0n)
-        .map((k) => ({ label: fmtPeriod(k), amountFmt: (sums[k] || 0n).toString() }));
+        .map((k) => ({
+          label: fmtPeriod(k),
+          amountFmt: (sums[k] || 0n).toString(),
+        }));
 
       setStakes(rows);
       setSummary(sumRows);
+      if (rows.length === 0) setStatus('ℹ No stakes found');
     } catch (err) {
       console.error('Load stakes error:', err);
       setStatus(`❌ ${err?.reason || err?.message || 'Failed to load stakes'}`);
@@ -134,7 +159,7 @@ export default function StakingDashboard() {
   const connectOrSwitch = async () => {
     try {
       setStatus('🔄 Connecting wallet…');
-      const addr = await ensureConnected(true); // force prompt to pick/switch
+      const addr = await ensureConnected(true);
       setAddress(addr);
       await loadStakes();
       setStatus('');
@@ -149,10 +174,8 @@ export default function StakingDashboard() {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(stakingAddress, stakingAbi, signer);
-
       const tx = await contract.claim(index);
       await tx.wait();
-
       setStatus(`✅ Stake #${index} claimed!`);
       loadStakes();
     } catch (err) {
@@ -161,10 +184,8 @@ export default function StakingDashboard() {
     }
   };
 
-  // Initial load + react to account/chain changes
   useEffect(() => {
     loadStakes();
-
     if (window.ethereum) {
       const onAcct = () => loadStakes();
       const onChain = () => loadStakes();
@@ -178,53 +199,76 @@ export default function StakingDashboard() {
   }, [loadStakes]);
 
   return (
-    <div className="staking-dashboard">
+    <div className="staking-dashboard neon-box">
       <h3 className="section-title">Your Active Stakes</h3>
-      <p className="tiny-muted">Stake count (debug): {stakes.length}</p>
+      {status && <p className="ui-text" style={{ marginBottom: 10 }}>{status}</p>}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+      <div style={styles.row}>
         <span className="tiny-muted">
-          {address ? <>Connected: {address.slice(0,6)}…{address.slice(-4)}</> : 'Wallet not connected'}
+          {address
+            ? <>Connected: {address.slice(0, 6)}…{address.slice(-4)}</>
+            : 'Wallet not connected'}
         </span>
         <button style={styles.btn} onClick={connectOrSwitch}>
           {address ? 'Switch Wallet' : 'Connect Wallet'}
         </button>
-        <button style={{ ...styles.btn, marginLeft: 6 }} onClick={loadStakes}>Refresh</button>
+        <button style={{ ...styles.btn, marginLeft: 6 }} onClick={loadStakes}>
+          Refresh
+        </button>
       </div>
 
-      {/* Period totals */}
-     <div style={{ ...styles.card, marginBottom: 12 }}>
-  <strong>Periods Summary</strong>
-  {summary.length === 0 ? (
-    <p>No stakes found.</p>
-  ) : (
-    <ul className="simple-list" style={{ marginTop: 6 }}>
-      {summary.map((row, i) => (
-        <li key={i}>{row.label} — {row.amountFmt} HFV</li>
-      ))}
-    </ul>
-  )}
-</div>
+      {wrongNetwork ? (
+        <div style={{ ...styles.card, marginTop: 12 }}>
+          <p>⚠ Wrong Network — please switch to Ethereum Mainnet.</p>
+          <button style={{ ...styles.btn, marginTop: 10 }} onClick={switchToMainnet}>
+            Switch to Ethereum Mainnet
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* Period totals */}
+          <div style={{ ...styles.card, marginBottom: 12 }}>
+            <strong>Periods Summary</strong>
+            {summary.length === 0 ? (
+              <p>No stakes found.</p>
+            ) : (
+              <ul className="simple-list" style={{ marginTop: 6 }}>
+                {summary.map((row, i) => (
+                  <li key={i}>
+                    {row.label} — {row.amountFmt} HFV
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
-{/* Individual stakes */}
-{stakes.length > 0 && (
-  <ul>
-    {stakes.map((s) => (
-      <li key={s.index} style={styles.listCard}>
-        <div><strong>#</strong> {s.index}</div>
-        <div><strong>Period:</strong> {s.periodLabel}</div>
-        <div><strong>Amount:</strong> {s.amountFmt} HFV</div>
-        <div><strong>Start:</strong> {s.startFmt}</div>
-        <div><strong>Status:</strong> {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}</div>
-        {!s.claimed && s.unlocked && (
-          <button style={styles.btn} onClick={() => handleClaim(s.index)}>
-  Claim
-</button>
-        )}
-      </li>
-    ))}
-  </ul>
-)}
-</div>
-);
+          {/* Individual stakes */}
+          {stakes.length > 0 && (
+            <ul>
+              {stakes.map((s) => (
+                <li key={s.index} style={styles.listCard}>
+                  <div><strong>#</strong> {s.index}</div>
+                  <div><strong>Period:</strong> {s.periodLabel}</div>
+                  <div><strong>Amount:</strong> {s.amountFmt} HFV</div>
+                  <div><strong>Start:</strong> {s.startFmt}</div>
+                  <div>
+                    <strong>Status:</strong>{' '}
+                    {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}
+                  </div>
+                  {!s.claimed && s.unlocked && (
+                    <button
+                      style={styles.btn}
+                      onClick={() => handleClaim(s.index)}
+                    >
+                      Claim
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
+      )}
+    </div>
+  );
 }
