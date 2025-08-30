@@ -224,7 +224,7 @@ body {
   body {
     background-size: contain;
     background-attachment: scroll;
-    background-color: #000;
+    background-color: transparent;
 }
 
 .glow-button {
