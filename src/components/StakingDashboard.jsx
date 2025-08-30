@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { ethers } from 'ethers';
 import HFVStaking from '../abi/HFVStaking.json';
-import { useWallet } from '../context/WalletContext';
+import { useWallet } from '../components/WalletContext';
 
 const styles = {
   card: {
