@@ -219,3 +219,83 @@ body {
   background: url("/background.jpg") no repeat center center fixed;
   background-size: cover;
 }
+
+@media (max-width: 768px) {
+  body {
+    background-size: contain;
+    background-attachment: scroll;
+    background-color: #000;
+}
+
+.glow-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 2px solid rgba(var(--neon), 0.9);
+  background: rgba(0, 0, 0, 0.25); /* glassy transparent base */
+  backdrop-filter: blur(6px); /* 🔥 glass blur */
+  -webkit-backdrop-filter: blur(6px); /* Safari iOS */
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: .3px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow:
+    0 0 12px rgba(var(--neon), .6),
+    inset 0 0 8px rgba(var(--neon), .25);
+  transition: transform .15s ease, filter .15s ease;
+  animation: neonPulse 2.4s ease-in-out infinite alternate,
+             textPulse 2s infinite alternate;
+}
+
+.glow-button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.15);
+}
+
+.glow-button:active {
+  transform: scale(0.98);
+  filter: brightness(1.05);
+}
+
+
+.glow-frame input,
+.glow-frame select,
+.cyber-input {
+  width: 100%;
+  font-size: 1rem;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 12px;
+  border: 2px solid rgba(var(--neon), 0.6);
+  background: rgba(0, 0, 0, 0.25); /* glass base */
+  backdrop-filter: blur(6px); /* 🔥 blur behind */
+  -webkit-backdrop-filter: blur(6px); /* Safari iOS */
+  color: var(--text);
+  font-weight: 500;
+  outline: none;
+  box-shadow:
+    0 0 8px rgba(var(--neon), .4),
+    inset 0 0 6px rgba(var(--neon), .25);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus effect */
+.glow-frame input:focus,
+.glow-frame select:focus,
+.cyber-input:focus {
+  border-color: rgba(var(--neon), 0.9);
+  box-shadow:
+    0 0 16px rgba(var(--neon), .8),
+    inset 0 0 12px rgba(var(--neon), .4);
+}
+
+.glow-frame input:disabled,
+.glow-frame select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+}

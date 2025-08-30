@@ -4,7 +4,7 @@ import EthereumProvider from '@walletconnect/ethereum-provider';
 import {useWallet} from '../components/WalletContext';
 export default function ConnectWallet({ onWalletConnected }) {
   const [address, setAddress] = useState(null);
-  const { address: ctxAddress, provider:ctxProvider, connectWallet } =useWallett();
+ const { address: ctxAddress, provider: ctxProvider, setAddress: setCtxAddress, setProvider: setCtxProvider } = useWallet();
   const connectWalletConnect = async () => {
     try {
       const provider = await EthereumProvider.init({
