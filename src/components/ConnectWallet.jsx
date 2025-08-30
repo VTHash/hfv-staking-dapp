@@ -25,23 +25,37 @@ export default function ConnectWallet({ onWalletConnected }) {
       console.error('WalletConnect error:', err);
     }
   };
+  const showMetaMaskLink =
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.ethereum;
 
-  return (
-    <>
+return (
+  <>
     {!address ? (
-      <button className="glow-button" onClick={connectWalletConnect}>
-        <img
-          src="/wallet-connect-logo.png"
-          alt="WalletConnect"
-          className="walletconnect-icon"
-        />
-        Connect Wallet
-      </button>
+      <div>
+        <button className="glow-button" onClick={connectWalletConnect}>
+          <img
+            src="/wallet-connect-logo.png"
+            alt="WalletConnect"
+            className="walletconnect-icon"
+          />
+          Connect Wallet
+        </button>
+
+        {/* ✅ Mobile fallback only when not already inside MetaMask browser */}
+        {showMetaMaskLink && (
+          <a
+            href={`metamask://dapp/${window.location.host}`}
+            className="glow-button"
+            style={{ display: 'block', marginTop: '10px', textAlign: 'center' }}
+          >
+            Open in MetaMask
+          </a>
+        )}
+      </div>
     ) : (
       <p className="status-text">
         Connected: <strong>{address.slice(0, 6)}...{address.slice(-4)}</strong>
       </p>
     )}
   </>
-);
-}
+)};
