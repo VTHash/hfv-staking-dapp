@@ -299,3 +299,18 @@ body {
   cursor: not-allowed;
 }
 }
+
+.walletconnect-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  object-fit: contain;
+}
+
+.glow-button {
+  width: auto !important; /* prevent full width stretch */
+  max-width: 280px; /* keep compact */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
