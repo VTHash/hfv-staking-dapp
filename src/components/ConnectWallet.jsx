@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { BrowserProvider } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
-
+import {useWallet} from './WalletContext';
 export default function ConnectWallet({ onWalletConnected }) {
   const [address, setAddress] = useState(null);
-
+  const { address: ctxAddress, provider:ctxProvider, connectWallet } =useWallett();
   const connectWalletConnect = async () => {
     try {
       const provider = await EthereumProvider.init({
@@ -15,7 +15,6 @@ export default function ConnectWallet({ onWalletConnected }) {
       });
 
       await provider.enable();
-
       const browserProvider = new BrowserProvider(provider);
       const signer = await browserProvider.getSigner();
       const userAddress = await signer.getAddress();

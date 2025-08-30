@@ -4,9 +4,11 @@ import StakeForm from './StakeForm';
 import StakingDashboard from './StakingDashboard';
 import Claim from './ClaimHFV';
 import '../index.css';
+import { WalletProvider } from './WalletContext'; 
 
 const App = () => {
   return (
+    <WalletProvider>
     <div className="app-glow-frame">
       <div className="hud-container">
        <div className="app-wrapper">   
@@ -67,7 +69,7 @@ const App = () => {
       
       </div>
     </div>
-
+</WalletProvider>
   );
 };
 
