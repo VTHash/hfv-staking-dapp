@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserProvider } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
-import {useWallet} from './WalletContext';
+import {useWallet} from '../components/WalletContext';
 export default function ConnectWallet({ onWalletConnected }) {
   const [address, setAddress] = useState(null);
   const { address: ctxAddress, provider:ctxProvider, connectWallet } =useWallett();
