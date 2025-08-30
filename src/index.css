@@ -387,3 +387,8 @@ html, body { overflow-x: hidden; }
   }
   .glow-frame * { max-width: 100%; } /* prevent children from pushing out */
 }
+
+.logo {
+  display: block;
+  margin: 0 auto 1rem auto;
+}
