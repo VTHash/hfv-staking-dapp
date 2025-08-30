@@ -23,7 +23,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: url("/background.png") center center / cover no-repeat;
+  background: url("/background.jpg") center center / cover no-repeat;
   z-index: -2;
 }
 
