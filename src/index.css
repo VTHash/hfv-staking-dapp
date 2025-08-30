@@ -363,3 +363,27 @@ html, body, #root {
     border-radius: 0;
   }
 }
+
+html, body { overflow-x: hidden; }
+* { box-sizing: border-box; } /* borders included in width */
+
+/* Desktop: centered, capped width */
+.glow-frame {
+  width: 100%;
+  max-width: 640px;
+  margin: 12px auto;
+  box-sizing: border-box;
+}
+
+/* Mobile: fit the screen exactly */
+@media (max-width: 768px) {
+  .app-wrapper { padding: 0; } /* no extra outer padding */
+  .glow-frame {
+    width: 100vw; /* fill screen width */
+    max-width: 100vw;
+    margin: 0; /* no side overflow */
+    padding: 18px 14px; /* safe inner space */
+    border-radius: 0; /* optional: edge-to-edge look */
+  }
+  .glow-frame * { max-width: 100%; } /* prevent children from pushing out */
+}
