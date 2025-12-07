@@ -5,34 +5,48 @@ import { useWallet } from '../components/WalletContext';
 
 const styles = {
   card: {
-    padding: 18,
-    borderRadius: 14,
-    background: 'linear-gradient(145deg, rgba(0,255,153,0.06), rgba(0,255,153,0.16))',
-    border: '1px solid #00ff99',
-    boxShadow: '0 0 8px rgba(0,255,153,0.45)',
+    padding: 14,
+    borderRadius: 22,
+    background: '#020617',
+    border: '1px solid rgba(0, 255, 140, 0.35)',
+    boxShadow:
+      '0 0 18px rgba(0, 255, 140, 0.18), 0 0 4px rgba(0, 255, 140, 0.25) inset, 0 14px 34px rgba(0, 0, 0, 0.75)',
+    color: '#e5e7eb',
   },
   listCard: {
     marginBottom: 10,
-    color: '#eafff8',
-    border: '1px solid #00ff99',
-    background: 'linear-gradient(145deg, rgba(0,255,153,0.05), rgba(0,255,153,0.12))',
-    boxShadow: '0 0 12px rgba(0,255,153,0.45)',
-    borderRadius: 14,
-    padding: 16,
+    color: '#e5e7eb',
+    borderRadius: 22,
+    padding: 14,
+    background: '#020617',
+    border: '1px solid rgba(0, 255, 140, 0.35)',
+    boxShadow:
+      '0 0 18px rgba(0, 255, 140, 0.18), 0 0 4px rgba(0, 255, 140, 0.25) inset, 0 14px 34px rgba(0, 0, 0, 0.75)',
   },
   btn: {
-    background: 'linear-gradient(145deg, #00ff95, #00ffaa)',
-    color: '#000',
+    background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+    color: '#02120a',
     fontWeight: 700,
     border: 'none',
-    borderRadius: 12,
-    padding: '12px 16px',
+    borderRadius: 999,
+    padding: '10px 16px',
     minHeight: 44,
     cursor: 'pointer',
-    boxShadow: '0 0 12px #00ff95',
-    transition: 'transform .2s ease, box-shadow .2s ease',
+    boxShadow: '0 10px 25px rgba(34, 197, 94, 0.45)',
+    transition: 'transform .12s ease, box-shadow .12s ease, filter .12s ease',
+    fontSize: 13,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    whiteSpace: 'nowrap',
   },
-  row: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 },
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 10,
+  },
 };
 
 const stakingAbi = HFVStaking.abi;
@@ -176,16 +190,21 @@ export default function StakingDashboard() {
       <p className="tiny-muted">Stake count (debug): {stakes.length}</p>
 
       {/* You can keep/remove the buttons below; they no longer need to connect here */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+      <div style={styles.row}>
         <span className="tiny-muted">
-          {address ? <>Connected: {address.slice(0,6)}…{address.slice(-4)}</> : 'Wallet not connected'}
+          {address ? <>Connected: {address.slice(0, 6)}…{address.slice(-4)}</> : 'Wallet not connected'}
         </span>
-        <button style={{ ...styles.btn, marginLeft: 6 }} onClick={loadStakes}>Refresh</button>
+        <button style={{ ...styles.btn, marginLeft: 6 }} onClick={loadStakes}>
+          Refresh
+        </button>
       </div>
 
       {wrongNetwork && (
         <div style={{ ...styles.card, marginBottom: 12 }}>
           <p>⚠ Wrong Network — please switch to Ethereum Mainnet.</p>
+          <button style={{ ...styles.btn, marginTop: 8 }} onClick={switchToMainnet}>
+            Switch to Mainnet
+          </button>
         </div>
       )}
 
@@ -196,7 +215,9 @@ export default function StakingDashboard() {
         ) : (
           <ul className="simple-list" style={{ marginTop: 6 }}>
             {summary.map((row, i) => (
-              <li key={i}>{row.label} — {row.amountFmt} HFV</li>
+              <li key={i}>
+                {row.label} — {row.amountFmt} HFV
+              </li>
             ))}
           </ul>
         )}
@@ -210,9 +231,12 @@ export default function StakingDashboard() {
               <div><strong>Period:</strong> {s.periodLabel}</div>
               <div><strong>Amount:</strong> {s.amountFmt} HFV</div>
               <div><strong>Start:</strong> {s.startFmt}</div>
-              <div><strong>Status:</strong> {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}</div>
+              <div>
+                <strong>Status:</strong>{' '}
+                {s.claimed ? 'Claimed' : s.unlocked ? 'Unlocked' : 'Locked'}
+              </div>
               {!s.claimed && s.unlocked && (
-                <button style={styles.btn} onClick={() => handleClaim(s.index)}>
+                <button style={{ ...styles.btn, marginTop: 8 }} onClick={() => handleClaim(s.index)}>
                   Claim
                 </button>
               )}

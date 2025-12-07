@@ -1,0 +1,103 @@
+.stake-form {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 14px auto;
+  padding: 14px 14px 16px;
+  border-radius: 22px;
+
+  background: #020617;
+  border: 1px solid rgba(0, 255, 140, 0.35);
+  box-shadow:
+    0 0 18px rgba(0, 255, 140, 0.18),
+    0 0 4px rgba(0, 255, 140, 0.25) inset,
+    0 14px 34px rgba(0, 0, 0, 0.75);
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Title inside the card (uses existing .section-title class from global CSS) */
+.stake-form .section-title {
+  margin-bottom: 10px;
+}
+
+/* Labels already use .ui-text – just spacing here */
+.stake-form .ui-text {
+  font-size: 0.85rem;
+  color: #9ca3af !important;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* Shared input styles for number + select */
+.stake-form .input-field {
+  width: 100%;
+  font-size: 0.95rem;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  background: #020617;
+  color: #f9fafb;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+  margin-bottom: 4px;
+}
+
+.stake-form .input-field::placeholder {
+  color: #6b7280;
+}
+
+/* Focus glow */
+.stake-form .input-field:focus {
+  border-color: rgba(34, 197, 94, 0.9);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+}
+
+/* Wallet toggle spacing (whatever WalletToggle renders inside) */
+.stake-form > *:not(:last-child) {
+  /* subtle vertical rhythm, overridden by explicit margins where needed */
+}
+
+/* Buttons row – we only target the existing glow-button class inside stake-form */
+.stake-form .glow-button {
+  margin-top: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Put a little gap between Approve and Stake buttons */
+.stake-form .glow-button + .glow-button {
+  margin-top: 6px;
+}
+
+/* Disabled stake button state */
+.stake-form .glow-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Status text at the bottom */
+.status-text {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  min-height: 1.2em;
+  white-space: pre-line;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .stake-form {
+    max-width: 100%;
+    padding: 12px 12px 14px;
+    border-radius: 18px;
+    margin: 0 0 10px 0;
+  }
+
+  .stake-form .glow-button {
+    font-size: 0.95rem;
+    padding: 10px 14px;
+  }
+}
